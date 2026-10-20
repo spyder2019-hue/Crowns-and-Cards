@@ -1,0 +1,221 @@
+/* Original style block 27 */
+
+/* Five-bestiary collection selector and map. */
+#tab-collection .bestiary-index{padding:18px clamp(8px,2.3vw,36px) 30px;max-width:1230px;margin:0 auto}
+.bestiary-intro{text-align:center;padding:10px 8px 22px}
+.bestiary-intro h2,.map-heading h2{font:normal clamp(30px,3.4vw,46px) Georgia,serif!important;color:#e4c38e!important;margin:9px 0!important;letter-spacing:.12em;text-shadow:0 3px 18px #000}
+.bestiary-kicker{color:#b99c73;font:11px Georgia,serif;letter-spacing:.27em;text-align:center}
+.bestiary-intro p,.map-heading p{color:#b3a795;margin:8px auto 0;line-height:1.5}
+.bestiary-choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(225px,1fr));gap:16px;max-width:1250px;margin:10px auto}
+.bestiary-choice{background:linear-gradient(160deg,rgba(40,43,50,.96),rgba(12,16,23,.97) 72%);border:1px solid #97734f!important;border-radius:11px;position:relative;min-height:310px;display:flex;align-items:center;justify-content:flex-start;flex-direction:column;gap:12px;padding:23px 14px 15px!important;overflow:hidden;box-shadow:inset 0 0 0 3px #100f13,0 12px 28px #0009;color:#e8d3ab!important;cursor:pointer;text-align:center!important;transition:transform .2s,border-color .2s}
+.bestiary-choice:before{content:'';position:absolute;inset:6px;border:1px solid #8c714d60;border-radius:7px;pointer-events:none}
+.bestiary-choice:hover{transform:translateY(-4px);border-color:#ddba7a!important}
+.bestiary-crest{font:normal 92px Georgia,serif;line-height:1.35;display:flex;align-items:center;justify-content:center;width:145px;height:145px;border-radius:50%;border:2px solid #c7a066;background:radial-gradient(circle at 45% 30%,#3c4050,#0e131e 72%);box-shadow:0 0 0 6px #b89e5b14,inset 0 0 22px #000;flex-shrink:0;color:#cdb48a}
+.race-elf .bestiary-crest{color:#b1d8b7;background:radial-gradient(circle,#31493a,#111c19)}
+.race-demon .bestiary-crest{color:#d7a0a1;background:radial-gradient(circle,#522629,#160f17)}
+.race-human .bestiary-crest{color:#e2c18c;background:radial-gradient(circle,#4b4131,#161824)}
+.race-orc .bestiary-crest{color:#b7c487;background:radial-gradient(circle,#3b4933,#141e13)}
+.bestiary-crest.has-art{font-size:0;background-size:cover;background-position:center top}
+.bestiary-copy{display:flex;align-items:center;flex-direction:column;gap:9px;min-height:94px}
+.bestiary-copy strong{font:normal bold 19px Georgia,serif;color:#f0d9ac}
+.bestiary-copy small{font:13px Georgia,serif;color:#a9a397;line-height:1.4;max-width:215px}
+.bestiary-copy em{font:normal bold 10px Georgia,serif;color:#c5a66d;letter-spacing:.12em;margin-top:auto}
+.bestiary-chevron{position:absolute;bottom:14px;right:13px;font-size:25px;color:#b99c73}
+.bestiary-back{border:1px solid #a58659!important;padding:10px 17px!important;border-radius:3px;color:#e5c78e!important;background:#171a20!important;cursor:pointer;margin:0 0 14px}
+#tab-collection[data-bestiary-view="index"] #undead-bestiary-panel,
+#tab-collection[data-bestiary-view="index"] #hero-roster,
+#tab-collection[data-bestiary-view="undead"] #bestiary-index,
+#tab-collection[data-bestiary-view="undead"] #bestiary-future,
+#tab-collection[data-bestiary-view="future"] #bestiary-index,
+#tab-collection[data-bestiary-view="future"] #undead-bestiary-panel,
+#tab-collection[data-bestiary-view="future"] #hero-roster{display:none!important}
+#tab-collection[data-bestiary-view="index"] #bestiary-future{display:none!important}
+.bestiary-future{padding:22px;min-height:435px;max-width:760px;margin:0 auto;text-align:center;color:#c6baa5;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:14px}
+.bestiary-future .future-sigil{font:100px Georgia,serif;color:#c1a37a;text-shadow:0 5px 30px #000}
+.bestiary-future h2{font:normal 33px Georgia,serif;color:#e5c895;margin:0}
+.bestiary-future p{max-width:460px;line-height:1.6}
+#tab-packs .packs-screen{padding-top:12px!important}
+#tab-packs .pack-menu .future-pack-option{opacity:.83}
+#tab-packs .pack-menu .future-pack-option.selected{opacity:1}
+#tab-packs .pack-art-inner.future-pack-art{background-image:none!important;display:flex;align-items:center;justify-content:center}
+#tab-packs .pack-art-inner.future-pack-art::after{content:attr(data-sigil);font:clamp(90px,12vw,160px) Georgia,serif;color:#b99d71;text-shadow:0 7px 23px #000}
+#tab-packs #buy-pack:disabled{filter:grayscale(.75);opacity:.64;cursor:not-allowed}
+#tab-packs .future-pack-message{font:15px Georgia,serif;color:#c1b59f;text-align:center;padding:28px 15px;border:1px dashed #9e815a61;background:#100f1299}
+.gothic-map-tab{padding:20px clamp(6px,2vw,26px) 42px!important}
+.map-heading{text-align:center;margin:8px 0 26px}
+.map-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(255px,330px);gap:20px;align-items:stretch;max-width:1330px;margin:auto}
+.map-parchment{min-height:510px;position:relative;border:8px ridge #82623e;border-radius:5px;background:radial-gradient(ellipse at 24% 33%,#403d2d55,transparent 45%),radial-gradient(ellipse at 75% 73%,#4235267a,transparent 55%),repeating-linear-gradient(32deg,#322d25 0px,#292923 4px,#343026 9px);box-shadow:inset 0 0 70px #090909,0 15px 45px #000b;overflow:hidden}
+.map-parchment:before{content:'';position:absolute;inset:12px;border:1px solid #ad8f5477;pointer-events:none}
+.map-runes{position:absolute;left:0;top:18px;width:100%;text-align:center;letter-spacing:1em;color:#b69d6b77}
+.map-path{position:absolute;inset:10% 4%;width:92%;height:80%;pointer-events:none}
+.map-node{position:absolute;left:var(--node-x);top:var(--node-y);transform:translate(-50%,-50%);background:transparent!important;border:0!important;color:#e9d29f!important;display:flex;align-items:center;flex-direction:column;gap:5px;max-width:160px;cursor:pointer;text-align:center;padding:7px!important;z-index:1}
+.map-node span{display:grid;place-items:center;background:#171a1f;border:2px solid #ad8a5d;border-radius:50%;width:67px;height:67px;font:32px Georgia,serif;box-shadow:0 5px 23px #000b}
+.map-node b{padding:5px 8px;font:normal bold 14px Georgia,serif;background:#171817e9;border:1px solid #8f7952;color:#eed3a7;white-space:normal}
+.map-node.active span,.map-node:hover span{border-color:#f0cc8d;box-shadow:0 0 0 5px #dba65b33,0 0 26px #d8ab6688}
+.map-compass{position:absolute;bottom:20px;left:20px;font:70px Georgia,serif;line-height:1;color:#bca07299}
+.map-compass small{display:block;text-align:center;font:12px Georgia,serif}
+.map-detail{background:linear-gradient(145deg,#25242b,#111820);border:1px solid #92774f;box-shadow:inset 0 0 0 4px #101217,0 10px 28px #0009;min-height:350px;padding:26px 18px;color:#d6c5a4}
+.map-detail-kicker{font:11px Georgia,serif;letter-spacing:.2em;color:#ab8c62}
+.map-detail h3{font:normal 27px Georgia,serif;color:#e8c992;margin:18px 0 11px}
+.map-detail p{line-height:1.6;color:#b4a99b}
+.map-detail .map-rewards{border-top:1px solid #7e684b70;padding:20px 0;display:flex;gap:20px;color:#e5c58d}
+.map-detail button{background:linear-gradient(#8d3333,#551b1b)!important;border:1px solid #ba7663!important;color:#fff0dc!important;letter-spacing:.09em;padding:14px 12px!important;width:100%;cursor:pointer}
+@media(max-width:920px){.map-layout{grid-template-columns:1fr}.map-parchment{min-height:400px}.map-detail{min-height:0}.bestiary-choices{grid-template-columns:repeat(auto-fit,minmax(175px,1fr))}.bestiary-choice{min-height:292px}.bestiary-crest{width:125px;height:125px;font-size:76px}}
+@media(max-width:520px){.bestiary-choices{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.bestiary-choice{padding:19px 8px 11px!important;min-height:260px}.bestiary-crest{width:95px;height:95px;font-size:57px}.bestiary-copy strong{font-size:15px}.bestiary-copy small{font-size:11px}.bestiary-copy em{font-size:9px}.map-parchment{min-height:320px}.map-node{max-width:115px}.map-node span{width:48px;height:48px;font-size:23px}.map-node b{font-size:10px}.map-compass{font-size:48px}}
+
+
+/* Original style block 28 */
+
+/* Crowns & Cards official pack art. Both cover images are transparent. */
+#tab-packs .packs-screen {
+  padding-top:clamp(28px,4vw,58px)!important;
+}
+#tab-packs .packs-layout {
+  margin-top:16px!important;
+  align-items:start!important;
+}
+#tab-packs .pack-focus { min-width:0!important; padding-top:8px!important; }
+#tab-packs .pack-image {
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  height:420px!important;
+  max-width:420px!important;
+  width:100%!important;
+  margin:0 auto 8px!important;
+  background:none!important;
+  border:0!important;
+  box-shadow:none!important;
+  overflow:visible!important;
+}
+#tab-packs .pack-image::before,#tab-packs .pack-image::after {display:none!important;}
+#tab-packs #pack-feature-art {
+  box-sizing:border-box!important;
+  display:block!important;
+  width:min(100%,365px)!important;
+  height:410px!important;
+  background-position:center center!important;
+  background-size:contain!important;
+  background-repeat:no-repeat!important;
+  background-color:transparent!important;
+  box-shadow:none!important;
+  border:0!important;
+  border-radius:0!important;
+  filter:drop-shadow(0 18px 18px rgba(0,0,0,.76))!important;
+  transition:transform .2s ease!important;
+}
+#tab-packs #pack-feature-art:hover { transform:translateY(-3px) scale(1.015); }
+#tab-packs #pack-feature-art.pack-art-hero { width:min(100%,318px)!important; height:410px!important; }
+#tab-packs #pack-feature-art.pack-art-undead { width:min(100%,400px)!important; height:390px!important; }
+#tab-packs #pack-feature-art.future-pack-art {
+  width:min(100%,290px)!important;
+  height:400px!important;
+  background-image:linear-gradient(145deg,#1b2530,#10141d)!important;
+  border:1px solid #756340!important;
+  border-radius:8px!important;
+  position:relative!important;
+}
+#tab-packs #pack-feature-art.future-pack-art::before {
+  content:attr(data-sigil); position:absolute;inset:0;display:grid;place-items:center;
+  font-size:80px;color:#b99a65;text-shadow:0 0 28px #332714;
+}
+#tab-packs .pack-title { margin-top:6px!important; }
+#tab-packs .pack-preview { padding-top:20px!important; }
+@media (max-width:900px) {
+  #tab-packs .packs-screen {padding-top:20px!important;}
+  #tab-packs .pack-image {height:345px!important;}
+  #tab-packs #pack-feature-art,#tab-packs #pack-feature-art.pack-art-hero {height:334px!important;width:min(100%,260px)!important;}
+  #tab-packs #pack-feature-art.pack-art-undead {height:334px!important;width:min(100%,330px)!important;}
+}
+
+
+/* Original style block 29 */
+
+/* Icon is genuine transparency, not a square screenshot */
+#tab-collection .race-undead .bestiary-crest.undead-sigil{
+  background:transparent!important;
+  border:none!important;
+  box-shadow:none!important;
+  border-radius:0!important;
+  width:160px!important;
+  height:160px!important;
+  padding:0!important;
+}
+#tab-collection .undead-sigil img {
+  display:block!important; width:100%!important; height:100%!important;
+  object-fit:contain!important; filter:drop-shadow(0 4px 11px #8e654c6b);
+}
+/* Main character render: show full burning lich without square artwork clipping */
+#tab-world .equipment-portrait:has(img[src*="data:image/webp"]){background:radial-gradient(ellipse at center,#47211a 5%,#111722 67%,#090f1a 100%)!important}
+#tab-world #equipment-hero-image[src^="data:image/webp"]{object-fit:contain!important;object-position:center center!important;transform:scale(1.05)!important}
+#tab-world #hero-showcase-card img {object-fit:contain!important;object-position:center center!important}
+/* Packs lowered below the top resources; remove forced tall empty container */
+#tab-packs {padding-top:clamp(35px,5vw,72px)!important}
+#tab-packs .packs-screen {
+  min-height:0!important;
+  padding:17px clamp(12px,2vw,22px) 24px!important;
+}
+#tab-packs .hero-pack-special-section {
+  max-width:1170px!important;
+  margin:0 auto 19px!important;
+  padding:9px 12px 12px!important;
+  background:linear-gradient(100deg,#1b2636e8,#121c2ae6,#1d2633e8)!important;
+  border:1px solid #b58d5888!important;
+  box-shadow:inset 0 0 18px #0008,0 5px 20px #0006!important;
+  display:flex!important;
+  gap:17px!important;
+  align-items:center!important;
+  justify-content:center!important;
+}
+#tab-packs .pack-special-caption {
+  color:#dabe86!important;
+  font:700 12px Georgia,serif!important;
+  letter-spacing:2.3px!important;
+  white-space:nowrap!important;
+}
+#tab-packs .hero-pack-special-section .pack-menu-item {
+  width:min(480px,100%)!important;
+  min-height:64px!important;
+  background:linear-gradient(100deg,#1d2d45,#142237)!important;
+  border-color:#a68e6c!important;
+  margin:0!important;
+  color:#f0daaf!important;
+}
+#tab-packs .hero-pack-special-section .pack-menu-item.selected {
+  border-color:#e5c886!important;
+  box-shadow:0 0 0 1px #c8ad79,inset 0 0 23px #b7a36b22!important;
+}
+#tab-packs .race-pack-caption {
+  grid-column:1/-1!important;
+  font:700 11px Georgia,serif!important;
+  letter-spacing:2px!important;
+  color:#cba972!important;
+  text-align:center!important;
+  border-bottom:1px solid #99794b85!important;
+  padding:3px 0 10px!important;
+  margin-bottom:2px!important;
+}
+#tab-packs .pack-menu-item {min-height:64px!important;padding:10px!important}
+#tab-packs .pack-menu {gap:9px!important}
+#tab-packs .packs-layout {margin-top:4px!important}
+#tab-packs .pack-focus {padding-top:0!important}
+#tab-packs .pack-image {height:350px!important;margin-bottom:0!important}
+#tab-packs #pack-feature-art {height:342px!important}
+#tab-packs #pack-feature-art.pack-art-hero,
+#tab-packs #pack-feature-art.pack-art-undead {height:342px!important}
+#tab-packs .pack-preview {padding-top:4px!important}
+#tab-packs .pack-title {font-size:24px!important;margin:7px 0 2px!important}
+#tab-packs .pack-focus p {margin:5px 0 10px!important}
+#tab-packs .summon-button {padding:12px 9px!important}
+@media(max-width:900px){
+  #tab-packs .pack-menu{width:100%!important;max-width:100%!important;min-width:0!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;box-sizing:border-box!important}
+  #tab-packs .pack-menu-item{min-width:0!important;max-width:100%!important;overflow:hidden!important;box-sizing:border-box!important}
+  #tab-packs .pack-menu-item>span:nth-child(2){min-width:0!important}
+  #tab-packs .pack-menu-item b,#tab-packs .pack-menu-item small{overflow-wrap:anywhere!important}
+  #tab-packs {padding-top:16px!important}
+  #tab-packs .hero-pack-special-section {flex-direction:column!important;gap:5px!important;padding:9px!important}
+  #tab-packs .hero-pack-special-section .pack-menu-item {width:100%!important}
+  #tab-packs .pack-image {height:320px!important}
+  #tab-packs #pack-feature-art,#tab-packs #pack-feature-art.pack-art-hero,#tab-packs #pack-feature-art.pack-art-undead{height:312px!important}
+}
+

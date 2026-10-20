@@ -1,0 +1,2 @@
+document.addEventListener('click',function(e){const btn=e.target.closest('.gothic-sidebar [data-tab]');if(!btn)return;const tab=btn.dataset.tab;showTab(tab);document.querySelectorAll('.gothic-sidebar [data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));});
+document.addEventListener('click',function(e){const btn=e.target.closest('.nav [data-tab]');if(!btn)return;document.querySelectorAll('.gothic-sidebar [data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===btn.dataset.tab));});
