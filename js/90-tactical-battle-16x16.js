@@ -53,6 +53,10 @@
  const allLiving=side=>battle[side==='player'?'allies':'enemies'].filter(u=>u.alive);
  const selected=()=>battle?.allies.find(u=>u.id===pickedAlly&&u.alive);
  const allPlaced=()=>battle&&battle.allies.every(u=>u.x!==null&&u.y!==null);
+ const activeUnit=()=>battle?[...battle.allies,...battle.enemies].find(u=>u.id===battle.activeId&&u.alive)||null:null;
+ const activePlayer=()=>{const u=activeUnit();return u&&u.side==='player'?u:null};
+ const activeEnemy=()=>{const u=activeUnit();return u&&u.side==='enemy'?u:null};
+ const rankUnit=u=>({unit:u,speed:speedOf(u),hp:u.hp});
  const write=(t)=>{if(!battle)return;battle.log.unshift(t);battle.log=battle.log.slice(0,45)};
  const validFree=(x,y,except)=>inBounds(x,y)&&!isRock(x,y)&&!unitHere(x,y,except);
  function bfs(unit){
@@ -90,22 +94,34 @@
  function project(x,y){return [OX+(x-y)*W/2,OY+(x+y)*H/2]}
  function diamond(sx,sy){ctx.beginPath();ctx.moveTo(sx,sy-H/2);ctx.lineTo(sx+W/2,sy);ctx.lineTo(sx,sy+H/2);ctx.lineTo(sx-W/2,sy);ctx.closePath()}
  function relief(x,y,sx,sy){
+   const terrain={
+     forest:{base:[52,66,58],sideA:'#1f2823',sideB:'#131b17',accent:'rgba(113,156,105,.34)',rune:'rgba(151,210,133,.16)'},
+     ruins:{base:[89,87,82],sideA:'#29241f',sideB:'#171411',accent:'rgba(179,148,112,.26)',rune:'rgba(244,212,150,.18)'},
+     dragon:{base:[67,58,70],sideA:'#241c28',sideB:'#17111a',accent:'rgba(125,91,162,.28)',rune:'rgba(202,122,255,.18)'}
+   }[battle.place.id]||{base:[72,74,80],sideA:'#22272e',sideB:'#141920',accent:'rgba(170,150,118,.22)',rune:'rgba(210,180,120,.14)'};
    const number=seeded(x,y,battle.place.id.length);
-   const base=battle.place.id==='forest'?[45,69,62]:battle.place.id==='ruins'?[71,75,83]:[57,50,62];
-   const delta=Math.round(number*20)-9;
-   let [r,g,b]=base.map(v=>v+delta),isDeploy=x<=3,isEnemy=x>=12;
+   const dust=seeded(x,y,71);
+   const delta=Math.round(number*18)-8;
+   let [r,g,b]=terrain.base.map(v=>Math.max(10,Math.min(255,v+delta)));
+   const isDeploy=x<=3,isEnemy=x>=12;
    if(battle.phase==='deploy'){
-     if(isDeploy){g+=23;b+=10}
-     if(isEnemy){r+=24;g-=12}
+     if(isDeploy){g+=18;b+=8}
+     if(isEnemy){r+=16;g-=8}
    }
-   ctx.beginPath();ctx.moveTo(sx-W/2,sy);ctx.lineTo(sx,sy+H/2);ctx.lineTo(sx,sy+H/2+DEPTH);ctx.lineTo(sx-W/2,sy+DEPTH);ctx.closePath();ctx.fillStyle='#171d21';ctx.fill();
-   ctx.beginPath();ctx.moveTo(sx,sy+H/2);ctx.lineTo(sx+W/2,sy);ctx.lineTo(sx+W/2,sy+DEPTH);ctx.lineTo(sx,sy+H/2+DEPTH);ctx.closePath();ctx.fillStyle='#0d151b';ctx.fill();
-   diamond(sx,sy);ctx.fillStyle=`rgb(${r},${g},${b})`;ctx.fill();
-   ctx.lineWidth=.75;ctx.strokeStyle='rgba(214,203,166,.18)';ctx.stroke();
-   const n=seeded(x,y,9);
-   if(n>.46){ctx.beginPath();ctx.moveTo(sx-11,sy+2);ctx.lineTo(sx-2,sy-1);ctx.lineTo(sx+7,sy+2);ctx.strokeStyle='rgba(13,20,23,.20)';ctx.stroke()}
-   if(battle.place.id==='forest'&&n>.58){ctx.strokeStyle='rgba(112,151,104,.4)';ctx.beginPath();ctx.moveTo(sx-4,sy+3);ctx.lineTo(sx-2,sy-3);ctx.moveTo(sx+1,sy+2);ctx.lineTo(sx+4,sy-2);ctx.stroke()}
+   ctx.beginPath();ctx.moveTo(sx-W/2,sy);ctx.lineTo(sx,sy+H/2);ctx.lineTo(sx,sy+H/2+DEPTH);ctx.lineTo(sx-W/2,sy+DEPTH);ctx.closePath();ctx.fillStyle=terrain.sideA;ctx.fill();
+   ctx.beginPath();ctx.moveTo(sx,sy+H/2);ctx.lineTo(sx+W/2,sy);ctx.lineTo(sx+W/2,sy+DEPTH);ctx.lineTo(sx,sy+H/2+DEPTH);ctx.closePath();ctx.fillStyle=terrain.sideB;ctx.fill();
+   const topGrad=ctx.createLinearGradient(sx,sy-H/2,sx,sy+H/2);
+   topGrad.addColorStop(0,`rgb(${r+10},${g+10},${b+10})`);topGrad.addColorStop(.58,`rgb(${r},${g},${b})`);topGrad.addColorStop(1,`rgb(${Math.max(0,r-14)},${Math.max(0,g-14)},${Math.max(0,b-14)})`);
+   diamond(sx,sy);ctx.fillStyle=topGrad;ctx.fill();
+   ctx.lineWidth=.8;ctx.strokeStyle='rgba(228,212,175,.15)';ctx.stroke();
+   ctx.strokeStyle='rgba(11,16,23,.22)';ctx.lineWidth=1.1;
+   ctx.beginPath();
+   ctx.moveTo(sx-16,sy+2);ctx.lineTo(sx-7,sy-4);ctx.lineTo(sx+4,sy+1);ctx.lineTo(sx+15,sy-6);ctx.stroke();
+   if(dust>.42){ctx.strokeStyle=terrain.accent;ctx.lineWidth=.8;ctx.beginPath();ctx.moveTo(sx-10,sy+7);ctx.lineTo(sx-2,sy+1);ctx.lineTo(sx+8,sy+5);ctx.stroke()}
+   if(dust>.68){ctx.fillStyle=terrain.rune;ctx.beginPath();ctx.arc(sx+8,sy-1,3.1,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(sx-5,sy+4,2.2,0,Math.PI*2);ctx.fill()}
+   if(battle.place.id==='dragon'&&dust>.58){ctx.strokeStyle='rgba(230,117,72,.20)';ctx.beginPath();ctx.moveTo(sx-5,sy-7);ctx.lineTo(sx+3,sy-3);ctx.lineTo(sx+9,sy+3);ctx.stroke()}
  }
+
  function rock(sx,sy,x,y){
    ctx.save();ctx.translate(sx,sy-9);const height=18+seeded(x,y,12)*12;
    ctx.beginPath();ctx.moveTo(-17,9);ctx.lineTo(-14,-height+9);ctx.lineTo(-3,-height-7);ctx.lineTo(13,-height+7);ctx.lineTo(17,8);ctx.lineTo(0,17);ctx.closePath();
@@ -119,11 +135,11 @@
    ctx.strokeStyle='#c1a47a';ctx.lineWidth=.7;ctx.strokeRect(sx-w/2,y,w,5);
  }
  function token(u,sx,sy,t){
-   const active=pickedAlly===u.id||focusedEnemy===u.id;
+   const active=battle?.activeId===u.id||pickedAlly===u.id||focusedEnemy===u.id;
    const idle=fxEnabled?Math.sin(t/380+String(u.id).length*1.7)*2.1:0;
    const bob=fxEnabled?Math.sin(t/600+String(u.id).length)*1.5:0;
    const frameW=52,frameH=69;
-   ctx.save();ctx.translate(sx,sy+bob);
+   ctx.save();ctx.globalAlpha=(battle&&battle.phase==='fight'&&u.turnDone)?0.76:1;ctx.translate(sx,sy+bob);
    // Cast-shadow and ornate plinth make each figure feel anchored on the ground.
    ctx.beginPath();ctx.ellipse(0,0,27,10,0,0,Math.PI*2);ctx.fillStyle='#030709c9';ctx.fill();
    ctx.save();ctx.shadowColor=u.side==='player'?'#44dcbd':'#e9655d';ctx.shadowBlur=active?23:9;
@@ -203,10 +219,16 @@
   ctx.save();
   const impact=effects.findLast(e=>e.kind==='attack'&&t-e.start<e.duration&&(t-e.start)/e.duration>.45);
   if(fxEnabled&&impact){const d=(t-impact.start)/impact.duration;ctx.translate(Math.sin(t*.31)*2.5*(1-d),Math.cos(t*.27)*2.2*(1-d))}
-  const bg=ctx.createRadialGradient(600,320,45,600,380,670);
-  bg.addColorStop(0,'#2b303d');bg.addColorStop(.55,'#131924');bg.addColorStop(1,'#070c15');ctx.fillStyle=bg;ctx.fillRect(0,0,CW,CH);
-  ctx.textAlign='center';ctx.fillStyle='#c8a66a55';ctx.font='12px Georgia';ctx.fillText('⚜  Т А К Т И Ч Е С К О Е   П О Л Е   1 6 × 1 6  ⚜',CW/2,39);
-  const ally=selected();const moveMap=battle.phase==='fight'&&ally&&!ally.moved?bfs(ally):null;
+  const scene=battle.place.id==='forest'
+    ?{skyA:'#2a332f',skyB:'#0e1315',mist:'rgba(116,167,118,.08)',title:'Т Л Е Ю Щ И Й   Л Е С'}
+    :battle.place.id==='ruins'
+      ?{skyA:'#35312d',skyB:'#100e0e',mist:'rgba(192,153,111,.08)',title:'Р У И Н Ы   Н Е К Р О П О Л Я'}
+      :{skyA:'#2c2232',skyB:'#0b0811',mist:'rgba(167,117,219,.10)',title:'П А С С А Ж   Д Р А К О Н А'};
+  const bg=ctx.createLinearGradient(0,0,0,CH);
+  bg.addColorStop(0,scene.skyA);bg.addColorStop(.45,'#131822');bg.addColorStop(1,scene.skyB);ctx.fillStyle=bg;ctx.fillRect(0,0,CW,CH);
+  ctx.fillStyle=scene.mist;for(let i=0;i<7;i++){ctx.beginPath();ctx.ellipse(160+i*165,118+i*16,145,34,0,0,Math.PI*2);ctx.fill()}
+  ctx.textAlign='center';ctx.fillStyle='#c8a66a55';ctx.font='12px Georgia';ctx.fillText('⚜  '+scene.title+'  ·  П О Л Е   1 6 × 1 6  ⚜',CW/2,39);
+  const ally=activePlayer();const moveMap=battle.phase==='fight'&&battle.turn==='player'&&ally&&!ally.moved?bfs(ally):null;
   const tiles=[],actors=[];
   for(let sum=0;sum<=30;sum++)for(let x=0;x<SIZE;x++){
     const y=sum-x;if(!inBounds(x,y))continue;
@@ -226,7 +248,7 @@
   // Draw characters in depth order; this also preserves overlap while a miniature walks.
   actors.sort((a,b)=>a.x+a.y-b.x-b.y || a.x-b.x);
   for(const u of actors){const [sx,sy]=unitPixel(u,t);token(u,sx,sy,t)}
-  if(ally&&battle.phase==='fight'&&!ally.acted)for(const e of allLiving('enemy'))if(canHit(ally,e)){
+  if(ally&&battle.phase==='fight'&&battle.turn==='player'&&!ally.acted)for(const e of allLiving('enemy'))if(canHit(ally,e)){
     const [sx,sy]=project(e.x,e.y);ctx.strokeStyle='#f48377cc';ctx.lineWidth=2;
     ctx.beginPath();ctx.ellipse(sx,sy,27,11,0,0,Math.PI*2);ctx.stroke();
   }
@@ -274,7 +296,7 @@
    const next=battle.allies.find(a=>a.x===null);pickedAlly=next?next.id:u.id;
  }
  function activeAttack(a,t){
-   if(battle.phase!=='fight'||battle.turn!==(a.side==='enemy'?'enemy':'player')||a.acted)return false;
+   if(battle.phase!=='fight'||battle.activeId!==a.id||a.turnDone||a.acted)return false;
    if(!canHit(a,t)){write('Цель далеко или закрыта скалой. Дальность '+rangeOf(a)+' кл.');return false}
    const power=CREATURES[a.key].atk+(a.side==='player'?((Math.max(1,Number(a.level)||1)-1)+(state.hero.attack||0)+(typeof equipmentAttackBonus==='function'?equipmentAttackBonus():0)):0);
    t.hp-=power;a.acted=true;fx('attack',t.x,t.y,{fromX:a.x,fromY:a.y,power,isMagic:CREATURES[a.key].type==='magic'||CREATURES[a.key].type==='mage'});
@@ -287,8 +309,78 @@
    }
    if(!allLiving('enemy').length){endExpedition(true);return true}
    if(!allLiving('player').length){endExpedition(false);return true}
+   if(a.side==='player')finishTurn(a);
    return true;
  }
+
+ function buildTurnQueue(){
+   const allies=allLiving('player').sort((a,b)=>speedOf(b)-speedOf(a)||a.id-b.id);
+   const enemies=allLiving('enemy').sort((a,b)=>speedOf(b)-speedOf(a)||String(a.id).localeCompare(String(b.id)));
+   const queue=[];const max=Math.max(allies.length,enemies.length);
+   for(let i=0;i<max;i++){if(allies[i])queue.push(allies[i].id);if(enemies[i])queue.push(enemies[i].id)}
+   return queue;
+ }
+ function startRound(round){
+   if(!battle||battle.over)return;
+   battle.round=round;battle.turnQueue=buildTurnQueue();battle.turnIndex=0;
+   [...battle.allies,...battle.enemies].forEach(u=>{u.turnDone=false;u.moved=false;u.acted=false});
+   fx('turn',8,8,{label:'РАУНД '+battle.round});
+   write('✦ Раунд '+battle.round+'. Порядок хода обновлён.');
+   beginNextTurn();
+ }
+ function beginNextTurn(){
+   if(!battle||battle.over)return;
+   while(battle.turnIndex < (battle.turnQueue?.length||0)){
+     const id=battle.turnQueue[battle.turnIndex];
+     const unit=[...battle.allies,...battle.enemies].find(u=>u.id===id&&u.alive);
+     if(!unit){battle.turnIndex++;continue}
+     battle.activeId=id;battle.turn=unit.side;
+     unit.moved=false;unit.acted=false;
+     if(unit.side==='player'){
+       pickedAlly=unit.id;focusedEnemy=null;enemyBusy=false;
+       write('Ходит '+CREATURES[unit.key].name+'. Можно двигаться и атаковать.');
+       renderBattle();
+       return;
+     }
+     enemyBusy=true;focusedEnemy=null;renderBattle();
+     setTimeout(()=>enemyAction(unit.id),fxEnabled?260:20);
+     return;
+   }
+   startRound((battle.round||1)+1);
+ }
+ function finishTurn(unit,reason=''){
+   if(!battle||battle.over||!unit)return;
+   unit.turnDone=true;unit.moved=true;unit.acted=true;
+   if(reason)write(reason);
+   battle.turnIndex=(battle.turnIndex||0)+1;
+   battle.activeId=null;
+   if(!allLiving('enemy').length){endExpedition(true);return}
+   if(!allLiving('player').length){endExpedition(false);return}
+   beginNextTurn();
+ }
+ async function enemyAction(unitId){
+   const foe=battle&&battle.enemies.find(u=>u.id===unitId&&u.alive);
+   if(!battle||battle.over||!foe){enemyBusy=false;return}
+   const targets=allLiving('player');if(!targets.length){endExpedition(false);return}
+   targets.sort((a,b)=>md(foe,a)-md(foe,b)||a.hp-b.hp);
+   const t=targets[0];
+   if(!canHit(foe,t)){
+     const distances=bfs(foe);let choice=null,score=Infinity;
+     for(const [key,d] of distances){if(d<1||d>speedOf(foe))continue;const [x,y]=key.split(',').map(Number);
+       const candidate={x,y};const s=Math.max(0,md(candidate,t)-rangeOf(foe))*100+md(candidate,t)+d*.05;
+       if(s<score){score=s;choice=candidate}
+     }
+     if(choice){const ox=foe.x,oy=foe.y;foe.x=choice.x;foe.y=choice.y;foe.moved=true;motionEvent(foe,ox,oy);write(CREATURES[foe.key].name+' занимает выгодную позицию.');renderBattle();await wait(fxEnabled?460:40)}
+   }
+   const possible=allLiving('player').filter(u=>canHit(foe,u)).sort((a,b)=>a.hp-b.hp);
+   if(possible.length){activeAttack(foe,possible[0]);renderBattle();await wait(fxEnabled?620:40)}
+   enemyBusy=false;
+   if(battle&&!battle.over)finishTurn(foe);
+ }
+ function canEndCurrentTurn(){
+   const u=activePlayer();return !!(battle&&battle.phase==='fight'&&battle.turn==='player'&&u&&!enemyBusy);
+ }
+
  function enterTile(x,y){
   if(!inBattle()||enemyBusy)return;
   const u=unitHere(x,y);
@@ -299,55 +391,41 @@
     renderBattle();return;
   }
   if(battle.turn!=='player')return;
-  if(u&&u.side==='player'){pickedAlly=u.id;focusedEnemy=null;renderBattle();return}
-  const a=selected();
+  const a=activePlayer();
+  if(u&&u.side==='player'){
+    if(u.id!==a?.id)write('Сейчас ходит другой союзник: '+CREATURES[a.key].name+'.');
+    pickedAlly=a?.id||u.id;focusedEnemy=null;renderBattle();return;
+  }
   if(u&&u.side==='enemy'){
     focusedEnemy=u.id;
     if(a)activeAttack(a,u);
     renderBattle();return;
   }
-  if(!a){write('Сначала выбери союзного бойца.');renderBattle();return}
-  if(a.moved){write('Этот боец уже перемещался в текущем раунде.');renderBattle();return}
+  if(!a){write('Сейчас нет активного союзника.');renderBattle();return}
+  if(a.moved){write('Этот боец уже перемещался в свой ход.');renderBattle();return}
   if(!validFree(x,y,a.id)){write('Нельзя занять эту клетку.');renderBattle();return}
   const distance=bfs(a).get(posKey(x,y));
   if(distance===undefined||distance>speedOf(a)){write('Слишком далеко. Доступно клеток движения: '+speedOf(a)+'.');renderBattle();return}
-  const beforeX=a.x,beforeY=a.y;a.x=x;a.y=y;a.moved=true;motionEvent(a,beforeX,beforeY);write(CREATURES[a.key].name+' перемещается на '+(x+1)+':'+(y+1)+'.');renderBattle();
+  const beforeX=a.x,beforeY=a.y;a.x=x;a.y=y;a.moved=true;motionEvent(a,beforeX,beforeY);
+  write(CREATURES[a.key].name+' перемещается на '+(x+1)+':'+(y+1)+'.');
+  if(!allLiving('enemy').some(e=>canHit(a,e))){
+    write('После перемещения цель недоступна — ход завершён.');
+    finishTurn(a);
+  } else renderBattle();
  }
+
  function deploy(){
    if(!battle||battle.phase!=='deploy'||!allPlaced())return;
-   battle.phase='fight';battle.turn='player';battle.round=1;
+   battle.phase='fight';
    pickedAlly=battle.allies[0].id;focusedEnemy=null;
-   write('⚔ Битва началась. Ход №1 — твой.');fx('turn',8,8,{label:'ТВОЙ ХОД'});renderBattle();
+   write('⚔ Битва началась. Теперь существа ходят по очереди — по одному бойцу за раз.');
+   startRound(1);
  }
  const wait=ms=>new Promise(resolve=>setTimeout(resolve,ms));
- async function enemyPhase(){
-   if(!battle||battle.phase!=='fight'||battle.turn!=='player'||enemyBusy)return;
-   enemyBusy=true;battle.turn='enemy';battle.enemies.forEach(u=>{u.acted=false;u.moved=false});write('Враг совершает ход…');renderBattle();
-   for(const foe of [...allLiving('enemy')]){
-     if(!battle||battle.over)break;
-     const targets=allLiving('player');if(!targets.length)break;
-     // Choose the closest survivor and move toward attack range using pathfinder.
-     targets.sort((a,b)=>md(foe,a)-md(foe,b));
-     const t=targets[0];
-     if(!canHit(foe,t)){
-       const distances=bfs(foe);let choice=null,score=Infinity;
-       for(const [key,d] of distances){if(d<1||d>speedOf(foe))continue;const [x,y]=key.split(',').map(Number);
-         const candidate={x,y};const s=Math.max(0,md(candidate,t)-rangeOf(foe))*100+md(candidate,t)+d*.05;
-         if(s<score){score=s;choice=candidate}
-       }
-       if(choice){const ox=foe.x,oy=foe.y;foe.x=choice.x;foe.y=choice.y;motionEvent(foe,ox,oy);write(CREATURES[foe.key].name+' приближается.');renderBattle();await wait(fxEnabled?440:55)}
-     }
-     const possible=allLiving('player').filter(u=>canHit(foe,u)).sort((a,b)=>a.hp-b.hp);
-     if(possible.length){activeAttack(foe,possible[0]);renderBattle();await wait(fxEnabled?580:55)}
-   }
-   if(battle&&!battle.over){
-     if(!allLiving('player').length){endExpedition(false)}
-     else{battle.turn='player';battle.round++;
-       battle.allies.forEach(u=>{u.moved=false;u.acted=false});
-       pickedAlly=allLiving('player')[0]?.id||null;focusedEnemy=null;write('✦ Раунд '+battle.round+'. Твой ход.');fx('turn',8,8,{label:'РАУНД '+battle.round});renderBattle();}
-   }
-   enemyBusy=false;
-   if(battle)renderBattle();
+ function enemyPhase(){
+   const u=activePlayer();
+   if(!canEndCurrentTurn())return;
+   finishTurn(u,'Ход '+CREATURES[u.key].name+' завершён.');
  }
  function endExpedition(victory){
   if(!battle||battle.over)return;
@@ -365,7 +443,7 @@
  }
  function inspector(){
   if(!battle)return;
-  const unit=focusedEnemy!==null?battle.enemies.find(u=>u.id===focusedEnemy&&u.alive):selected();
+  const unit=focusedEnemy!==null?battle.enemies.find(u=>u.id===focusedEnemy&&u.alive):(activePlayer()||selected());
   const root=document.getElementById('battle-inspector');
   if(!unit){root.innerHTML='<div class="tactics-mini-title">✦ ВЫБРАННЫЙ БОЕЦ</div><div style="font-size:12px;color:#aaa">Нажми на союзника в отряде или на поле.</div>';return}
   const c=CREATURES[unit.key];
@@ -374,12 +452,12 @@
  function formation(){
   const el=document.getElementById('tactics-formation');
   if(!battle)return;
-  el.innerHTML='<h3>✦ '+(battle.phase==='deploy'?'РАССТАВЬ СВОЙ ОТРЯД': 'БОЙЦЫ ОТРЯДА')+' · '+allLiving('player').length+'/4</h3>'+battle.allies.map(u=>`<button type="button" data-tactics-unit="${u.id}" class="tf-unit ${u.id===pickedAlly?'selected':''} ${u.x!==null?'placed':''} ${u.acted?'acted':''}" ${!u.alive?'disabled':''}><img src="${CARD_ART[u.key]}" alt=""><span>${CREATURES[u.key].name}${u.side==='player'&&u.level>1?' · Ур. '+u.level:''}</span><small>${!u.alive?'☠ погиб':u.x===null?'✚ разместить':battle.phase==='deploy'?'✓ размещён':`♥ ${u.hp} ${u.acted?'· ход сделан':''}`}</small></button>`).join('');
+  el.innerHTML='<h3>✦ '+(battle.phase==='deploy'?'РАССТАВЬ СВОЙ ОТРЯД': 'БОЙЦЫ ОТРЯДА')+' · '+allLiving('player').length+'/4</h3>'+battle.allies.map(u=>`<button type="button" data-tactics-unit="${u.id}" class="tf-unit ${u.id===pickedAlly?'selected':''} ${u.x!==null?'placed':''} ${u.turnDone?'acted':''}" ${!u.alive?'disabled':''}><img src="${CARD_ART[u.key]}" alt=""><span>${CREATURES[u.key].name}${u.side==='player'&&u.level>1?' · Ур. '+u.level:''}</span><small>${!u.alive?'☠ погиб':u.x===null?'✚ разместить':battle.phase==='deploy'?'✓ размещён':`♥ ${u.hp} ${u.turnDone?'· ход сделан':battle.activeId===u.id?'· ходит сейчас':''}`}</small></button>`).join('');
  }
  function battleWelcome(){
   document.getElementById('battle-title').textContent='АРЕНА ПОХОДОВ';
   document.getElementById('battle-sub').textContent='Изометрическое поле 16 × 16 · пошаговая стратегия';
-  const status=document.getElementById('battle-status');status.innerHTML='<div class="tactics-welcome" style="width:100%"><h3>Выбери место для похода</h3><p>Размести до четырёх существ на поле, перемещай их по клеткам и побеждай врагов по ходам.</p><div class="tactics-missions">'+PLACES.map(p=>`<button type="button" class="tactics-mission" onclick="startBattle('${p.id}')"><div style="font-size:31px">${p.emoji}</div><b>${p.name}</b><small>✦ ${p.gold} золота · ${p.xp} опыта</small></button>`).join('')+'</div></div>';
+  const status=document.getElementById('battle-status');status.innerHTML='<div class="tactics-welcome" style="width:100%"><h3>Выбери место для похода</h3><p>Размести до четырёх существ на поле, затем веди пошаговый бой: существа ходят по очереди, по одному бойцу за раз.</p><div class="tactics-missions">'+PLACES.map(p=>`<button type="button" class="tactics-mission" onclick="startBattle('${p.id}')"><div style="font-size:31px">${p.emoji}</div><b>${p.name}</b><small>✦ ${p.gold} золота · ${p.xp} опыта</small></button>`).join('')+'</div></div>';
   document.querySelector('.tactics-stage').style.display='none';
   document.getElementById('end-turn').disabled=true;
  }
@@ -388,21 +466,21 @@
   document.querySelector('.tactics-stage').style.display='grid';
   document.getElementById('battle-title').textContent=battle.place.name.toUpperCase();
   const setup=battle.phase==='deploy',done=battle.phase==='done';
-  document.getElementById('battle-sub').textContent='Поле 16 × 16 · '+(setup?'подготовка отряда':done?'поход завершён':`Раунд ${battle.round} · ${battle.turn==='player'?'твой ход':'ход врага'}`);
-  document.getElementById('battle-status').textContent=setup?`РАССТАНОВКА · ${battle.allies.filter(u=>u.x!==null).length} из ${battle.allies.length} бойцов размещено. Выбирай в панели справа, затем нажимай на зелёную клетку.`:done?((allLiving('enemy').length===0?'🏆 ПОБЕДА':'☠ ПОРАЖЕНИЕ')+' · Можно вернуться к карте.'): `РАУНД ${battle.round} · Союзники: ${allLiving('player').length} · Противники: ${allLiving('enemy').length} · ${battle.turn==='player'?'Твой ход':'Враг ходит…'}`;
-  document.getElementById('tactics-instruction').textContent=setup?'Выбери бойца справа и нажми на свободную клетку в зелёной зоне. Повтори для каждого бойца. Затем нажми «Начать бой».':done?'Поход завершён. Выжившие сохраняются, павшие карты исчезают навсегда.':'Выбери бойца, нажми на синюю клетку для движения, затем на врага в пределах дальности. У каждого бойца одно перемещение и одна атака за раунд.';
+  document.getElementById('battle-sub').textContent='Поле 16 × 16 · '+(setup?'подготовка отряда':done?'поход завершён':`Раунд ${battle.round} · ${battle.turn==='player'?'ходит '+CREATURES[activePlayer()?.key||pickedAlly]?.name||'союзник':'ходит '+CREATURES[activeEnemy()?.key||'boneguard']?.name||'враг'}`);
+  document.getElementById('battle-status').textContent=setup?`РАССТАНОВКА · ${battle.allies.filter(u=>u.x!==null).length} из ${battle.allies.length} бойцов размещено. Выбирай в панели справа, затем нажимай на зелёную клетку.`:done?((allLiving('enemy').length===0?'🏆 ПОБЕДА':'☠ ПОРАЖЕНИЕ')+' · Можно вернуться к карте.'): `РАУНД ${battle.round} · Союзники: ${allLiving('player').length} · Противники: ${allLiving('enemy').length} · ${battle.turn==='player'?'ходит '+CREATURES[activePlayer()?.key||pickedAlly]?.name:'враг действует…'}`;
+  document.getElementById('tactics-instruction').textContent=setup?'Выбери бойца справа и нажми на свободную клетку в зелёной зоне. Повтори для каждого бойца. Затем нажми «Начать бой».':done?'Поход завершён. Выжившие сохраняются, павшие карты исчезают навсегда.':'Ходит только один боец за раз. Сначала можно переместиться по синим клеткам, затем атаковать врага или завершить ход кнопкой.';
   document.getElementById('tactics-auto-deploy').style.display=setup?'':'none';
   document.getElementById('tactics-deploy').style.display=setup?'':'none';
   document.getElementById('tactics-deploy').disabled=!allPlaced();
   document.getElementById('attack').style.display=!setup&&!done?'':'none';
   document.getElementById('heal').style.display=!setup&&!done?'':'none';
-  const a=selected();const enemy=battle.enemies.find(u=>u.id===focusedEnemy&&u.alive);
-  document.getElementById('attack').disabled=enemyBusy||done||battle.turn!=='player'||!a||a.acted||!enemy||!canHit(a,enemy);
-  document.getElementById('heal').disabled=enemyBusy||done||battle.turn!=='player'||!a||a.acted||a.hp>=a.maxHp;
-  const end=document.getElementById('end-turn');end.disabled=setup||done||enemyBusy||battle.turn!=='player';end.textContent=setup?'Расставь бойцов':done?'Бой окончен':'Завершить ход →';
+  const a=activePlayer();const enemy=battle.enemies.find(u=>u.id===focusedEnemy&&u.alive);
+  document.getElementById('attack').disabled=enemyBusy||done||battle.turn!=='player'||!a||a.acted||battle.activeId!==a.id||!enemy||!canHit(a,enemy);
+  document.getElementById('heal').disabled=enemyBusy||done||battle.turn!=='player'||!a||a.acted||battle.activeId!==a.id||a.hp>=a.maxHp;
+  const end=document.getElementById('end-turn');end.disabled=setup||done||enemyBusy||battle.turn!=='player'||!activePlayer();end.textContent=setup?'Расставь бойцов':done?'Бой окончен':'Передать ход →';
   document.getElementById('retreat').textContent=done?'← К карте':setup?'← Отменить поход':'← Отступить';
   document.getElementById('battle-log').innerHTML=battle.log.map(x=>`<div>✦ ${x}</div>`).join('');
-  document.getElementById('tactics-cursor').textContent=hoverTile?`Клетка ${hoverTile.x+1} : ${hoverTile.y+1}`:setup?'◈ Зелёные клетки — зона расстановки':done?'✦ Поход окончен':'◈ Синие точки — доступный ход · красные круги — цель';
+  document.getElementById('tactics-cursor').textContent=hoverTile?`Клетка ${hoverTile.x+1} : ${hoverTile.y+1}`:setup?'◈ Зелёные клетки — зона расстановки':done?'✦ Поход окончен':'◈ Синие точки — доступный ход · красные круги — цель активного бойца';
   inspector();formation();layoutBoard();drawBoard();centerBoard();frame();
  }
  function markNavigation(tab){document.querySelectorAll('.gothic-sidebar [data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));}
@@ -413,7 +491,7 @@
   const place=PLACES.find(p=>p.id===placeId)||PLACES[0];
   const allies=state.army.map(id=>byId(id)).filter(Boolean).slice(0,4).map(u=>({id:u.id,key:u.key,side:'player',level:creatureLevel(u),hp:creatureStats(u).hp+(typeof equipmentHealthBonus==='function'?equipmentHealthBonus():0),maxHp:creatureStats(u).hp+(typeof equipmentHealthBonus==='function'?equipmentHealthBonus():0),x:null,y:null,alive:true,moved:false,acted:false}));
   const enemies=place.enemies.map((key,i)=>({id:'e'+i,key,side:'enemy',hp:CREATURES[key].hp,maxHp:CREATURES[key].hp,x:(positions[place.id]||positions.forest)[i][0],y:(positions[place.id]||positions.forest)[i][1],alive:true,moved:false,acted:false}));
-  battle={place,allies,enemies,phase:'deploy',round:0,turn:'player',over:false,log:['Поход: '+place.name+'. Размести существ в выделенной зоне.']};
+  battle={place,allies,enemies,phase:'deploy',round:0,turn:'player',over:false,activeId:null,turnQueue:[],turnIndex:0,log:['Поход: '+place.name+'. Размести существ в выделенной зоне.']};
   battleAnimationReset();pickedAlly=allies[0]?.id||null;focusedEnemy=null;hoverTile=null;cameraReady=false;enemyBusy=false;
   showTab('battle');markNavigation('battle');renderBattle();
  };
@@ -433,12 +511,12 @@
   if(ally&&enemy)activeAttack(ally,enemy);renderBattle();
  };
  document.getElementById('heal').onclick=()=>{
-  const u=selected();if(!u||u.acted||battle?.phase!=='fight'||battle.turn!=='player')return;
-  const healing=Math.min(3,u.maxHp-u.hp);u.hp+=healing;u.acted=true;fx('heal',u.x,u.y,{healing});write('✦ '+CREATURES[u.key].name+' восстанавливает '+healing+' здоровья.');renderBattle();
+  const u=activePlayer();if(!u||u.acted||battle?.phase!=='fight'||battle.turn!=='player')return;
+  const healing=Math.min(3,u.maxHp-u.hp);u.hp+=healing;u.acted=true;fx('heal',u.x,u.y,{healing});write('✦ '+CREATURES[u.key].name+' восстанавливает '+healing+' здоровья.');renderBattle();finishTurn(u);
  };
  document.getElementById('tactics-formation').addEventListener('click',e=>{
    const button=e.target.closest('[data-tactics-unit]');if(!button||!battle||battle.over||enemyBusy)return;
-   pickedAlly=Number(button.dataset.tacticsUnit);focusedEnemy=null;renderBattle();
+   const chosen=Number(button.dataset.tacticsUnit);if(battle.phase==='fight'&&battle.turn==='player'&&battle.activeId!==chosen){write('Сейчас ходит '+CREATURES[activePlayer().key].name+'.');pickedAlly=activePlayer().id;}else pickedAlly=chosen;focusedEnemy=null;renderBattle();
  });
  arenaCanvas.addEventListener('click',e=>{const pos=tileFromEvent(e);if(pos)enterTile(pos.x,pos.y)});
  arenaCanvas.addEventListener('mousemove',e=>{
