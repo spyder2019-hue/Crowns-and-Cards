@@ -15,7 +15,8 @@
 #tab-battle .tactics-status{min-height:34px;margin:10px 0 14px;color:#d3c09f;font-size:13px;display:flex;align-items:center}
 #tab-battle .tactics-stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(235px,290px);gap:16px;align-items:start;min-width:0}
 #tab-battle .tactics-board-area{min-width:0;border:1px solid #5f543f;background:radial-gradient(ellipse at 50% 12%,#2d241f,#15121a 58%,#090c12);box-shadow:inset 0 0 40px #000b,0 12px 28px #0008;overflow:hidden;position:relative}
-#tab-battle .tactics-board-area::before{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(255,225,162,.04),transparent 18%,transparent 82%,rgba(0,0,0,.26)),url('../assets/backgrounds/cathedral.jpg') center/cover no-repeat;mix-blend-mode:screen;opacity:.08}\n#tab-battle .tactics-board-area::after{content:'';position:absolute;inset:14px;border:1px solid rgba(197,166,108,.18);pointer-events:none}
+#tab-battle .tactics-board-area::before{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(255,225,162,.04),transparent 18%,transparent 82%,rgba(0,0,0,.26)),url('../assets/backgrounds/cathedral.jpg') center/cover no-repeat;mix-blend-mode:screen;opacity:.08}
+#tab-battle .tactics-board-area::after{content:'';position:absolute;inset:14px;border:1px solid rgba(197,166,108,.18);pointer-events:none}
 #tab-battle .tactics-bar{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:9px 12px;color:#d0b88e;font-size:10px;letter-spacing:1px;background:linear-gradient(180deg,#241e1b,#11161e);border-bottom:1px solid #5a4a35}
 #tab-battle .tactics-dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin:0 5px 0 12px}
 #tab-battle .ally-dot{background:#67d8bb;box-shadow:0 0 9px #67d8bb}
