@@ -1,0 +1,45 @@
+/* Crowns & Cards v0.2A — presentation only, no changes to card balance */
+:root{--cc-ember:#efac73;--cc-arcane:#b17ce4}
+#tab-battle .tactics-shell{position:relative;isolation:isolate;background:radial-gradient(ellipse at 54% 24%,#293040e9 0%,transparent 62%),linear-gradient(145deg,#111c27f7,#070e16fd 72%,#221a23f0);border:1px solid #9c7648;box-shadow:inset 0 0 60px #000b,0 24px 65px #0009}
+#tab-battle .tactics-shell::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.25;background:repeating-linear-gradient(90deg,transparent 0 116px,#dbc28e0a 117px,transparent 118px),linear-gradient(145deg,#f4d3a308,transparent 60%);z-index:-1}
+#tab-battle .tactics-board-area{position:relative;border:1px solid #91683d;box-shadow:0 0 0 1px #352819,inset 0 0 38px #000c,0 12px 35px #0009}
+#tab-battle .tactics-board-area::after{content:"";position:absolute;inset:0;pointer-events:none;border:1px solid #cda97922;box-shadow:inset 0 0 40px #070911bb;z-index:2}
+#tab-battle .tactics-bar{background:linear-gradient(180deg,#2b3440,#151b25);border-bottom-color:#a17c46}
+#tab-battle .tactics-camera button{transition:transform .2s,box-shadow .2s,border-color .2s}
+#tab-battle .tactics-camera button:hover{transform:translateY(-2px);border-color:#ddc08a;box-shadow:0 0 15px #d5a46744}
+#tab-battle #tactics-motion-toggle{min-width:135px;font:10px Georgia,serif;letter-spacing:.2px;padding:7px 8px;border-color:#89704d;color:#f4d7a3;background:linear-gradient(#283442,#121d27)}
+#tab-battle #tactics-motion-toggle[aria-pressed="false"]{opacity:.65}
+#tab-battle #arena{transition:width .22s ease;filter:contrast(1.06) saturate(1.14)}
+#tab-battle .tactics-status{min-height:44px;background:linear-gradient(90deg,#281f1882,transparent);border-left:3px solid #bd8c56;padding:8px 13px!important}
+#tab-battle .tf-unit{transition:transform .18s,border-color .18s,box-shadow .18s,filter .18s}
+#tab-battle .tf-unit:hover:not(:disabled){transform:translateY(-3px);filter:brightness(1.17);border-color:#ddb87b}
+#tab-battle .tf-unit.selected{box-shadow:0 0 18px #d5a45a55,inset 0 0 20px #b8975152}
+#tab-battle .tactics-end:not(:disabled),#tab-battle .tactics-deploy:not(:disabled){transition:filter .18s,transform .18s,box-shadow .18s;box-shadow:inset 0 1px #f6cca175,0 0 22px #9f462450}
+#tab-battle .tactics-end:hover:not(:disabled),#tab-battle .tactics-deploy:hover:not(:disabled){filter:brightness(1.15);transform:translateY(-2px);box-shadow:0 0 30px #db844a75}
+#tab-battle .tactics-inspector,#tab-battle .tactics-formation,#tab-battle .tactics-legend,#tab-battle .tactics-log-wrap{border-color:#80633f;box-shadow:inset 0 1px #eac27b12}
+#tab-battle .tactics-mission{transition:transform .22s,box-shadow .22s,border-color .22s}
+#tab-battle .tactics-mission:hover{transform:translateY(-5px);border-color:#c9a271;box-shadow:0 9px 25px #0009,0 0 18px #b7894333}
+#tab-battle .battle-log>div:first-child{animation:cc-log-appear .32s ease-out}
+@keyframes cc-log-appear{from{opacity:.1;transform:translateX(7px);color:#f7dda3}to{opacity:1;transform:translateX(0)}}
+/* World and collection feel more like animated game screens, while remaining 2D. */
+#tab-world .hero-showcase-card, #tab-world #hero-showcase-card{animation:cc-hero-idle 5s ease-in-out infinite;transform-origin:50% 80%;filter:drop-shadow(0 12px 18px #000a)}
+@keyframes cc-hero-idle{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+#tab-world .equipment-slot{transition:transform .23s,filter .23s,box-shadow .23s}
+#tab-world .equipment-slot:hover{transform:scale(1.075);filter:brightness(1.18);box-shadow:0 0 24px #cda46c6a}
+#tab-collection .collection-card,#tab-collection .gothic-card,.world-army-picker .collection-card,.world-army-picker .gothic-card{transition:transform .25s,box-shadow .25s,filter .25s}
+#tab-collection .collection-card:hover,#tab-collection .gothic-card:hover,.world-army-picker .collection-card:hover,.world-army-picker .gothic-card:hover{transform:translateY(-5px);filter:brightness(1.09);box-shadow:0 14px 32px #0009,0 0 16px #c9a46335}
+#tab-packs .pack-image{perspective:1200px}
+#tab-packs .pack-art-inner{transition:transform .45s cubic-bezier(.2,.7,.2,1),filter .4s;animation:cc-pack-breathe 5s ease-in-out infinite;transform-origin:center 55%;filter:drop-shadow(0 12px 15px #05050cbb)}
+#tab-packs .pack-art-inner:hover{animation-play-state:paused;transform:rotateY(-8deg) rotateX(3deg) translateY(-8px) scale(1.025);filter:drop-shadow(0 18px 28px #060611dd) brightness(1.09)}
+@keyframes cc-pack-breathe{0%,100%{transform:translateY(1px) rotateY(-2deg)}50%{transform:translateY(-6px) rotateY(2deg)}}
+#tab-packs .summon-button:not(:disabled){transition:transform .2s,box-shadow .2s,filter .2s}
+#tab-packs .summon-button:hover:not(:disabled){transform:translateY(-3px);filter:brightness(1.2);box-shadow:0 0 26px #7ebefa99}
+#tab-packs .pack-art-inner.cc-pack-opening{animation:cc-pack-opening .8s cubic-bezier(.15,.8,.3,1)!important}
+@keyframes cc-pack-opening{0%{transform:scale(1);filter:brightness(1)}35%{transform:scale(1.1) rotate(-3deg);filter:brightness(1.55) drop-shadow(0 0 30px #ffe7b8)}60%{transform:scale(1.03) rotate(2deg);filter:brightness(1.9) drop-shadow(0 0 45px #a482ff)}100%{transform:scale(1);filter:brightness(1)}}
+#tab-packs .pack-rewards .preview-card.cc-reward-enter{animation:cc-reward-in .65s cubic-bezier(.19,.9,.4,1) both;animation-delay:calc(var(--cc-order,0)*.12s)}
+@keyframes cc-reward-in{0%{opacity:0;transform:translateY(40px) rotateY(75deg) scale(.8);filter:brightness(2)}65%{opacity:1;filter:brightness(1.2)}100%{opacity:1;transform:translateY(0) rotateY(0) scale(1);filter:brightness(1)}}
+#tab-lab .lab-card{transition:filter .2s,box-shadow .25s}
+#tab-lab .lab-card.cc-fusion-glow{animation:cc-fusion-flash .9s ease-out}
+@keyframes cc-fusion-flash{0%{box-shadow:0 0 0 0 #fbd990,0 0 20px #a56bff}38%{box-shadow:0 0 30px 12px #fbd990b0,0 0 40px #a56bff}100%{box-shadow:0 12px 35px #000c}}
+@media (max-width:620px){#tab-battle .tactics-camera{flex-wrap:wrap;justify-content:flex-end}#tab-battle #tactics-motion-toggle{font-size:9px;min-width:100px;padding:5px}}
+@media (prefers-reduced-motion:reduce){#tab-battle *,#tab-world .hero-showcase-card,#tab-world #hero-showcase-card,#tab-packs .pack-art-inner,#tab-packs .pack-rewards .preview-card,#tab-lab .lab-card{animation:none!important;transition:none!important}}
