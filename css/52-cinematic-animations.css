@@ -43,3 +43,10 @@
 @keyframes cc-fusion-flash{0%{box-shadow:0 0 0 0 #fbd990,0 0 20px #a56bff}38%{box-shadow:0 0 30px 12px #fbd990b0,0 0 40px #a56bff}100%{box-shadow:0 12px 35px #000c}}
 @media (max-width:620px){#tab-battle .tactics-camera{flex-wrap:wrap;justify-content:flex-end}#tab-battle #tactics-motion-toggle{font-size:9px;min-width:100px;padding:5px}}
 @media (prefers-reduced-motion:reduce){#tab-battle *,#tab-world .hero-showcase-card,#tab-world #hero-showcase-card,#tab-packs .pack-art-inner,#tab-packs .pack-rewards .preview-card,#tab-lab .lab-card{animation:none!important;transition:none!important}}
+
+
+/* v0.3.2 — warmer ancient stone ornament around battlefield */
+#tab-battle .tactics-board-area{border-color:#a18556!important;box-shadow:0 0 0 1px #3a2b1c,inset 0 0 50px #000d,0 16px 40px #000a}
+#tab-battle .tactics-board-area::after{border-color:#dfc09025;box-shadow:inset 0 0 54px #070911bf}
+#tab-battle .tactics-bar{background:linear-gradient(180deg,#352c26,#181e28);border-bottom-color:#ab8249}
+#tab-battle #arena{filter:contrast(1.06) saturate(1.12)}

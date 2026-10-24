@@ -116,3 +116,12 @@
 .lab-empty{color:#aaa094;font-size:14px;text-align:center;line-height:1.6}
 @media(max-width:920px){.lab-layout{grid-template-columns:1fr}.lab-roster{grid-template-columns:repeat(2,minmax(0,1fr));max-height:255px}.lab-workspace{min-height:0}.lab-fusion-layout{margin:0 auto;padding-top:10px}}
 @media(max-width:550px){#tab-lab:not(.hidden){padding:10px!important}.lab-roster{grid-template-columns:1fr 1fr;gap:5px}.lab-entry{gap:4px;padding:5px;min-height:58px}.lab-entry img{width:32px;height:41px}.lab-entry-body strong{font-size:11px}.lab-entry-copy{font-size:9px}.lab-fusion-layout{grid-template-columns:1fr;justify-items:center;gap:15px}.lab-card{max-width:217px;min-height:300px}.lab-card-art{height:196px}.lab-controls{width:100%}.lab-merge{max-width:none}.lab-top{padding-top:6px}.lab-top p{font-size:12px}}
+
+
+/* v0.3.2 — gothic diorama arena visual refinement */
+#tab-battle .tactics-board-area{border:1px solid #91744b!important;border-radius:6px;background:radial-gradient(circle at 50% 5%,#342e2c 0,#15171b 60%,#090c12 100%);box-shadow:0 0 0 1px #3c2b1e,inset 0 0 45px #0009,0 16px 40px #000b}
+#tab-battle .tactics-bar{background:linear-gradient(180deg,#332b24,#191e26);border-bottom:1px solid #947249;color:#e5cba2}
+#tab-battle .tactics-board-footer{background:linear-gradient(180deg,#161b22,#0d1118);border-top:1px solid #675139}
+#tab-battle #arena{width:1140px;background:radial-gradient(circle at 50% 20%,#34403d,#0b0d13 78%)}
+#tab-battle .tactics-board-area::before{opacity:.045}
+#tab-battle .tactics-stage{gap:18px}
