@@ -1,0 +1,45 @@
+/* Nine-kingdom campaign: isolated from the world, battle and inventory screens. */
+#cc-v09 #cc09-map.cc09-page{padding:clamp(8px,1.6vw,16px);gap:0}
+#cc-v09 .cc-campaign-page{display:grid;gap:12px;color:#19356c;font-family:system-ui,-apple-system,"Segoe UI",sans-serif}
+#cc-v09 .cc-campaign-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 13px;border:3px solid #f9ce71;border-radius:17px;background:linear-gradient(130deg,#fff9df,#e0eeff);box-shadow:0 4px 0 #c78f45}
+#cc-v09 .cc-campaign-header h1{margin:0;color:#243c79;font-size:clamp(17px,3vw,25px);font-weight:950;line-height:1.2}
+#cc-v09 .cc-campaign-header p{margin:4px 0 0;font-size:clamp(10px,1.6vw,12px);font-weight:650;color:#586993}
+#cc-v09 .cc-campaign-global-progress{white-space:nowrap;background:#263d82;color:#fff4c3;border:2px solid #ffe392;padding:9px;border-radius:13px;font-size:clamp(11px,2.4vw,15px);font-weight:900}
+#cc-v09 .cc-campaign-scroll{position:relative;max-width:100%;overflow-x:auto;overflow-y:hidden;border:4px solid #e8b45d;border-radius:18px;background:#122952;box-shadow:0 7px 0 #ad7533,0 12px 22px #17346455;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:#ffdb69 #254e8d}
+#cc-v09 .cc-campaign-canvas{position:relative;width:100%;min-width:750px;aspect-ratio:3/2}
+#cc-v09 .cc-campaign-canvas>img{position:absolute;inset:0;display:block;width:100%;height:100%;object-fit:fill;pointer-events:none;user-select:none}
+#cc-v09 .cc-campaign-hit{position:absolute;appearance:none;-webkit-appearance:none;border:0!important;border-radius:19px!important;background:transparent!important;box-shadow:none!important;color:#fff;z-index:2;display:flex;justify-content:flex-end;align-items:flex-start;padding:7px;cursor:pointer;touch-action:pan-x pan-y;transition:background .18s ease!important}
+#cc-v09 .cc-campaign-hit:active:not(:disabled){transform:none!important}
+#cc-v09 .cc-campaign-hit:is(:hover,:focus-visible,.is-current){background:radial-gradient(ellipse at center,transparent 25%,color-mix(in srgb,var(--region-color) 25%,transparent) 90%)!important;outline:2px solid color-mix(in srgb,var(--region-color) 85%,white);outline-offset:-4px}
+#cc-v09 .cc-campaign-hit-badge{position:relative;display:inline-block;padding:4px 6px;border-radius:11px;border:1px solid #f5ce7f;background:rgba(16,22,56,.93);box-shadow:0 2px 7px #0c153680;color:#fff6dd;font-size:clamp(10px,1.5vw,12px);font-weight:850;white-space:nowrap;pointer-events:none}
+#cc-v09 .cc-campaign-hit.is-locked .cc-campaign-hit-badge{background:rgba(30,35,63,.92);color:#d8d7e2;border-color:#838ba4}
+#cc-v09 .cc-campaign-scroll-hint{text-align:center;font-size:11px;font-weight:750;color:#4b6393;padding:1px 4px}
+#cc-v09 .cc-campaign-detail{padding:clamp(11px,2vw,18px);border:3px solid #b69965;border-top:5px solid var(--campaign-color);border-radius:19px;background:linear-gradient(170deg,#fff8e4,#e3ecff 72%,#d1e3f7);box-shadow:0 6px 0 #ad8552,0 10px 25px #14265642;color:#253b77}
+#cc-v09 .cc-campaign-detail-head{display:flex;justify-content:space-between;align-items:start;gap:12px}
+#cc-v09 .cc-campaign-region-label{font-size:10px;letter-spacing:.06em;font-weight:900;color:#666895}
+#cc-v09 .cc-campaign-detail h2{font-size:clamp(19px,3.5vw,27px);line-height:1.2;margin:3px 0 5px;font-weight:950;color:#182d67}
+#cc-v09 .cc-campaign-detail-head p{font-size:12px;color:#5c6791;font-weight:650;margin:0}
+#cc-v09 .cc-campaign-counter{flex:none;border-radius:14px;border:2px solid #c08e42;background:#ffe5a7;padding:8px;color:#5e401e;font-size:15px;font-weight:900}
+#cc-v09 .cc-campaign-progress{height:10px;background:#bccce8;border:1px solid #8caddb;border-radius:12px;overflow:hidden;margin:14px 0 8px}
+#cc-v09 .cc-campaign-progress span{display:block;height:100%;background:linear-gradient(90deg,#ffbe3e,#ffe57a);border-radius:12px;transition:width .25s ease}
+#cc-v09 .cc-campaign-hint{margin:0 0 10px;font-size:11px;font-weight:750;color:#62638a}
+#cc-v09 .cc-campaign-missions{display:grid;gap:9px}
+#cc-v09 .cc-campaign-mission{display:grid;grid-template-columns:35px minmax(0,1fr) auto;gap:10px;align-items:center;border:2px solid #c1bbaf;border-radius:15px;background:#ffffffce;padding:10px;box-shadow:0 3px 0 #a4a8bf}
+#cc-v09 .cc-campaign-mission.is-cleared{border-color:#a6cf88;background:#f5fff0}
+#cc-v09 .cc-campaign-mission.is-locked{opacity:.72}
+#cc-v09 .cc-campaign-mission-icon{height:34px;width:34px;display:grid;place-items:center;background:#354e8c;border-radius:11px;color:#fff1a0;font-size:19px;font-weight:900}
+#cc-v09 .cc-campaign-mission-info{min-width:0}
+#cc-v09 .cc-campaign-mission-info strong{display:block;font-size:clamp(12px,1.9vw,15px);font-weight:900;color:#203c77}
+#cc-v09 .cc-campaign-mission-info p{font-size:11px;color:#596889;font-weight:600;margin:2px 0}
+#cc-v09 .cc-campaign-mission-info small{display:block;color:#89611d;font-size:10px;font-weight:850}
+#cc-v09 button.cc-campaign-start{min-width:99px;min-height:39px;border:2px solid #fff1b3;border-radius:11px;background:linear-gradient(#ffdd6c,#eeb03c);color:#694415;font-weight:950;font-size:12px;box-shadow:0 3px 0 #aa7630;padding:5px 8px}
+#cc-v09 button.cc-campaign-start:disabled{background:linear-gradient(#c6ccdf,#a1acc2);border-color:#cad2e4;color:#53627e;box-shadow:none;cursor:not-allowed}
+#cc-v09 .cc-campaign-finale{padding:14px;border:3px solid #ffd36b;border-radius:16px;background:#33498d;text-align:center;font-size:15px;font-weight:950;color:#fff5ce}
+@media(max-width:600px){
+ #cc-v09 .cc-campaign-canvas{min-width:760px}
+ #cc-v09 .cc-campaign-mission{grid-template-columns:30px minmax(0,1fr);gap:7px;padding:9px}
+ #cc-v09 .cc-campaign-mission-icon{width:28px;height:28px;font-size:16px}
+ #cc-v09 button.cc-campaign-start{grid-column:2;justify-self:start;min-height:34px}
+ #cc-v09 .cc-campaign-scroll{border-radius:13px}
+}
+@media(prefers-reduced-motion:reduce){#cc-v09 .cc-campaign-hit,#cc-v09 .cc-campaign-progress span{transition:none!important}}

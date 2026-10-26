@@ -5,7 +5,7 @@
 <base href="https://spyder2019-hue.github.io/Crowns-and-Cards/">
 <meta charset="utf-8"/><meta content="#172532" name="theme-color"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Crowns &amp; Cards — Пять королевств · Мультяшное меню</title>
-<meta name="cc-build" content="20261026-frames-removed"><link rel="icon" type="image/webp" href="assets/branding/crowns-cards-logo.webp?art=20261026b">
+<meta name="cc-build" content="20261026-nine-kingdom-campaign-v1"><link rel="icon" type="image/webp" href="assets/branding/crowns-cards-logo.webp?art=20261026b">
 <style>
 /* css/00-base-and-early-ui.css */
 /* Original style block 0 */
@@ -2655,7 +2655,9 @@ body.cc-v09-native #tab-battle{display:block!important;visibility:visible!import
  #cc-v09 .cc09-slot-list.right{right:0!important}
 }
 
-</style></head><body class="cc-v09-active"><div class="app">
+</style><link rel="stylesheet" href="css/110-kingdom-campaign.css?v=1">
+<!-- Crowns & Cards nine-kingdom campaign v1 -->
+</head><body class="cc-v09-active"><div class="app">
 <header class="top"><div><div class="brand">♛ CROWNS <span>&amp;</span> CARDS</div><div class="sub">Стратегия пяти королевств</div></div><div class="resources"><div class="resource"><svg aria-label="Золото" class="gold-coin-icon" height="30" role="img" viewbox="0 0 64 64" width="30" xmlns="http://www.w3.org/2000/svg"><defs><radialgradient cx="35%" cy="24%" id="coinshine" r="75%"><stop offset="0" stop-color="#fff3b2"></stop><stop offset=".32" stop-color="#f5c94b"></stop><stop offset=".75" stop-color="#b77b18"></stop><stop offset="1" stop-color="#6b3d0d"></stop></radialgradient></defs><circle cx="32" cy="32" fill="#3b2109" r="29" stroke="#ffdb70" stroke-width="2"></circle><circle cx="32" cy="32" fill="url(#coinshine)" r="25" stroke="#9c6116" stroke-width="2"></circle><circle cx="32" cy="32" fill="none" r="19" stroke="#ffe29a" stroke-width="2"></circle><path d="M39 23c-4-4-15-3-15 4 0 8 16 3 16 11 0 8-13 10-18 4M32 17v30" fill="none" stroke="#7c460f" stroke-linecap="round" stroke-width="4"></path><path d="M39 22c-4-4-15-3-15 4 0 8 16 3 16 11 0 8-13 10-18 4M32 17v30" fill="none" stroke="#ffe8a3" stroke-linecap="round" stroke-width="2"></path></svg><b id="gold">500</b></div><div class="resource" style="display:none!important">⭐ Ур. <b id="level">1</b></div><div class="resource" style="display:none!important">🃏 Карт: <b id="total">0</b></div></div></header>
 <aside class="gothic-sidebar"><div class="side-logo"><img src="assets/branding/crowns-cards-logo.webp?art=20261026b" alt="Crowns & Cards" style="width:100%;max-height:145px;object-fit:contain"></div><button class="active" data-tab="world" type="button">♜ <span>Мир</span></button><button data-tab="map" type="button">◇ <span>Карта</span></button><button data-tab="lab" type="button">⚗ <span>Лаборатория</span></button><button data-tab="packs" type="button">▤ <span>Паки</span></button><button data-tab="shop" type="button">◆ <span>Магазин</span></button></aside>
 <main>
@@ -3727,7 +3729,7 @@ renderEquipment();
  function activeAttack(a,t){
    if(battle.phase!=='fight'||battle.activeId!==a.id||a.turnDone||a.acted)return false;
    if(!canHit(a,t)){write('Цель далеко или закрыта скалой. Дальность '+rangeOf(a)+' кл.');return false}
-   const power=CREATURES[a.key].atk+(a.side==='player'?((Math.max(1,Number(a.level)||1)-1)+(state.hero.attack||0)+(typeof equipmentAttackBonus==='function'?equipmentAttackBonus():0)):0);
+   const power=CREATURES[a.key].atk+(a.side==='player'?((Math.max(1,Number(a.level)||1)-1)+(state.hero.attack||0)+(typeof equipmentAttackBonus==='function'?equipmentAttackBonus():0)):(battle.place.enemyBonus||0));
    t.hp-=power;a.acted=true;fx('attack',t.x,t.y,{fromX:a.x,fromY:a.y,power,isMagic:CREATURES[a.key].type==='magic'||CREATURES[a.key].type==='mage'});
    write(CREATURES[a.key].name+' атакует '+CREATURES[t.key].name+' — '+power+' урона.');
    if(t.hp<=0){t.hp=0;t.alive=false;fx('death',t.x,t.y);write('☠ '+CREATURES[t.key].name+' погибает.');
@@ -3919,7 +3921,7 @@ renderEquipment();
   if(!state.army.length){alert('Выбери хотя бы одного бойца в четырёх слотах под героем.');showTab('world');if(typeof openWorldArmySlot==='function')openWorldArmySlot(0);return}
   const place=PLACES.find(p=>p.id===placeId)||PLACES[0];
   const allies=state.army.map(id=>byId(id)).filter(Boolean).slice(0,4).map(u=>({id:u.id,key:u.key,side:'player',level:creatureLevel(u),hp:creatureStats(u).hp+(typeof equipmentHealthBonus==='function'?equipmentHealthBonus():0),maxHp:creatureStats(u).hp+(typeof equipmentHealthBonus==='function'?equipmentHealthBonus():0),x:null,y:null,alive:true,moved:false,acted:false}));
-  const enemies=place.enemies.map((key,i)=>({id:'e'+i,key,side:'enemy',hp:CREATURES[key].hp,maxHp:CREATURES[key].hp,x:(positions[place.id]||positions.forest)[i][0],y:(positions[place.id]||positions.forest)[i][1],alive:true,moved:false,acted:false}));
+  const enemies=place.enemies.map((key,i)=>({id:'e'+i,key,side:'enemy',hp:Math.round(CREATURES[key].hp*(place.hpMult||1)),maxHp:Math.round(CREATURES[key].hp*(place.hpMult||1)),x:(positions[place.id]||positions.forest)[i][0],y:(positions[place.id]||positions.forest)[i][1],alive:true,moved:false,acted:false}));
   battle={place,allies,enemies,phase:'deploy',round:0,turn:'player',over:false,activeId:null,turnQueue:[],turnIndex:0,log:['Поход: '+place.name+'. Размести существ в выделенной зоне.']};
   battleAnimationReset();pickedAlly=allies[0]?.id||null;focusedEnemy=null;hoverTile=null;cameraReady=false;enemyBusy=false;
   showTab('battle');markNavigation('battle');renderBattle();
@@ -4395,6 +4397,7 @@ renderEquipment();
   </div>
 </div>
 <button type="button" id="cc-v09-back">‹ Вернуться в меню</button>
+<script src="js/110-kingdom-campaign.js?v=1"></script>
 <script>
 /* js/130-cartoon-native-v09.js */
 /* Crowns & Cards v0.9 — truly native illustrated UI, no flattened screenshots/hotspots. */
@@ -4697,18 +4700,7 @@ function renderWorld(){
   <div class="cc09-action-row">${btn('map','⚔ В БОЙ!')}</div>
   <div class="cc09-panel cc09-panel-blue"><div class="cc09-row"><strong>⚔ БОЕВОЙ ОТРЯД</strong><span class="cc09-chip">${current.length} / 4</span></div><div class="cc09-world-squad" style="margin-top:12px">${slots}</div></div>`;
 }
-function renderMap(){
- const kingdoms=[
-  ['human','Королевство людей','map-humans','future:human',true],
-  ['undead','Земли нежити','map-undead','missions',false],
-  ['elf','Эльфийские леса','map-elves','future:elf',true],
-  ['demon','Демонические пустоши','map-demons','future:demon',true],
-  ['orc','Территория орков','map-orcs','future:orc',true]
- ];
- const tiles=kingdoms.map(([id,title,art,cmd,locked],i)=>`<button type="button" data-cmd="${cmd}" class="cc09-map-kingdom ${locked?'locked':'selected'} ${i===0?'big':''}"><img src="${ico(art)}" alt=""><span class="cc09-badge">${locked?'🔒 СКОРО':'✓ ОТКРЫТО'}</span><strong>${title}</strong><small>${locked?'Новая раса в разработке':'Три доступных похода'}</small></button>`).join('');
- const missions=PLACES.map(p=>`<button class="cc09-panel cc09-row" style="width:100%;text-align:left" type="button" data-cmd="start:${p.id}"><span><b>${esc(p.emoji)} ${esc(p.name)}</b><br><small class="cc09-map-detail">+${p.gold} золота · +${p.xp} опыта</small></span><span class="cc09-chip">⚔ В бой</span></button>`).join('');
- return `<div class="cc09-map-intro"><h1 class="cc09-title">🗺 Карта королевств</h1><p class="cc09-subtitle">Выбери королевство или отправься в поход.</p></div><div class="cc09-grid2">${tiles}</div><div class="cc09-panel"><h2 class="cc09-title" style="font-size:22px">Походы нежити</h2><div style="display:grid;gap:10px;margin-top:12px">${missions}</div></div>`;
-}
+function renderMap(){return window.CrownsCampaign?window.CrownsCampaign.render():'<p>Карта временно недоступна</p>';}
 function renderPacks(){
  const packs=[['units','Пак нежити','pack-undead','3 существа'],['heroes','Пак героев','pack-heroes','Случайный герой'],['future','Особый пак','pack-royal','Скоро']];
  const cards=packs.map(([type,title,image,caption])=>`<button type="button" class="cc09-pack-card ${pack===type?'selected':''}" data-cmd="pack:${type}"><img src="${ico(image)}" alt="${title}"><strong>${title}</strong><small>${caption}</small></button>`).join('');
@@ -4890,6 +4882,8 @@ function handle(command){
  const [name,param,other]=command.split(':');
  switch(name){
   case 'map':closeModal();setPage('map');break;
+  case 'region':window.CrownsCampaign?.select(param);closeModal();setPage('map');break;
+  case 'campaign':{if(!window.CrownsCampaign?.canStart(param)){notice('Сначала выполни предыдущее задание');break;}enterBattle(param);break;}
   case 'missions':showMissions();break;
   case 'mission':showMissions(param);break;
   case 'future':notice('Эта раса пока в разработке. Доступны три похода с нежитью.');break;
