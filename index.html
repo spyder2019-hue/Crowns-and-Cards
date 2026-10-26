@@ -5,7 +5,7 @@
 <base href="https://spyder2019-hue.github.io/Crowns-and-Cards/">
 <meta charset="utf-8"/><meta content="#172532" name="theme-color"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Crowns &amp; Cards — Пять королевств · Мультяшное меню</title>
-<meta name="cc-build" content="20261026-creatures-logo-v2"><link rel="icon" type="image/webp" href="assets/branding/crowns-cards-logo.webp?art=20261026b">
+<meta name="cc-build" content="20261026-squad-v3"><link rel="icon" type="image/webp" href="assets/branding/crowns-cards-logo.webp?art=20261026b">
 <style>
 /* css/00-base-and-early-ui.css */
 /* Original style block 0 */
@@ -2527,6 +2527,44 @@ body.cc-v09-native #tab-battle{display:block!important;visibility:visible!import
 @media(max-width:430px){#cc-v09 .cc09-logo{width:34vw;height:58px}#cc-v09 .cc09-counter{padding:4px 5px}#cc-v09 .cc09-gems{display:none}#cc-v09 .cc09-settings{width:36px;height:36px;font-size:19px}#cc-v09 .cc09-hud{min-height:66px}#cc-v09 .cc09-world-stage{min-height:348px}#cc-v09 .cc09-hero-art{height:calc(100% - 48px)}#cc-v09 .cc09-action-row{grid-template-columns:1.2fr .7fr}#cc-v09 .cc09-gold-button{padding:8px;font-size:13px}#cc-v09 .cc09-purple-button{padding:6px;font-size:11px}#cc-v09 .cc09-world-squad{gap:5px}#cc-v09 .cc09-unit img{height:65px}#cc-v09 .cc09-unit{min-height:108px}#cc-v09 .cc09-page{gap:10px}#cc-v09 .cc09-dialog-body{padding:12px 9px 20px}#cc-v09 .cc-item{gap:5px;padding:7px}#cc-v09 .cc-item img{width:44px;height:54px}#cc-v09 .cc-btn{padding:7px;font-size:11px}#cc-v09 .cc09-hero-overlay{width:73%;left:13.5%}}
 @media(prefers-reduced-motion:reduce){#cc-v09 .cc09-page.active{animation:none}#cc-v09 .cc09-toast{transition:none}}
 
+
+/* v0.9 squad gallery — full-body creature portraits, phone + desktop */
+#cc-v09 .cc09-dialog:has(.cc09-squad-catalog){width:min(100%,890px);max-height:94%}
+#cc-v09 .cc09-squad-catalog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:stretch}
+#cc-v09 .cc09-pick-card{display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start;gap:5px;padding:8px;border:3px solid #b88ce3;border-radius:17px;background:linear-gradient(155deg,#fef5df,#e2edff);color:#2b3972;box-shadow:0 5px 0 #a6b7da;text-align:center;min-width:0;cursor:pointer}
+#cc-v09 .cc09-pick-card:not(:disabled):active{transform:translateY(2px);box-shadow:0 2px 0 #a6b7da}
+#cc-v09 .cc09-pick-portrait{display:flex;align-items:flex-end;justify-content:center;min-width:0;height:clamp(150px,27vw,245px);padding:8px 4px 0;overflow:hidden;border-radius:12px;background:radial-gradient(ellipse at 50% 85%,#7264a9 0%,#303975 52%,#18254f 100%);border:2px solid #b3a5de}
+#cc-v09 .cc09-pick-portrait img{display:block;width:100%;height:100%;object-fit:contain;object-position:center bottom;min-width:0}
+#cc-v09 .cc09-pick-title{font-weight:900;font-size:clamp(12px,2.6vw,16px);line-height:1.15;min-height:32px;display:flex;align-items:center;justify-content:center}
+#cc-v09 .cc09-pick-meta{font-size:11px;font-weight:700;color:#566994}
+#cc-v09 .cc09-pick-action{display:block;margin-top:auto;padding:8px 3px;background:linear-gradient(#ffed92,#eeb948);border:1px solid #b9872d;border-radius:10px;color:#50360d;font-weight:900;font-size:12px}
+#cc-v09 .cc09-pick-card.is-equipped{border-color:#68bd83;background:#e9f8e9;cursor:default}
+#cc-v09 .cc09-pick-card.is-equipped .cc09-pick-action{background:#b5dcc4;border-color:#85b495;color:#306548}
+#cc-v09 .cc09-squad-slots button{min-height:100px;padding:5px}
+#cc-v09 .cc09-squad-slots img{width:100%;max-width:78px;height:70px;object-fit:contain;object-position:center bottom;background:radial-gradient(#6673a9,#233c78);border-radius:7px}
+#cc-v09 .cc09-squad-slots .cc09-empty-slot{font-size:30px;line-height:70px}
+#cc-v09 .cc09-squad-slots button>span:last-child{font-size:10px;line-height:1.15;overflow-wrap:anywhere}
+#cc-v09 .cc09-world-squad{grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+#cc-v09 .cc09-world-squad .cc09-unit{min-height:165px}
+#cc-v09 .cc09-world-squad .cc09-unit img{width:100%;height:122px;object-fit:contain;object-position:center bottom;padding:4px 1px;background:radial-gradient(ellipse at 50% 100%,#707ac3 0%,#263f7a 80%)}
+#cc-v09 .cc09-world-squad .cc09-unit strong{padding:5px 3px 7px;font-size:clamp(10px,1.6vw,14px)}
+#cc-v09 .cc09-world-squad .cc09-unit .cc09-level{top:5px;left:5px;z-index:2}
+#cc-v09 .cc09-world-squad .cc09-unit .cc09-stars{bottom:28px}
+#cc-v09 .cc09-action-row{grid-template-columns:1fr}
+#cc-v09 .cc09-hero-art{height:calc(100% - 15px)}
+#cc-v09 .cc09-hero-overlay,#cc-v09 .cc09-banner{display:none!important}
+@media(min-width:650px){
+ #cc-v09 .cc09-squad-catalog{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:650px){
+ #cc-v09 .cc09-squad-catalog{gap:8px}
+ #cc-v09 .cc09-pick-card{padding:5px;border-width:2px}
+ #cc-v09 .cc09-pick-portrait{height:clamp(145px,45vw,220px);padding:4px 2px 0}
+ #cc-v09 .cc09-world-squad{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ #cc-v09 .cc09-world-squad .cc09-unit{min-height:169px}
+ #cc-v09 .cc09-world-squad .cc09-unit img{height:122px}
+ #cc-v09 .cc09-dialog-body{padding-left:9px;padding-right:9px}
+}
 </style></head><body class="cc-v09-active"><div class="app">
 <header class="top"><div><div class="brand">♛ CROWNS <span>&amp;</span> CARDS</div><div class="sub">Стратегия пяти королевств</div></div><div class="resources"><div class="resource"><svg aria-label="Золото" class="gold-coin-icon" height="30" role="img" viewbox="0 0 64 64" width="30" xmlns="http://www.w3.org/2000/svg"><defs><radialgradient cx="35%" cy="24%" id="coinshine" r="75%"><stop offset="0" stop-color="#fff3b2"></stop><stop offset=".32" stop-color="#f5c94b"></stop><stop offset=".75" stop-color="#b77b18"></stop><stop offset="1" stop-color="#6b3d0d"></stop></radialgradient></defs><circle cx="32" cy="32" fill="#3b2109" r="29" stroke="#ffdb70" stroke-width="2"></circle><circle cx="32" cy="32" fill="url(#coinshine)" r="25" stroke="#9c6116" stroke-width="2"></circle><circle cx="32" cy="32" fill="none" r="19" stroke="#ffe29a" stroke-width="2"></circle><path d="M39 23c-4-4-15-3-15 4 0 8 16 3 16 11 0 8-13 10-18 4M32 17v30" fill="none" stroke="#7c460f" stroke-linecap="round" stroke-width="4"></path><path d="M39 22c-4-4-15-3-15 4 0 8 16 3 16 11 0 8-13 10-18 4M32 17v30" fill="none" stroke="#ffe8a3" stroke-linecap="round" stroke-width="2"></path></svg><b id="gold">500</b></div><div class="resource" style="display:none!important">⭐ Ур. <b id="level">1</b></div><div class="resource" style="display:none!important">🃏 Карт: <b id="total">0</b></div></div></header>
 <aside class="gothic-sidebar"><div class="side-logo"><img src="assets/branding/crowns-cards-logo.webp?art=20261026b" alt="Crowns & Cards" style="width:100%;max-height:145px;object-fit:contain"></div><button class="active" data-tab="world" type="button">♜ <span>Мир</span></button><button data-tab="map" type="button">◇ <span>Карта</span></button><button data-tab="lab" type="button">⚗ <span>Лаборатория</span></button><button data-tab="packs" type="button">▤ <span>Паки</span></button><button data-tab="shop" type="button">◆ <span>Магазин</span></button></aside>
@@ -4560,12 +4598,12 @@ function renderWorld(){
   const unit=current[i];
   return unit?`<button type="button" class="cc09-unit" data-cmd="army:${i}" aria-label="Изменить бойца ${i+1}"><img src="${esc(creaturePicture(unit))}" alt="${esc(CREATURES[unit.key].name)}"><span class="cc09-level">${creatureLevel(unit)}</span><span class="cc09-stars">${'★'.repeat(Math.min(5,creatureLevel(unit)+2))}</span><strong>${esc(CREATURES[unit.key].name)}</strong></button>`:`<button type="button" class="cc09-unit empty" data-cmd="army:${i}" aria-label="Добавить бойца ${i+1}"><span>＋</span><strong>Слот ${i+1}</strong></button>`;
  }).join('');
- return `<div class="cc09-world-stage"><div class="cc09-banner">⚜ CROWNS & CARDS ⚜</div>
+ return `<div class="cc09-world-stage">
    <img class="cc09-hero-art" src="${esc(heroArt)}" alt="Текущий герой — ${esc(hero.name)}">
    <div class="cc09-slot-list left">${renderSlots(equLeft)}</div><div class="cc09-slot-list right">${renderSlots(equRight)}</div>
-   <button type="button" data-cmd="hero" class="cc09-hero-overlay"><strong>${esc(hero.name)}</strong><small>Уровень ${state.level} · Атака +${hero.attack||0} · Снаряжение</small></button>
+
   </div>
-  <div class="cc09-action-row">${btn('map','⚔ В БОЙ!')}${btn('collection','▣ Коллекция','purple')}</div>
+  <div class="cc09-action-row">${btn('map','⚔ В БОЙ!')}</div>
   <div class="cc09-panel cc09-panel-blue"><div class="cc09-row"><strong>⚔ БОЕВОЙ ОТРЯД</strong><span class="cc09-chip">${current.length} / 4</span></div><div class="cc09-world-squad" style="margin-top:12px">${slots}</div></div>`;
 }
 function renderMap(){
@@ -4625,17 +4663,23 @@ function setPage(id){
 const originalRenderAll=renderAll;
 renderAll=function(){originalRenderAll();sync(true)};
 function showArmy(slot=0){
- focusedSlot=slot;
+ focusedSlot=Number.isFinite(slot)?Math.min(3,Math.max(0,slot)):0;
  const current=livingArmy();
- let row='<div class="cc-squad-row">'+Array.from({length:4},(_,i)=>{
+ const row='<div class="cc-squad-row cc09-squad-slots">'+Array.from({length:4},(_,i)=>{
   const unit=current[i];
-  return `<button data-cmd="army-slot:${i}" class="${i===focusedSlot?'selected':''}">${unit?cardImg(unit):'<span>＋</span>'}<span>${unit?'Ур. '+creatureLevel(unit):'Слот '+(i+1)}</span></button>`;
+  return `<button type="button" data-cmd="army-slot:${i}" class="${i===focusedSlot?'selected':''}" aria-label="Слот ${i+1}${unit?': '+CREATURES[unit.key].name:''}">${unit?cardImg(unit):'<span class="cc09-empty-slot">＋</span>'}<span>${unit?esc(CREATURES[unit.key].name):'Слот '+(i+1)}</span></button>`;
  }).join('')+'</div>';
  const list=state.units.map(u=>{
   const c=CREATURES[u.key],chosen=state.army.includes(u.id);
-  return `<div class="cc-item">${cardImg(u)}<div class="cc-item-detail"><b>${esc(c.name)}</b><small>${esc(c.rarity)} · Ур. ${creatureLevel(u)} · №${u.id}${chosen?' · В отряде':''}</small></div>${button('army-equip:'+u.id,chosen?'Выбрано':'В слот','',chosen?'disabled':'')}</div>`;
+  const label=chosen?'В отряде':'В слот';
+  return `<button type="button" class="cc09-pick-card ${chosen?'is-equipped':''}" data-cmd="army-equip:${u.id}" ${chosen?'disabled':''} aria-label="${esc(c.name)}. Уровень ${creatureLevel(u)}. ${label}">
+   <span class="cc09-pick-portrait">${cardImg(u)}</span>
+   <span class="cc09-pick-title">${esc(c.name)}</span>
+   <span class="cc09-pick-meta">${esc(c.rarity)} · Ур. ${creatureLevel(u)}</span>
+   <span class="cc09-pick-action">${label}</span>
+  </button>`;
  }).join('');
- openModal('Боевой отряд',`<p>Нажми на слот сверху, затем выбери карту. В бой можно брать до четырёх существ.</p>${row}${current[slot]?button('army-remove:'+slot,'Убрать из слота','blue'):''}<div class="cc-list">${list||'<p>Нет карт. Открой пак нежити.</p>'}</div>${button('collection','Моя коллекция','purple')}`);
+ openModal('Выбор отряда',`<p>Выбери слот, затем нажми на нужную карту. Каждый персонаж показан целиком.</p>${row}${current[focusedSlot]?button('army-remove:'+focusedSlot,'Убрать бойца из слота','blue'):''}<div class="cc09-squad-catalog">${list||'<p>Карт пока нет. Открой пак нежити.</p>'}</div>`);
 }
 function showCollection(){
  const groups=new Map();state.units.forEach(u=>{if(!groups.has(u.key))groups.set(u.key,[]);groups.get(u.key).push(u)});
@@ -4685,7 +4729,7 @@ function openPack(){
  const drops=state.units.slice(before);
  const hero=(state.heroes||[]).slice(previousHeroes);
  const figures=drops.map(u=>`<figure>${cardImg(u)}<figcaption>${esc(CREATURES[u.key].name)}</figcaption></figure>`).join('')+hero.map(h=>`<figure><img src="${esc(typeof heroPicture==='function'?heroPicture(h.id):'assets/heroes/hero-art.jpg')}" alt=""><figcaption>${esc(h.name)}</figcaption></figure>`).join('');
- openModal('Пак открыт!',`<p>${drops.length||hero.length?'Получены настоящие игровые карты, они уже сохранены в коллекции.':'Награда добавлена в коллекцию. Герой, который уже есть, может не дублироваться.'}</p><div class="cc-pack-result">${figures||'<p>Проверь героев в коллекции.</p>'}</div>${button('collection','Открыть коллекцию','purple')}${button('open-pack-again','Открыть ещё один пак')}`);
+ openModal('Пак открыт!',`<p>${drops.length||hero.length?'Получены настоящие игровые карты, они уже сохранены в коллекции.':'Награда добавлена в коллекцию. Герой, который уже есть, может не дублироваться.'}</p><div class="cc-pack-result">${figures||'<p>Проверь героев в коллекции.</p>'}</div>${button('army','Выбрать отряд','purple')}${button('open-pack-again','Открыть ещё один пак')}`);
  sync();
 }
 function showRewards(){
