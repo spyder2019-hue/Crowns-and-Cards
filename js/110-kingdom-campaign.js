@@ -117,13 +117,13 @@
       return mission;
     });
   });
-  let current='human';
+  let current='human',hasPicked=false;
   const escape=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&quot;'}[c]));
   const beaten=mission=>Boolean(state.won&&state.won[mission.id]);
   const isRegionOpen=index=>index===0||beaten(territories[index-1].missions.at(-1));
   const isMissionOpen=(regionIndex,index)=>isRegionOpen(regionIndex)&&(index===0||beaten(territories[regionIndex].missions[index-1]));
   const totals=()=>territories.reduce((n,r)=>n+r.missions.filter(beaten).length,0);
-  const select=id=>{if(territories.some(r=>r.id===id))current=id;};
+  const select=id=>{if(territories.some(r=>r.id===id)){current=id;hasPicked=true;}};
   const getMission=id=>MISSIONS.find(m=>m.id===id);
   const canStart=id=>{const m=getMission(id);if(!m)return false;const ri=territories.findIndex(r=>r.id===m.region);return isMissionOpen(ri,territories[ri].missions.indexOf(m));};
 
@@ -176,15 +176,30 @@
       const done=r.missions.filter(beaten).length,opened=isRegionOpen(i);
       const label=`${r.name}. ${opened?'Доступно':'Закрыто'}. Выполнено ${done} из 4. Нажми для просмотра заданий.`;
       const d='M'+COASTS[r.id].trim().split(/\s+/).join(' L')+' Z';
-      return `<path class="cc-campaign-island ${opened?'is-open':'is-locked'} ${current===r.id?'is-current':''}"
+      return `<path class="cc-campaign-island ${opened?'is-open':'is-locked'} ${hasPicked&&current===r.id?'is-current':''}"
         data-cmd="region:${r.id}" tabindex="0" role="button" focusable="true"
         aria-label="${escape(label)}" style="--region-color:${r.color}" d="${d}"><title>${escape(label)}</title></path>`;
     }).join('');
+    // A soft radial light appears only after a region was actually clicked.
+    let glow='';
+    if(hasPicked){
+      const region=territories.find(x=>x.id===current);
+      if(region){
+        const points=COASTS[region.id].trim().split(/\s+/).map(x=>x.split(',').map(Number));
+        const xx=points.map(x=>x[0]), yy=points.map(x=>x[1]);
+        const x0=Math.min(...xx),x1=Math.max(...xx),y0=Math.min(...yy),y1=Math.max(...yy);
+        const left=(((x0+x1)/2)/1536*100).toFixed(2);
+        const top=(((y0+y1)/2)/1024*100).toFixed(2);
+        const width=((x1-x0)*.86/1536*100).toFixed(2);
+        const height=((y1-y0)*.86/1024*100).toFixed(2);
+        glow=`<div class="cc-campaign-selection-glow" aria-hidden="true" style="left:${left}%;top:${top}%;width:${width}%;height:${height}%;--glow-color:${region.color}"></div>`;
+      }
+    }
     const finished=number===MISSIONS.length;
     const result=`<div class="cc-campaign-page">
       <div class="cc-campaign-scroll" id="cc-campaign-scroll" aria-label="Карта земель, прокручивается горизонтально"><div class="cc-campaign-canvas">
-        <img src="assets/maps/nine-kingdoms-campaign.webp?v=2" draggable="false" alt="Девять отдельных фантастических островов">
-        <svg class="cc-campaign-outline-map" viewBox="0 0 1536 1024" preserveAspectRatio="none" role="group" aria-label="Нажми на контур выбранной земли">${coastline}</svg>
+        <img src="assets/maps/nine-kingdoms-campaign.webp?v=3" draggable="false" alt="Девять отдельных фантастических островов">${glow}
+        <svg class="cc-campaign-outline-map" viewBox="0 0 1536 1024" preserveAspectRatio="none" role="group" aria-label="Нажми на землю, чтобы увидеть задания">${coastline}</svg>
       </div></div>
       <div class="cc-campaign-map-footer">
         <span>↔ Двигай карту и нажимай на землю — задания откроются отдельно.</span>
@@ -195,7 +210,7 @@
     Promise.resolve().then(()=>{
       const el=document.getElementById('cc-campaign-scroll');
       if(!el)return;
-      const marker=el.querySelector('.cc-campaign-island.is-current');
+      const marker=el.querySelector('.cc-campaign-island.is-current') || el.querySelector('.cc-campaign-island[data-cmd="region:human"]');
       if(!marker)return;
       const box=marker.getBBox();
       const desired=(box.x+box.width/2)*el.scrollWidth/1536-el.clientWidth/2;

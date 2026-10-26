@@ -77,3 +77,34 @@
  #cc-v09 .cc-campaign-popup .cc-campaign-mission .cc-campaign-start{grid-column:2}
 }
 @media(prefers-reduced-motion:reduce){#cc-v09 .cc-campaign-island{transition:none}}
+
+/* v3: The island polygons are INVISIBLE hitboxes. Do not show crooked coastlines. */
+#cc-v09 .cc-campaign-outline-map .cc-campaign-island,
+#cc-v09 .cc-campaign-outline-map .cc-campaign-island.is-current,
+#cc-v09 .cc-campaign-outline-map .cc-campaign-island.is-locked,
+#cc-v09 .cc-campaign-outline-map .cc-campaign-island:hover,
+#cc-v09 .cc-campaign-outline-map .cc-campaign-island:focus-visible{
+  fill:transparent!important;
+  stroke:none!important;
+  stroke-width:0!important;
+  stroke-opacity:0!important;
+  filter:none!important;
+  outline:none!important;
+  transition:none!important;
+  pointer-events:all;
+  cursor:pointer
+}
+#cc-v09 .cc-campaign-selection-glow{
+  position:absolute;z-index:2;pointer-events:none;
+  transform:translate(-50%,-50%);border-radius:50%;
+  border:0!important;box-shadow:none!important;
+  background:radial-gradient(ellipse at center,
+    color-mix(in srgb,var(--glow-color) 49%,transparent) 0%,
+    color-mix(in srgb,var(--glow-color) 26%,transparent) 37%,
+    transparent 74%);
+  filter:blur(14px);
+  mix-blend-mode:screen;
+  animation:cc-campaign-glow-on .27s ease-out both
+}
+@keyframes cc-campaign-glow-on{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){#cc-v09 .cc-campaign-selection-glow{animation:none!important}}
