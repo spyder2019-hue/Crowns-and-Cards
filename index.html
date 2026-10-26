@@ -5,7 +5,7 @@
 <base href="https://spyder2019-hue.github.io/Crowns-and-Cards/">
 <meta charset="utf-8"/><meta content="#172532" name="theme-color"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Crowns &amp; Cards — Пять королевств · Мультяшное меню</title>
-<meta name="cc-build" content="20261026-fullsize-equipment-with-boots"><link rel="icon" type="image/webp" href="assets/branding/crowns-cards-logo.webp?art=20261026b">
+<meta name="cc-build" content="20261026-equipment-hd-640"><link rel="icon" type="image/webp" href="assets/branding/crowns-cards-logo.webp?art=20261026b">
 <style>
 /* css/00-base-and-early-ui.css */
 /* Original style block 0 */
@@ -2589,11 +2589,11 @@ body.cc-v09-native #tab-battle{display:block!important;visibility:visible!import
  background-position:center!important;background-repeat:no-repeat!important;
  background-size:contain!important;pointer-events:none;
 }
-#tab-world .equipment-slot[data-equipment-slot="helmet"] .equipment-slot-icon{background-image:url("assets/equipment/helmet.webp?v=20261026-gear-shield-v1")!important}
-#tab-world .equipment-slot[data-equipment-slot="shield"] .equipment-slot-icon{background-image:url("assets/equipment/shield.webp?v=20261026-gear-shield-v1")!important}
-#tab-world .equipment-slot[data-equipment-slot="amulet"] .equipment-slot-icon{background-image:url("assets/equipment/amulet.webp?v=20261026-gear-shield-v1")!important}
-#tab-world .equipment-slot[data-equipment-slot="armor"] .equipment-slot-icon{background-image:url("assets/equipment/armor.webp?v=20261026-gear-shield-v1")!important}
-#tab-world .equipment-slot[data-equipment-slot="weapon"] .equipment-slot-icon{background-image:url("assets/equipment/weapon.webp?v=20261026-gear-shield-v1")!important}
+#tab-world .equipment-slot[data-equipment-slot="helmet"] .equipment-slot-icon{background-image:url("assets/equipment/helmet.webp?v=20261026-equipment-hd-640")!important}
+#tab-world .equipment-slot[data-equipment-slot="shield"] .equipment-slot-icon{background-image:url("assets/equipment/shield.webp?v=20261026-equipment-hd-640")!important}
+#tab-world .equipment-slot[data-equipment-slot="amulet"] .equipment-slot-icon{background-image:url("assets/equipment/amulet.webp?v=20261026-equipment-hd-640")!important}
+#tab-world .equipment-slot[data-equipment-slot="armor"] .equipment-slot-icon{background-image:url("assets/equipment/armor.webp?v=20261026-equipment-hd-640")!important}
+#tab-world .equipment-slot[data-equipment-slot="weapon"] .equipment-slot-icon{background-image:url("assets/equipment/weapon.webp?v=20261026-equipment-hd-640")!important}
 
 /* Six user-approved full-size equipment icons: no decorative circles, responsive. */
 #cc-v09 .cc09-world-stage{min-height:clamp(385px,58vh,560px)!important}
@@ -2645,7 +2645,7 @@ body.cc-v09-native #tab-battle{display:block!important;visibility:visible!import
 }
 #tab-world .equipment-slot[data-equipment-slot="boots"] .equipment-slot-icon{
  display:block!important;
- background-image:url("assets/equipment/boots.webp?v=20261026-gear-clean-v2")!important;
+ background-image:url("assets/equipment/boots.webp?v=20261026-equipment-hd-640")!important;
 }
 #tab-world .equipment-slot-label{text-shadow:0 2px 3px #101c38!important}
 @media(max-width:420px){
@@ -4680,7 +4680,7 @@ function renderWorld(){
  const current=livingArmy();
  const equLeft=[['helmet','♛','Шлем'],['shield','⬡','Щит'],['amulet','✧','Амулет']];
  const equRight=[['armor','♜','Броня'],['weapon','⚔','Оружие'],['boots','♢','Обувь']];
- const renderSlots=arr=>arr.map(([slot,icon,name])=>`<button type="button" data-cmd="gear:${slot}" aria-label="Снаряжение: ${name}" class="cc09-slot"><img class="cc09-slot-art" src="assets/equipment/${slot}.webp?v=20261026-gear-clean-v2" alt="" aria-hidden="true" loading="lazy"><small>${name}</small></button>`).join('');
+ const renderSlots=arr=>arr.map(([slot,icon,name])=>`<button type="button" data-cmd="gear:${slot}" aria-label="Снаряжение: ${name}" class="cc09-slot"><img class="cc09-slot-art" src="assets/equipment/${slot}.webp?v=20261026-equipment-hd-640" alt="" aria-hidden="true" loading="lazy"><small>${name}</small></button>`).join('');
  const hero=state.hero||{name:'Нерказ'};
  const heroArt=(typeof heroPicture==='function' ? heroPicture(hero.id||'nerkaz') : NERKAZ_FIRE_ART);
  const slots=Array.from({length:4},(_,i)=>{
