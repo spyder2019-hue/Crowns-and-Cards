@@ -196,10 +196,11 @@
       }
     }
     const finished=number===MISSIONS.length;
+    const selectedColor=hasPicked?(territories.find(r=>r.id===current)?.color||"#f7d27d"):"#f7d27d";
     const result=`<div class="cc-campaign-page">
       <div class="cc-campaign-scroll" id="cc-campaign-scroll" aria-label="Карта земель, прокручивается горизонтально"><div class="cc-campaign-canvas">
         <img src="assets/maps/nine-kingdoms-campaign.webp?v=3" draggable="false" alt="Девять отдельных фантастических островов">${glow}
-        <svg class="cc-campaign-outline-map" viewBox="0 0 1536 1024" preserveAspectRatio="none" role="group" aria-label="Нажми на землю, чтобы увидеть задания">${coastline}</svg>
+        <svg class="cc-campaign-outline-map" viewBox="0 0 1536 1024" preserveAspectRatio="none" role="group" aria-label="Нажми на землю, чтобы увидеть задания"><defs><radialGradient id="cc-campaign-picked-fill" cx="50%" cy="50%" r="58%"><stop offset="0%" stop-color="${selectedColor}" stop-opacity=".91"/><stop offset="28%" stop-color="${selectedColor}" stop-opacity=".62"/><stop offset="54%" stop-color="${selectedColor}" stop-opacity=".29"/><stop offset="88%" stop-color="${selectedColor}" stop-opacity="0"/><stop offset="100%" stop-color="${selectedColor}" stop-opacity="0"/></radialGradient></defs>${coastline}</svg>
       </div></div>
       <div class="cc-campaign-map-footer">
         <span>↔ Двигай карту и нажимай на землю — задания откроются отдельно.</span>
@@ -225,5 +226,39 @@
     event.preventDefault();
     target.dispatchEvent(new MouseEvent('click',{bubbles:true}));
   });
+
+  // The hand-drawn islands have irregular coastlines. Taps slightly outside
+  // invisible SVG polygons still choose the nearest land rather than doing nothing.
+  const landCenters={
+    north:[343,177],cursed:[820,165],fire:[1305,195],
+    elf:[188,440],human:[766,455],forgotten:[1331,485],
+    desert:[261,804],dark:[816,831],dead:[1309,823]
+  };
+  let pointerStart=null;
+  document.addEventListener('pointerdown',event=>{
+    if(event.target.closest?.('#cc-v09 .cc-campaign-canvas'))
+      pointerStart={x:event.clientX,y:event.clientY,scrollLeft:document.getElementById('cc-campaign-scroll')?.scrollLeft||0};
+  },{passive:true});
+  document.addEventListener('click',event=>{
+    const canvas=event.target.closest?.('#cc-v09 .cc-campaign-canvas');
+    if(!canvas||event.target.closest?.('[data-cmd]'))return;
+    const scroll=canvas.closest('.cc-campaign-scroll');
+    if(pointerStart&&(Math.abs(event.clientX-pointerStart.x)>12||Math.abs(event.clientY-pointerStart.y)>12||Math.abs((scroll?.scrollLeft||0)-pointerStart.scrollLeft)>8))return;
+    const rect=canvas.getBoundingClientRect();
+    if(!rect.width||!rect.height)return;
+    const x=(event.clientX-rect.left)/rect.width*1536;
+    const y=(event.clientY-rect.top)/rect.height*1024;
+    if(x<0||y<0||x>1536||y>1024)return;
+    let chosen=null,minimum=Infinity;
+    for(const region of territories){
+      const point=landCenters[region.id];
+      const distance=(x-point[0])**2+(y-point[1])**2;
+      if(distance<minimum){minimum=distance;chosen=region;}
+    }
+    if(!chosen||minimum>400*400)return;
+    const path=canvas.querySelector('[data-cmd="region:'+chosen.id+'"]');
+    if(path)path.dispatchEvent(new MouseEvent('click',{bubbles:true,cancelable:true}));
+  });
+
   window.CrownsCampaign={render:draw,details,select,getMission,canStart,regions:territories,missions:MISSIONS,completed:totals};
 })();

@@ -108,3 +108,30 @@
 }
 @keyframes cc-campaign-glow-on{from{opacity:0}to{opacity:1}}
 @media(prefers-reduced-motion:reduce){#cc-v09 .cc-campaign-selection-glow{animation:none!important}}
+
+/* v4 — Visible tactile feedback on selection; no visible outlines or straight polygon borders. */
+#cc-v09 .cc-campaign-outline-map path.cc-campaign-island.is-current,
+#cc-v09 .cc-campaign-outline-map path.cc-campaign-island.is-current:hover,
+#cc-v09 .cc-campaign-outline-map path.cc-campaign-island.is-current:focus-visible{
+  fill:url(#cc-campaign-picked-fill)!important;
+  stroke:none!important;
+  stroke-width:0!important;
+  filter:none!important;
+  mix-blend-mode:screen;
+}
+#cc-v09 .cc-campaign-selection-glow{
+  background:radial-gradient(ellipse at center,
+    color-mix(in srgb,var(--glow-color) 75%,transparent) 0%,
+    color-mix(in srgb,var(--glow-color) 46%,transparent) 37%,
+    transparent 75%)!important;
+  filter:blur(11px)!important;
+  animation:cc-campaign-select-pop .32s cubic-bezier(.15,.7,.26,1) both!important;
+}
+@keyframes cc-campaign-select-pop{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(.73)}
+  65%{opacity:1;transform:translate(-50%,-50%) scale(1.09)}
+  100%{opacity:1;transform:translate(-50%,-50%) scale(1)}
+}
+#cc-v09 .cc09-modal:has(.cc-campaign-popup){background:rgba(6,11,37,.37)!important;backdrop-filter:blur(1.5px)!important}
+#cc-v09 .cc-campaign-canvas{cursor:pointer}
+@media(prefers-reduced-motion:reduce){#cc-v09 .cc-campaign-selection-glow{animation:none!important}}
