@@ -348,3 +348,23 @@ button.cc-click-flash:not(:disabled){filter:brightness(1.17)!important;}
 /* Official Crowns & Cards emblem — uploaded artwork, shared desktop/mobile UI. */
 .gothic-sidebar .side-logo{background-image:url('../assets/branding/crowns-cards-logo.webp')!important;background-position:center!important;background-repeat:no-repeat!important;background-size:contain!important;min-height:120px;}
 .gothic-sidebar .side-logo>span,.gothic-sidebar .side-logo>small{visibility:hidden!important;}
+
+/* Royal throne backdrop visibility fix — mobile and desktop */
+body{isolation:isolate!important;}
+body::before{
+  z-index:0!important;
+  opacity:1!important;
+  background:
+    linear-gradient(90deg,rgba(5,11,21,.24),rgba(5,11,21,.03) 48%,rgba(5,11,21,.26)),
+    linear-gradient(0deg,rgba(5,11,21,.26),rgba(5,11,21,.02) 55%,rgba(5,11,21,.16)),
+    url("../assets/backgrounds/royal-throne-hall.webp") center 41%/cover no-repeat!important;
+}
+body::after{z-index:0!important;background:linear-gradient(90deg,rgba(5,9,17,.11),transparent 24%,transparent 76%,rgba(5,9,17,.11))!important;}
+.app{position:relative;z-index:1!important;}
+#tab-world .gothic-hero-scene{
+  background:linear-gradient(90deg,rgba(5,10,19,.38),rgba(5,10,19,.16) 50%,rgba(5,10,19,.38)),url("../assets/backgrounds/royal-throne-hall.webp") center 43%/cover no-repeat!important;
+}
+@media(max-width:700px){
+  body::before{background-position:center center!important;}
+  #tab-world .gothic-hero-scene{background-position:center 40%!important;}
+}
