@@ -13,7 +13,7 @@ body:before{content:'';position:fixed;inset:0;z-index:-1;opacity:.19;pointer-eve
 
 html{min-height:100%;background:#070b11}
 body{background:#080b11!important;min-height:100vh;position:relative;isolation:isolate}
-body::before{content:""!important;position:fixed!important;inset:0!important;z-index:-2!important;opacity:1!important;pointer-events:none!important;background:linear-gradient(90deg,rgba(5,8,13,.52),rgba(5,8,13,.28) 48%,rgba(5,8,13,.58)),linear-gradient(0deg,rgba(4,6,10,.60),rgba(4,6,10,.12) 40%,rgba(4,6,10,.42)),url("../assets/backgrounds/cathedral.jpg") center center / cover no-repeat!important;mask-image:none!important}
+body::before{content:""!important;position:fixed!important;inset:0!important;z-index:-2!important;opacity:1!important;pointer-events:none!important;background:linear-gradient(90deg,rgba(5,8,13,.42),rgba(5,8,13,.14) 48%,rgba(5,8,13,.46)),linear-gradient(0deg,rgba(4,6,10,.48),rgba(4,6,10,.08) 40%,rgba(4,6,10,.28)),url("../assets/backgrounds/royal-throne-hall.avif") center center / cover no-repeat!important;mask-image:none!important}
 body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;background:rgba(4,7,13,.18)}
 .app{position:relative;z-index:0}
 .top,.nav,.panel,.gothic-world,.world-banner,.army-panel,.pack-panel{backdrop-filter:blur(8px)}
