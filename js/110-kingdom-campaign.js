@@ -127,18 +127,26 @@
   const getMission=id=>MISSIONS.find(m=>m.id===id);
   const canStart=id=>{const m=getMission(id);if(!m)return false;const ri=territories.findIndex(r=>r.id===m.region);return isMissionOpen(ri,territories[ri].missions.indexOf(m));};
 
-  function draw() {
-    const number=totals();
-    const landButtons=territories.map((r,i)=>{
-      const done=r.missions.filter(beaten).length,opened=isRegionOpen(i);
-      const [left,top,width,height]=r.spot;
-      const status=done===4?'★':opened?'⚔':'🔒';
-      return `<button type="button" class="cc-campaign-hit ${current===r.id?'is-current':''} ${opened?'is-open':'is-locked'}" data-cmd="region:${r.id}" style="left:${left}%;top:${top}%;width:${width}%;height:${height}%;--region-color:${r.color}" aria-label="${escape(r.name)}. ${opened?'Доступно':'Закрыто'}. Выполнено ${done} из 4"><span class="cc-campaign-hit-badge">${status} ${done}/4</span></button>`;
-    }).join('');
-    const r=territories.find(x=>x.id===current)||territories[0];
+
+  // Shoreline silhouettes on the original map: one real region hit-area per island.
+  // ViewBox coordinates correspond to the 1536x1024 source illustration.
+  const COASTS={
+  "north": "20,172 45,142 92,137 125,105 174,115 210,60 264,77 318,0 360,43 414,31 455,79 498,110 540,90 561,142 615,170 663,195 661,236 611,259 575,271 545,292 483,306 443,300 405,325 360,320 322,315 289,289 230,304 178,289 135,282 95,262 41,255 2,240 0,207",
+  "cursed": "567,79 608,49 663,40 705,8 753,18 807,2 852,19 911,9 956,33 1003,4 1062,43 1135,85 1121,140 1080,180 1104,221 1072,252 1022,270 974,280 926,308 874,315 823,303 762,325 707,310 650,303 612,280 582,250 584,200 550,167 577,110",
+  "fire": "1110,96 1150,91 1214,47 1280,0 1344,12 1391,0 1451,34 1500,32 1536,64 1536,328 1500,325 1462,352 1432,350 1389,373 1353,366 1302,388 1259,364 1200,369 1160,343 1124,305 1101,254 1111,203 1094,150",
+  "elf": "0,248 60,235 107,245 155,226 205,260 261,283 288,321 339,326 370,342 415,373 436,422 405,477 429,519 381,554 352,563 335,590 270,599 236,608 180,583 141,592 93,568 60,558 21,526 0,482",
+  "human": "478,305 537,274 589,266 632,277 677,266 729,281 771,286 836,298 899,322 938,354 988,372 1051,408 1090,473 1059,524 1053,564 1009,603 951,610 903,645 848,654 795,625 733,619 679,625 647,604 587,594 540,582 490,567 473,531 427,531 401,499 439,475 465,446 433,412 443,360",
+  "forgotten": "1514,303 1536,330 1536,604 1510,625 1450,640 1420,627 1370,649 1325,636 1274,624 1207,632 1166,604 1125,608 1097,569 1102,520 1123,478 1172,454 1174,424 1214,411 1243,363 1284,339 1332,327 1363,288 1415,280 1466,280",
+  "desert": "0,669 50,638 118,630 164,618 212,607 287,603 346,619 401,602 453,604 500,633 545,649 557,699 547,737 547,797 530,851 494,871 474,904 428,944 397,960 353,982 300,992 228,989 173,1005 105,981 74,947 26,922 0,886",
+  "dark": "558,680 590,657 644,674 701,654 764,647 829,669 875,668 930,700 960,697 1000,722 1033,779 1082,803 1090,864 1070,922 1027,972 964,997 903,1002 836,1014 780,1005 722,1024 647,1004 596,993 552,962 539,921 524,868 540,819 530,761",
+  "dead": "1058,718 1081,673 1125,658 1168,626 1229,645 1273,637 1333,659 1390,670 1445,647 1503,674 1536,700 1536,946 1486,972 1440,1000 1363,990 1301,1000 1251,992 1192,968 1142,979 1108,958 1071,927 1030,898 1025,843 1000,810 1023,766"
+};
+  function details(id) {
+    const r=territories.find(x=>x.id===id);
+    if(!r)return null;
     const idx=territories.indexOf(r),open=isRegionOpen(idx),done=r.missions.filter(beaten).length;
     const missionList=r.missions.map((m,i)=>{
-      const cleared=beaten(m),available=isMissionOpen(idx,i),prev=r.missions[i-1];
+      const cleared=beaten(m),available=isMissionOpen(idx,i);
       const tag=cleared?'✓ Пройдено':available?'⚔ В бой':'🔒 Закрыто';
       return `<div class="cc-campaign-mission ${cleared?'is-cleared':''} ${available?'':'is-locked'}">
         <div class="cc-campaign-mission-icon">${m.boss?'👑':m.elite?'⚔️':String(i+1)}</div>
@@ -146,21 +154,61 @@
         <button type="button" class="cc-campaign-start" data-cmd="campaign:${m.id}" ${available?'':'disabled'}>${tag}</button>
       </div>`;
     }).join('');
-    const hint=!open?`Откроется после победы над боссом региона «${escape(territories[idx-1].name)}».` : done===4?'Все задания выполнены. Можно повторять бои ради наград.':'Проходи задания по порядку, чтобы открыть следующий бой.';
-    const finished=number===MISSIONS.length;
-    const result=`<div class="cc-campaign-page">
-      <div class="cc-campaign-header"><div><h1>🗺 Карта девяти земель</h1><p>Выбирай земли на карте, проходи задания и побеждай боссов.</p></div><strong class="cc-campaign-global-progress">🏆 ${number}/${MISSIONS.length}</strong></div>
-      <div class="cc-campaign-scroll" id="cc-campaign-scroll" aria-label="Карта земель, прокручивается горизонтально"><div class="cc-campaign-canvas"><img src="assets/maps/nine-kingdoms-campaign.webp?v=1" draggable="false" alt="Карта девяти фантастических королевств, включая земли людей, эльфов, севера, пустыни, проклятых, огня, забытых, тьмы и мёртвых">${landButtons}</div></div>
-      <div class="cc-campaign-scroll-hint">↔ На телефоне двигай карту пальцем. Нажми на землю, чтобы выбрать задания.</div>
-      <section class="cc-campaign-detail" aria-label="Задания выбранного королевства" style="--campaign-color:${r.color}">
-        <div class="cc-campaign-detail-head"><div><div class="cc-campaign-region-label">${open?'ДОСТУПНО':'ЗАКРЫТО'} · РЕК. УР. ${r.level}+</div><h2>${r.icon} ${escape(r.name)}</h2><p>${escape(r.desc)}</p></div><span class="cc-campaign-counter">${done}/4</span></div>
+    const hint=!open
+      ?`Откроется после победы над боссом региона «${escape(territories[idx-1].name)}».`
+      :done===4?'Все задания выполнены. Бои можно повторять ради наград.':'Пройди задания по порядку, чтобы открыть следующую битву.';
+    return {
+      title:r.icon+' '+r.name,
+      html:`<section class="cc-campaign-detail cc-campaign-popup" aria-label="Задания выбранной земли" style="--campaign-color:${r.color}">
+        <div class="cc-campaign-detail-head"><div>
+          <div class="cc-campaign-region-label">${open?'ДОСТУПНО':'ЗАКРЫТО'} · РЕК. УР. ${r.level}+</div>
+          <p class="cc-campaign-description">${escape(r.desc)}</p>
+        </div><span class="cc-campaign-counter">${done}/4</span></div>
         <div class="cc-campaign-progress"><span style="width:${done*25}%"></span></div>
         <p class="cc-campaign-hint">${hint}</p>
         <div class="cc-campaign-missions">${missionList}</div>
-      </section>${finished?'<div class="cc-campaign-finale">👑 Кампания пройдена! Все девять земель освобождены.</div>':''}
+      </section>`
+    };
+  }
+  function draw() {
+    const number=totals();
+    const coastline=territories.map((r,i)=>{
+      const done=r.missions.filter(beaten).length,opened=isRegionOpen(i);
+      const label=`${r.name}. ${opened?'Доступно':'Закрыто'}. Выполнено ${done} из 4. Нажми для просмотра заданий.`;
+      const d='M'+COASTS[r.id].trim().split(/\s+/).join(' L')+' Z';
+      return `<path class="cc-campaign-island ${opened?'is-open':'is-locked'} ${current===r.id?'is-current':''}"
+        data-cmd="region:${r.id}" tabindex="0" role="button" focusable="true"
+        aria-label="${escape(label)}" style="--region-color:${r.color}" d="${d}"><title>${escape(label)}</title></path>`;
+    }).join('');
+    const finished=number===MISSIONS.length;
+    const result=`<div class="cc-campaign-page">
+      <div class="cc-campaign-scroll" id="cc-campaign-scroll" aria-label="Карта земель, прокручивается горизонтально"><div class="cc-campaign-canvas">
+        <img src="assets/maps/nine-kingdoms-campaign.webp?v=2" draggable="false" alt="Девять отдельных фантастических островов">
+        <svg class="cc-campaign-outline-map" viewBox="0 0 1536 1024" preserveAspectRatio="none" role="group" aria-label="Нажми на контур выбранной земли">${coastline}</svg>
+      </div></div>
+      <div class="cc-campaign-map-footer">
+        <span>↔ Двигай карту и нажимай на землю — задания откроются отдельно.</span>
+        <strong>🏆 ${number}/${MISSIONS.length}</strong>
+      </div>
+      ${finished?'<div class="cc-campaign-finale">👑 Кампания пройдена! Все девять земель освобождены.</div>':''}
     </div>`;
-    Promise.resolve().then(()=>{const el=document.getElementById('cc-campaign-scroll');if(!el)return;const btn=el.querySelector('.cc-campaign-hit.is-current');if(btn){const target=btn.offsetLeft+btn.offsetWidth/2-el.clientWidth/2;el.scrollLeft=Math.max(0,target)}});
+    Promise.resolve().then(()=>{
+      const el=document.getElementById('cc-campaign-scroll');
+      if(!el)return;
+      const marker=el.querySelector('.cc-campaign-island.is-current');
+      if(!marker)return;
+      const box=marker.getBBox();
+      const desired=(box.x+box.width/2)*el.scrollWidth/1536-el.clientWidth/2;
+      el.scrollLeft=Math.max(0,Math.min(el.scrollWidth-el.clientWidth,desired));
+    });
     return result;
   }
-  window.CrownsCampaign={render:draw,select,getMission,canStart,regions:territories,missions:MISSIONS,completed:totals};
+  // SVG areas are keyboard accessible on PCs as well as clickable/tappable.
+  document.addEventListener('keydown',event=>{
+    const target=event.target.closest?.('#cc-v09 .cc-campaign-island');
+    if(!target || (event.key!=='Enter'&&event.key!==' '))return;
+    event.preventDefault();
+    target.dispatchEvent(new MouseEvent('click',{bubbles:true}));
+  });
+  window.CrownsCampaign={render:draw,details,select,getMission,canStart,regions:territories,missions:MISSIONS,completed:totals};
 })();
