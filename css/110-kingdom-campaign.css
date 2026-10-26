@@ -113,7 +113,7 @@
 #cc-v09 .cc-campaign-outline-map path.cc-campaign-island.is-current,
 #cc-v09 .cc-campaign-outline-map path.cc-campaign-island.is-current:hover,
 #cc-v09 .cc-campaign-outline-map path.cc-campaign-island.is-current:focus-visible{
-  fill:url(#cc-campaign-picked-fill)!important;
+  fill:var(--cc-campaign-fill,transparent)!important;
   stroke:none!important;
   stroke-width:0!important;
   filter:none!important;
