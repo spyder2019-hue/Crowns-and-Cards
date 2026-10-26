@@ -345,3 +345,6 @@ button.cc-click-flash:not(:disabled){filter:brightness(1.17)!important;}
  #tab-world .equipment-stage:after,#tab-lab .lab-work-panel:has(.lab-merge:not(:disabled)) .lab-card,
  #tab-packs .pack-rewards .undead-card,#tab-collection .cc-reveal-once{animation:none!important;}
 }
+/* Official Crowns & Cards emblem — uploaded artwork, shared desktop/mobile UI. */
+.gothic-sidebar .side-logo{background-image:url('../assets/branding/crowns-cards-logo.webp')!important;background-position:center!important;background-repeat:no-repeat!important;background-size:contain!important;min-height:120px;}
+.gothic-sidebar .side-logo>span,.gothic-sidebar .side-logo>small{visibility:hidden!important;}
