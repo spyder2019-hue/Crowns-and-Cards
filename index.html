@@ -5,7 +5,7 @@
 <base href="https://spyder2019-hue.github.io/Crowns-and-Cards/">
 <meta charset="utf-8"/><meta content="#172532" name="theme-color"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Crowns &amp; Cards — Пять королевств · Мультяшное меню</title>
-<meta name="cc-build" content="20261026-frame-script-fixed-v3"><link rel="icon" type="image/webp" href="assets/branding/crowns-cards-logo.webp?art=20261026b">
+<meta name="cc-build" content="20261026-frames-removed"><link rel="icon" type="image/webp" href="assets/branding/crowns-cards-logo.webp?art=20261026b">
 <style>
 /* css/00-base-and-early-ui.css */
 /* Original style block 0 */
@@ -2655,60 +2655,6 @@ body.cc-v09-native #tab-battle{display:block!important;visibility:visible!import
  #cc-v09 .cc09-slot-list.right{right:0!important}
 }
 
-/* User-provided selectable frames, carefully bounded to the scrollable game view.
-   Nine-slice border images preserve corners instead of stretching the square artwork.
-   pointer-events:none ensures no tap or drag is intercepted by decoration. */
-#cc-v09 .cc09-frame-layer{
- position:absolute;left:0;right:0;top:75px;bottom:100px;
- z-index:7;pointer-events:none!important;user-select:none;
- border:clamp(22px,5.7vw,46px) solid transparent;
- border-image-source:none;border-image-slice:210;border-image-repeat:stretch;
- box-sizing:border-box;opacity:.92;overflow:visible;
-}
-#cc-v09 .cc09-frame-layer[hidden]{display:none!important}
-#cc-v09 .cc09-frame-switch{
- position:absolute;z-index:20;right:9px;bottom:112px;min-width:111px;min-height:40px;
- display:inline-flex;align-items:center;justify-content:center;gap:5px;
- background:linear-gradient(170deg,#2b4b9e,#17285e);
- color:#fff7cf;border:2px solid #ffdf86;border-radius:12px;
- box-shadow:0 3px 0 #84601e,0 4px 14px rgba(3,12,40,.45);
- padding:7px 10px;font:850 11px/1.15 system-ui,-apple-system,sans-serif;
- cursor:pointer;touch-action:manipulation;white-space:nowrap;
-}
-#cc-v09 .cc09-frame-switch b{
- border-radius:6px;background:#132659;padding:3px 5px;
- min-width:30px;font-size:11px;color:#ffeb9c;
-}
-#cc-v09 .cc09-frame-switch:focus-visible{
- outline:3px solid #fff;outline-offset:2px;
-}
-#cc-v09 .cc09-frame-switch:active{transform:translateY(1px)}
-@media(max-width:440px){
- #cc-v09 .cc09-frame-layer{border-width:clamp(20px,6vw,26px)}
- #cc-v09 .cc09-frame-switch{right:8px;min-width:100px;min-height:36px;padding:6px 8px;font-size:10px}
-}
-@media(max-height:620px){
- #cc-v09 .cc09-frame-layer{border-width:clamp(14px,3vw,24px)}
- #cc-v09 .cc09-frame-switch{min-height:32px;padding:4px 8px}
-}
-
-/* Reliable iOS tap target for frame chooser; does not overlap main navigation. */
-#cc-v09 .cc09-frame-switch{
- pointer-events:auto!important;
- touch-action:manipulation!important;
- -webkit-tap-highlight-color:transparent!important;
- -webkit-user-select:none!important;
- user-select:none!important;
- min-height:44px!important;
- min-width:116px!important;
- z-index:22!important;
-}
-#cc-v09 .cc09-frame-switch:active{filter:brightness(1.16)}
-#cc-v09 .cc09-frame-switch b{min-width:34px!important;white-space:nowrap!important}
-#cc-v09 .cc09-frame-layer{pointer-events:none!important}
-@media(max-width:440px){
- #cc-v09 .cc09-frame-switch{right:max(8px,env(safe-area-inset-right))!important;min-height:44px!important}
-}
 </style></head><body class="cc-v09-active"><div class="app">
 <header class="top"><div><div class="brand">♛ CROWNS <span>&amp;</span> CARDS</div><div class="sub">Стратегия пяти королевств</div></div><div class="resources"><div class="resource"><svg aria-label="Золото" class="gold-coin-icon" height="30" role="img" viewbox="0 0 64 64" width="30" xmlns="http://www.w3.org/2000/svg"><defs><radialgradient cx="35%" cy="24%" id="coinshine" r="75%"><stop offset="0" stop-color="#fff3b2"></stop><stop offset=".32" stop-color="#f5c94b"></stop><stop offset=".75" stop-color="#b77b18"></stop><stop offset="1" stop-color="#6b3d0d"></stop></radialgradient></defs><circle cx="32" cy="32" fill="#3b2109" r="29" stroke="#ffdb70" stroke-width="2"></circle><circle cx="32" cy="32" fill="url(#coinshine)" r="25" stroke="#9c6116" stroke-width="2"></circle><circle cx="32" cy="32" fill="none" r="19" stroke="#ffe29a" stroke-width="2"></circle><path d="M39 23c-4-4-15-3-15 4 0 8 16 3 16 11 0 8-13 10-18 4M32 17v30" fill="none" stroke="#7c460f" stroke-linecap="round" stroke-width="4"></path><path d="M39 22c-4-4-15-3-15 4 0 8 16 3 16 11 0 8-13 10-18 4M32 17v30" fill="none" stroke="#ffe8a3" stroke-linecap="round" stroke-width="2"></path></svg><b id="gold">500</b></div><div class="resource" style="display:none!important">⭐ Ур. <b id="level">1</b></div><div class="resource" style="display:none!important">🃏 Карт: <b id="total">0</b></div></div></header>
 <aside class="gothic-sidebar"><div class="side-logo"><img src="assets/branding/crowns-cards-logo.webp?art=20261026b" alt="Crowns & Cards" style="width:100%;max-height:145px;object-fit:contain"></div><button class="active" data-tab="world" type="button">♜ <span>Мир</span></button><button data-tab="map" type="button">◇ <span>Карта</span></button><button data-tab="lab" type="button">⚗ <span>Лаборатория</span></button><button data-tab="packs" type="button">▤ <span>Паки</span></button><button data-tab="shop" type="button">◆ <span>Магазин</span></button></aside>
@@ -4439,12 +4385,6 @@ renderEquipment();
       <button type="button" data-cc-tab="lab"><img src="assets/menu/lab.webp?v=20261026nav" alt=""><span>Лаборатория</span></button>
     </nav>
 
-    <!-- Decorative fantasy frame: passive artwork above the play area, never above navigation. -->
-    <div id="cc09-frame-layer" class="cc09-frame-layer" aria-hidden="true" hidden></div>
-    <button id="cc09-frame-switch" type="button" class="cc09-frame-switch"
-      aria-label="Переключить рамку оформления" title="Сменить декоративную рамку">
-      <span aria-hidden="true">✦</span><span>Рамка</span><b id="cc09-frame-number">1/5</b>
-    </button>
     <div class="cc09-toast" id="cc-v09-toast" aria-live="polite"></div>
     <div class="cc09-modal" id="cc-v09-modal" hidden>
       <section class="cc09-dialog" role="dialog" aria-modal="true" aria-labelledby="cc-v09-dialog-title">
@@ -5038,95 +4978,6 @@ setPage('world');
 
 </script>
 
-<script>
-/* Frame chooser: explicitly handles iOS touch and normal mouse/keyboard clicks. */
-(function(){
- 'use strict';
- const shell=document.querySelector('#cc-v09 .cc09-shell');
- const viewport=document.getElementById('cc09-content');
- const overlay=document.getElementById('cc09-frame-layer');
- const button=document.getElementById('cc09-frame-switch');
- const number=document.getElementById('cc09-frame-number');
- if(!shell||!viewport||!overlay||!button||!number)return;
- const version='20261026-frames-mobile-v2';
- const choices=[
-  {name:'Без рамки',url:''},
-  {name:'Каменная с кристаллами',url:'assets/frames/frame-1.webp?v='+version},
-  {name:'Деревянная с фонарями',url:'assets/frames/frame-2.webp?v='+version},
-  {name:'Рамка с синими кристаллами',url:'assets/frames/frame-3.webp?v='+version},
-  {name:'Королевская с сапфирами',url:'assets/frames/frame-4.webp?v='+version},
-  {name:'Лесная из дерева и кристаллов',url:'assets/frames/frame-5.webp?v='+version}
- ];
- const storageKey='crowns_cards_frame_choice_v1';
- let saved=null;
- try{saved=localStorage.getItem(storageKey)}catch(_){}
- let selected=saved===null?1:Number(saved);
- if(!Number.isInteger(selected)||selected<0||selected>=choices.length)selected=1;
- function adjustLayout(){
-  const root=shell.getBoundingClientRect();
-  const play=viewport.getBoundingClientRect();
-  const top=Math.max(0,Math.round(play.top-root.top));
-  const bottom=Math.max(0,Math.round(root.bottom-play.bottom));
-  overlay.style.top=top+'px';
-  overlay.style.bottom=bottom+'px';
-  button.style.bottom=(bottom+10)+'px';
- }
- function applyFrame(){
-  const entry=choices[selected];
-  // Keep the frame passive, and update both paint and accessible state on each tap.
-  overlay.hidden=!entry.url;
-  overlay.style.borderImageSource=entry.url?'url("'+entry.url+'")':'none';
-  overlay.dataset.frame=String(selected);
-  number.textContent=selected===0?'Выкл':selected+'/5';
-  button.dataset.frame=String(selected);
-  button.title=entry.name+' — нажмите для следующего варианта';
-  button.setAttribute('aria-label','Рамка: '+entry.name+'. Переключить оформление');
-  try{localStorage.setItem(storageKey,String(selected))}catch(_){}
-  if(entry.url){
-   const prefetch=new Image();
-   prefetch.src=entry.url;
-   // Explicitly reapply after image load: makes iOS repaint border-image reliably.
-   prefetch.addEventListener('load',()=>{
-    if(choices[selected].url!==entry.url)return;
-    overlay.style.borderImageSource='none';
-    requestAnimationFrame(()=>{if(choices[selected].url===entry.url)overlay.style.borderImageSource='url("'+entry.url+'")'});
-   },{once:true});
-  }
- }
- function nextFrame(){
-  selected=(selected+1)%choices.length;
-  applyFrame();
- }
- // On iOS touchend arrives reliably even when Safari drops the synthetic click.
- // preventDefault suppresses that synthetic click so a tap advances exactly once.
- let lastTouch=0;
- button.addEventListener('touchend',e=>{
-  if(!e.changedTouches||!e.changedTouches.length)return;
-  e.preventDefault();
-  e.stopPropagation();
-  lastTouch=Date.now();
-  nextFrame();
- },{passive:false});
- button.addEventListener('click',e=>{
-  e.stopPropagation();
-  if(Date.now()-lastTouch<800){e.preventDefault();return}
-  nextFrame();
- });
- number.setAttribute('aria-live','polite');
- adjustLayout();
- applyFrame();
- if(typeof ResizeObserver!=='undefined'){
-  const observer=new ResizeObserver(adjustLayout);
-  observer.observe(shell);
-  observer.observe(viewport);
- }
- window.addEventListener('resize',adjustLayout,{passive:true});
- window.addEventListener('orientationchange',adjustLayout,{passive:true});
- requestAnimationFrame(adjustLayout);
- window.CrownsFramePreview={next:nextFrame,select(index){
-  if(Number.isInteger(index)&&index>=0&&index<choices.length){selected=index;applyFrame()}
- },get current(){return selected}};
-})();
-</script>
+
 </body></html>
 <!-- v0.9 native UI: backdrop illustrations and independent interactive components. -->
