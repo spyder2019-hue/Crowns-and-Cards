@@ -51,6 +51,16 @@ const fs = require('node:fs');
     assert(xp.top>=xp.stageTop && xp.bottom<=xp.stageTop+xp.stageHeight/3,layout.label+' XP bar not above hero');
     await page.locator('#cc09-world .cc09-unit.cc14-card-ready').first().click();
     await page.waitForSelector('#cc-v09 .cc09-pick-card.cc14-card-ready .cc14-card-skin',{timeout:10000});
+    await page.waitForSelector('#cc-v09 .cc09-squad-slots .cc14-squad-choice.cc14-card-ready .cc14-card-skin',{timeout:10000});
+    assert.equal(await page.locator('#cc-v09 .cc14-card-skin .cc14-name').count(),0,layout.label+' names still on creature cards');
+    const squadCard=await page.locator('#cc-v09 .cc09-squad-slots .cc14-card-skin').first().evaluate(el=>{
+      const f=el.getBoundingClientRect(),a=el.querySelector('.cc14-attack').getBoundingClientRect(),h=el.querySelector('.cc14-health').getBoundingClientRect();
+      return {frame:f.width,attack:((a.left+a.right)/2-f.left)/f.width,health:((h.left+h.right)/2-f.left)/f.width,
+        vertical:((a.top+a.bottom)/2-f.top)/f.height};
+    });
+    assert(Math.abs(squadCard.attack-.1875)<.03 && Math.abs(squadCard.health-.8125)<.03
+      && Math.abs(squadCard.vertical-.833)<.04,layout.label+' ornate stats off center '+JSON.stringify(squadCard));
+    if(layout.label!=='small-mobile')await page.screenshot({path:'screenshots/'+layout.label+'-squad-choice.png'});
     await page.locator('#cc-v09 .cc09-dialog-close').click();
     const stage=await page.locator('#cc-v09 .cc09-world-stage').evaluate(el=>({
       background:getComputedStyle(el).backgroundImage,
@@ -69,6 +79,28 @@ const fs = require('node:fs');
     const labColumns=await page.locator('#cc09-lab .cc7-equation').evaluate(el=>getComputedStyle(el).gridTemplateColumns.split(' ').length);
     if(layout.isMobile)assert.equal(labColumns,2,layout.label+' lab 2-column layout');
     if(layout.label!=='small-mobile') await page.screenshot({path:'screenshots/'+layout.label+'-lab.png'});
+    // Regression: a single owned card must be visible and selectable even when
+    // zero fusion copies exist (previous UI incorrectly filtered it out).
+    await page.evaluate(()=>{
+      state.units=[{id:99001,key:'boneguard',level:1}];
+      state.army=[];state.nextId=Math.max(Number(state.nextId||0),99002);
+      window.CrownsLab.clear();save();
+    });
+    await page.locator('#cc09-lab [data-cmd="lab-slot:base"]').click();
+    await page.waitForSelector('#cc-v09 .cc7-option.cc14-card-ready .cc14-card-skin',{timeout:10000});
+    assert.equal(await page.locator('#cc-v09 .cc7-option').count(),1,layout.label+' single owned creature invisible in lab chooser');
+    const labImage=await page.locator('#cc-v09 .cc7-option .cc14-portrait img').first().evaluate(img=>({src:img.getAttribute('src'),width:img.naturalWidth,frame:img.closest('.cc14-card-skin').getBoundingClientRect().width}));
+    const labFrame=await page.locator('#cc-v09 .cc7-option .cc14-card-skin').first().evaluate(el=>{
+      const r=el.getBoundingClientRect(),s=getComputedStyle(el);
+      return {width:r.width,height:r.height,display:s.display,visibility:s.visibility,opacity:s.opacity};
+    });
+    assert(labImage.src && labImage.frame>50 && labFrame.height>65,
+      layout.label+' laboratory card art not laid out '+JSON.stringify(labFrame));
+    await page.locator('#cc-v09 .cc7-option[data-cmd^="lab-pick:base:"]').first().click();
+    assert.equal(await page.evaluate(()=>window.CrownsLab.selection.baseId),99001,
+      layout.label+' lab selection refused creature with insufficient copies');
+    await page.locator('#cc-v09 [data-cc-tab="lab"]').click();
+    await page.waitForSelector('#cc09-lab .cc7-card.cc14-card-ready .cc14-card-skin',{timeout:10000});
 
     await page.locator('#cc-v09 [data-cc-tab="packs"]').click();
     await page.waitForSelector('#cc09-packs .cc09-pack-card img',{timeout:5000});

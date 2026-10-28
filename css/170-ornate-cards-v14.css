@@ -129,7 +129,7 @@
 #cc-v09 .cc7-option.cc14-card-ready>img,
 #cc-v09 .cc7-option.cc14-card-ready>span .cc7-stats,
 #cc-v09 .cc7-option.cc14-card-ready>span>b{display:none!important}
-#cc-v09 .cc7-option.cc14-card-ready>span{flex:0!important;gap:3px!important;min-height:0!important}
+#cc-v09 .cc7-option.cc14-card-ready>span:not(.cc14-card-skin){flex:0!important;gap:3px!important;min-height:0!important}
 #cc-v09 .cc7-option.cc14-card-ready>span small{font-size:10px!important;text-align:center!important}
 #cc-v09 .cc7-option.cc14-card-ready em{margin-top:auto!important}
 
@@ -212,4 +212,93 @@
 }
 @media(prefers-reduced-motion:reduce){
  #cc-v09 .cc14-card-skin{transition:none!important}
+}
+/* v15: name-free card front; let the character, level, sword and heart be the whole card. */
+#cc-v09 .cc14-card-skin .cc14-name,
+#collection-cards .cc14-card-skin .cc14-name,
+.world-army-choices .cc14-card-skin .cc14-name{display:none!important}
+#cc-v09 .cc-item.cc6-row.cc14-card-ready .cc-item-detail>b{display:none!important}
+#cc-v09 .cc14-card-skin .cc14-stat,
+#collection-cards .cc14-card-skin .cc14-stat,
+.world-army-choices .cc14-card-skin .cc14-stat{
+ top:77.3%!important;height:12%!important;
+ font-size:clamp(8px,8.6cqw,24px)!important;
+ line-height:1!important;display:flex!important;
+ align-items:center!important;justify-content:center!important;
+ text-align:center!important;letter-spacing:0!important;
+ font-variant-numeric:tabular-nums lining-nums!important;
+ overflow:hidden!important;text-overflow:clip!important;
+ white-space:nowrap!important;
+}
+#cc-v09 .cc14-card-skin .cc14-attack,
+#collection-cards .cc14-card-skin .cc14-attack,
+.world-army-choices .cc14-card-skin .cc14-attack{left:7%!important;width:23.5%!important;right:auto!important}
+#cc-v09 .cc14-card-skin .cc14-health,
+#collection-cards .cc14-card-skin .cc14-health,
+.world-army-choices .cc14-card-skin .cc14-health{right:7%!important;width:23.5%!important;left:auto!important}
+/* The four quick-choice slots in the squad modal now use the same ornate sleeves. */
+#cc-v09 .cc09-squad-slots{
+ display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;
+ gap:clamp(4px,1.1vw,11px)!important;align-items:start!important;
+}
+#cc-v09 .cc09-squad-slots .cc14-squad-choice.cc14-card-ready{
+ position:relative;display:block!important;width:100%!important;min-width:0!important;
+ min-height:0!important;height:auto!important;
+ padding:4px!important;overflow:visible!important;
+ border:2px solid transparent!important;border-radius:10px!important;
+ background:transparent!important;box-shadow:none!important;
+ color:#f4e8c9!important;
+}
+#cc-v09 .cc09-squad-slots .cc14-squad-choice.cc14-card-ready>img,
+#cc-v09 .cc09-squad-slots .cc14-squad-choice.cc14-card-ready>.cc09-level,
+#cc-v09 .cc09-squad-slots .cc14-squad-choice.cc14-card-ready>strong,
+#cc-v09 .cc09-squad-slots .cc14-squad-choice.cc14-card-ready>.cc6-stats{display:none!important}
+#cc-v09 .cc09-squad-slots .cc14-squad-choice.cc14-card-ready .cc14-card-skin{
+ width:100%!important;height:auto!important;
+}
+#cc-v09 .cc09-squad-slots .cc14-squad-choice.selected{
+ border-color:#ffe395!important;
+ box-shadow:0 0 13px #ffdc7c88!important;
+}
+#cc-v09 .cc09-squad-slots .cc14-squad-choice.empty{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ aspect-ratio:1024 / 1432;
+ min-height:0!important;padding:5px!important;
+ background:linear-gradient(#213e78,#0d2045)!important;
+ border:2px dashed #91b5df!important;
+}
+#cc-v09 .cc09-squad-slots .cc14-squad-choice.empty .cc09-empty-slot{font-size:clamp(20px,5vw,34px);line-height:1}
+#cc-v09 .cc09-squad-slots .cc14-squad-choice.empty>span:last-child{font-size:clamp(9px,1.3vw,12px)}
+/* Keep creature picker images visible at their actual card size, with room for the action footer. */
+#cc-v09 .cc7-option.cc14-card-ready .cc14-card-skin,
+#cc-v09 .cc09-pick-card.cc14-card-ready .cc14-card-skin{
+ width:100%!important;min-width:0!important;
+}
+#cc-v09 .cc7-option.cc14-card-ready>span>b,
+#cc-v09 .cc09-pick-card.cc14-card-ready>.cc09-pick-title{
+ display:none!important;
+}
+@media(max-width:600px){
+ #cc-v09 .cc09-squad-slots{gap:3px!important}
+ #cc-v09 .cc09-squad-slots .cc14-squad-choice.cc14-card-ready{padding:1px!important;border-width:1px!important}
+ #cc-v09 .cc14-card-skin .cc14-stat{font-size:clamp(8px,8.6cqw,18px)!important}
+}
+
+/* v15b: v7/v10 have a very broad ".cc7-option > span" rule.
+   It accidentally treats the ornamental sleeve as the text column, causing
+   the sleeve to collapse to 0px height in the laboratory picker. */
+#cc-v09 .cc7-option.cc14-card-ready>.cc14-card-skin{
+ display:block!important;flex:0 0 auto!important;
+ align-self:stretch!important;
+ width:100%!important;max-width:100%!important;
+ height:auto!important;min-height:0!important;
+ aspect-ratio:1024 / 1432!important;
+ margin:0 auto!important;
+ gap:0!important;justify-content:initial!important;align-items:initial!important;
+}
+#cc-v09 .cc7-card.cc14-card-ready>.cc14-card-skin,
+#cc-v09 .cc09-pick-card.cc14-card-ready>.cc14-card-skin{
+ display:block!important;flex:0 0 auto!important;
+ width:100%!important;max-width:100%!important;
+ height:auto!important;aspect-ratio:1024 / 1432!important;
 }
