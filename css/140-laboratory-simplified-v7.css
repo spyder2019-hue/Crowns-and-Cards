@@ -69,3 +69,16 @@
  #cc-v09 .cc7-option em{grid-column:2}
 }
 @media(prefers-reduced-motion:reduce){#cc-v09 .cc7-card,#cc-v09 .cc7-auto,#cc-v09 .cc7-merge{transition:none}}
+
+/* Laboratory picker: large, clearly readable character portraits on desktop and mobile. */
+#cc-v09 .cc7-options{gap:12px}
+#cc-v09 .cc7-option{grid-template-columns:clamp(104px,19vw,150px) minmax(0,1fr) auto;gap:13px;padding:10px;min-height:142px}
+#cc-v09 .cc7-option img{display:block;width:100%;height:clamp(116px,20vw,156px);object-fit:contain;object-position:center center;background:radial-gradient(ellipse,#526b95,#223555 75%);border-radius:10px}
+#cc-v09 .cc7-option b{font-size:clamp(13px,2vw,17px)}
+#cc-v09 .cc7-option small{font-size:clamp(11px,1.7vw,13px)}
+#cc-v09 .cc7-option .cc7-stats span{font-size:clamp(12px,1.8vw,15px)}
+@media(max-width:520px){
+ #cc-v09 .cc7-option{grid-template-columns:104px minmax(0,1fr);gap:10px;min-height:132px;padding:8px}
+ #cc-v09 .cc7-option img{height:120px}
+ #cc-v09 .cc7-option em{grid-column:2;font-size:12px}
+}
