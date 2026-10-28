@@ -5,7 +5,7 @@
 <base href="https://spyder2019-hue.github.io/Crowns-and-Cards/">
 <meta charset="utf-8"/><meta content="#172532" name="theme-color"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Crowns &amp; Cards — Пять королевств · Мультяшное меню</title>
-<meta name="cc-build" content="20261028-correct-packs-v10"><link rel="icon" type="image/webp" href="assets/branding/crowns-cards-logo.webp?art=20261026b">
+<meta name="cc-build" content="20261028-visual-finish-v10"><link rel="icon" type="image/webp" href="assets/branding/crowns-cards-logo.webp?art=20261026b">
 <style>
 /* css/00-base-and-early-ui.css */
 /* Original style block 0 */
@@ -2684,6 +2684,7 @@ body.cc-v09-native #tab-battle{display:block!important;visibility:visible!import
  background:transparent!important;
 }
 </style>
+<link rel="stylesheet" href="css/160-visual-finish-v10.css?v=20261028v10">
 </head><body class="cc-v09-active"><div class="app">
 <header class="top"><div><div class="brand">♛ CROWNS <span>&amp;</span> CARDS</div><div class="sub">Стратегия пяти королевств</div></div><div class="resources"><div class="resource"><svg aria-label="Золото" class="gold-coin-icon" height="30" role="img" viewbox="0 0 64 64" width="30" xmlns="http://www.w3.org/2000/svg"><defs><radialgradient cx="35%" cy="24%" id="coinshine" r="75%"><stop offset="0" stop-color="#fff3b2"></stop><stop offset=".32" stop-color="#f5c94b"></stop><stop offset=".75" stop-color="#b77b18"></stop><stop offset="1" stop-color="#6b3d0d"></stop></radialgradient></defs><circle cx="32" cy="32" fill="#3b2109" r="29" stroke="#ffdb70" stroke-width="2"></circle><circle cx="32" cy="32" fill="url(#coinshine)" r="25" stroke="#9c6116" stroke-width="2"></circle><circle cx="32" cy="32" fill="none" r="19" stroke="#ffe29a" stroke-width="2"></circle><path d="M39 23c-4-4-15-3-15 4 0 8 16 3 16 11 0 8-13 10-18 4M32 17v30" fill="none" stroke="#7c460f" stroke-linecap="round" stroke-width="4"></path><path d="M39 22c-4-4-15-3-15 4 0 8 16 3 16 11 0 8-13 10-18 4M32 17v30" fill="none" stroke="#ffe8a3" stroke-linecap="round" stroke-width="2"></path></svg><b id="gold">500</b></div><div class="resource" style="display:none!important">⭐ Ур. <b id="level">1</b></div><div class="resource" style="display:none!important">🃏 Карт: <b id="total">0</b></div></div></header>
 <aside class="gothic-sidebar"><div class="side-logo"><img src="assets/branding/crowns-cards-logo.webp?art=20261026b" alt="Crowns & Cards" style="width:100%;max-height:145px;object-fit:contain"></div><button class="active" data-tab="world" type="button">♜ <span>Мир</span></button><button data-tab="map" type="button">◇ <span>Карта</span></button><button data-tab="lab" type="button">⚗ <span>Лаборатория</span></button><button data-tab="packs" type="button">▤ <span>Паки</span></button><button data-tab="shop" type="button">◆ <span>Магазин</span></button></aside>
@@ -4719,6 +4720,9 @@ function button(action,label,kind='',attrs=''){return `<button type="button" cla
 function cardImg(unit){return `<img src="${esc(creaturePicture(unit))}" alt="">`}
 function renderWorld(){
  const current=livingArmy();
+ const xpNeed=Math.max(100,Number(state.level||1)*100);
+ const xpNow=Math.min(xpNeed,Math.max(0,Number(state.xp||0)));
+ const xpPct=Math.round(xpNow/xpNeed*100);
  const equLeft=[['helmet','♛','Шлем'],['shield','⬡','Щит'],['amulet','✧','Амулет']];
  const equRight=[['armor','♜','Броня'],['weapon','⚔','Оружие'],['boots','♢','Обувь']];
  const renderSlots=arr=>arr.map(([slot,icon,name])=>`<button type="button" data-cmd="gear:${slot}" aria-label="Снаряжение: ${name}" class="cc09-slot"><img class="cc09-slot-art" src="assets/equipment/${slot}.webp?v=20261026-equipment-hd-640" alt="" aria-hidden="true" loading="lazy"><small>${name}</small></button>`).join('');
@@ -4728,7 +4732,7 @@ function renderWorld(){
   const unit=current[i];
   return unit?`<button type="button" class="cc09-unit ${ccQuality(unit)}" data-cmd="army:${i}" aria-label="${esc(CREATURES[unit.key].name)}, уровень ${creatureLevel(unit)}, урон ${creatureStats(unit).atk}, здоровье ${creatureStats(unit).hp}"><img src="${esc(creaturePicture(unit))}" alt=""><span class="cc09-level">УР. ${creatureLevel(unit)}</span><strong>${esc(CREATURES[unit.key].name)}</strong>${ccStats(unit)}</button>`:`<button type="button" class="cc09-unit empty" data-cmd="army:${i}" aria-label="Добавить бойца ${i+1}"><span>＋</span><strong>Слот ${i+1}</strong></button>`;
  }).join('');
- return `<div class="cc09-world-stage">
+ return `<div class="cc10-world-head"><div class="cc10-world-heading"><span>✦ ГЕРОЙ КОРОЛЕВСТВА</span><strong>${esc(hero.name)}</strong></div><div class="cc10-world-exp" aria-label="Опыт героя ${xpNow} из ${xpNeed}"><span>УР. ${state.level||1} · ОПЫТ ${xpNow} / ${xpNeed}</span><div class="cc10-xp-track"><i style="width:${xpPct}%"></i></div></div></div><div class="cc09-world-stage">
    <img class="cc09-hero-art" src="${esc(heroArt)}" alt="Текущий герой — ${esc(hero.name)}">
    <div class="cc09-slot-list left">${renderSlots(equLeft)}</div><div class="cc09-slot-list right">${renderSlots(equRight)}</div>
 
@@ -4736,12 +4740,17 @@ function renderWorld(){
   <div class="cc09-action-row">${btn('map','⚔ В БОЙ!')}</div>
   <div class="cc09-panel cc09-panel-blue"><div class="cc09-row"><strong>⚔ БОЕВОЙ ОТРЯД</strong><span class="cc09-chip">${current.length} / 4</span></div><div class="cc09-world-squad" style="margin-top:12px">${slots}</div></div>`;
 }
-function renderMap(){return window.CrownsCampaign?window.CrownsCampaign.render():'<p>Карта временно недоступна</p>';}
+function renderMap(){
+ const count=window.CrownsCampaign?.completed?.()||0;
+ const total=window.CrownsCampaign?.missions?.length||36;
+ return '<div class="cc10-page-head"><div><span class="cc10-eyebrow">КАМПАНИЯ</span><h1>Девять земель</h1><p>Выбирай территорию, открывай задания и побеждай боссов.</p></div><span class="cc10-progress-badge">✦ '+count+' / '+total+'</span></div>'+
+ (window.CrownsCampaign?window.CrownsCampaign.render():'<p>Карта временно недоступна</p>');
+}
 function renderPacks(){
  const packs=[['units','Пак нежити','pack-undead','3 существа'],['heroes','Пак героев','pack-heroes','Случайный герой'],['future','Особый пак','pack-royal','Скоро']];
  const packArt={units:"assets/packs/pack-special-new.webp?v=10",heroes:"assets/packs/pack-heroes-new.webp?v=10",future:"assets/packs/pack-undead-new.webp?v=10"};
  const cards=packs.map(([type,title,image,caption])=>`<button type="button" class="cc09-pack-card ${pack===type?'selected':''}" data-cmd="pack:${type}"><img src="${packArt[type]}" onerror="this.onerror=null;this.src=&#39;${ico(image)}&#39;" alt="${esc(title)}" loading="lazy"><strong>${esc(title)}</strong><small>${esc(caption)}</small></button>`).join('');
- return `<div class="cc09-packs-grid">${cards}</div>${btn('open-pack',pack==='heroes'?'♛ ОТКРЫТЬ ПАК ГЕРОЕВ':'✦ ОТКРЫТЬ БЕСПЛАТНО')}`;
+ return `<div class="cc10-page-head"><div><span class="cc10-eyebrow">КОЛЛЕКЦИЯ</span><h1>Паки</h1><p>Открывай паки и пополняй свою армию.</p></div></div><div class="cc09-packs-grid">${cards}</div>${btn('open-pack',pack==='heroes'?'♛ ОТКРЫТЬ ПАК ГЕРОЕВ':'✦ ОТКРЫТЬ БЕСПЛАТНО')}`;
 }
 function renderShop(){
  const products=[
@@ -4750,10 +4759,10 @@ function renderShop(){
   ['Снаряжение','shop-chest','За золото','shop-equipment']
  ];
  const items=products.map(([name,art,price,cmd])=>`<article class="cc09-product"><img src="${ico(art)}" alt="${esc(name)}"><strong>${esc(name)}</strong><button type="button" class="cc09-buy cc09-gold-button" data-cmd="${cmd}">${price}</button></article>`).join('');
- return `<div class="cc09-grid3 cc09-available-products">${items}</div>`;
+ return `<div class="cc10-page-head"><div><span class="cc10-eyebrow">СНАРЯЖЕНИЕ И КАРТЫ</span><h1>Магазин</h1><p>Улучшай отряд за игровое золото.</p></div></div><div class="cc09-grid3 cc09-available-products">${items}</div>`;
 }
 function renderLab(){
- return window.CrownsLab?window.CrownsLab.render():'<div class="cc09-panel">Лаборатория временно недоступна.</div>';
+ return '<div class="cc10-page-head"><div><span class="cc10-eyebrow">УЛУЧШЕНИЕ КАРТ</span><h1>Лаборатория</h1><p>Соедини одинаковые карты и получи более сильного бойца.</p></div></div>'+(window.CrownsLab?window.CrownsLab.render():'<div class="cc09-panel">Лаборатория временно недоступна.</div>');
 }
 function renderActive(){
  const section=ROOT.querySelector('.cc09-page[data-page="'+active+'"]');
@@ -4814,7 +4823,7 @@ function showCollection(){
  }).join('');
  const heroes=(state.heroes||[]);
  const heroList=heroes.length?'<h3 class="cc-title">Герои</h3>'+heroes.map(h=>`<div class="cc-item"><div class="cc-item-detail"><b>${esc(h.name)}</b><small>${esc(h.title||'Герой')}</small></div>${button('heroes','Выбрать','purple')}</div>`).join(''):'';
- openModal('Моя коллекция',`<p>Карт: ${state.units.length}. Нажми «Выбрать», чтобы добавить одну копию в отряд.</p><div class="cc-list">${list||'<p>Карт пока нет. Открой бесплатный пак.</p>'}</div>${heroList}${button('army','Редактировать отряд','blue')}`);
+ openModal('Моя коллекция',`<p>Карт: ${state.units.length}. Нажми «Выбрать», чтобы добавить одну копию в отряд.</p><div class="cc-list cc10-collection-grid">${list||'<p>Карт пока нет. Открой бесплатный пак.</p>'}</div>${heroList}${button('army','Редактировать отряд','blue')}`);
 }
 function showHeroes(){
  const activeHero=state.hero;
@@ -4872,7 +4881,7 @@ function showShop(category){
    return `<div class="cc-item cc6-row ${ccQuality(u)}">${cardImg(u)}<div class="cc-item-detail"><b>${esc(c.name)}</b><small>${esc(c.rarity)} · постоянная карта</small>${ccLevel(u)}${ccStats(u)}</div>${button('unit-buy:'+key+':'+price,price+' золота')}</div>`;
  }).join('');
  const start=category==='gear';
- openModal('Магазин · '+format(state.gold)+' 🪙',`<p>Покупки здесь совершаются только за <b>игровое золото</b>. Цены на карточках показывают только игровое золото. Покупки происходят в существующей экономике.</p><div class="cc-confirm">Монет: <b>${format(state.gold)}</b> 🪙 ${button('shop-refill','Получить припасы','blue',state.quest?'disabled':'')}</div>${button('shop-units','Карты существ','blue')}${button('shop-equipment','Снаряжение','purple')}<h3 class="cc-title">${start?'Снаряжение':'Существа'}</h3><div class="cc-list">${start?gear:unitSales}</div>`);
+ openModal('Магазин · '+format(state.gold)+' 🪙',`<p>Покупки здесь совершаются только за <b>игровое золото</b>. Цены на карточках показывают только игровое золото. Покупки происходят в существующей экономике.</p><div class="cc-confirm">Монет: <b>${format(state.gold)}</b> 🪙 ${button('shop-refill','Получить припасы','blue',state.quest?'disabled':'')}</div>${button('shop-units','Карты существ','blue')}${button('shop-equipment','Снаряжение','purple')}<h3 class="cc-title">${start?'Снаряжение':'Существа'}</h3><div class="cc-list ${start?'cc10-gear-grid':'cc10-store-grid'}">${start?gear:unitSales}</div>`);
 }
 function showLab(){
  closeModal();setPage('lab');
