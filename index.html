@@ -5,7 +5,7 @@
 <base href="https://spyder2019-hue.github.io/Crowns-and-Cards/">
 <meta charset="utf-8"/><meta content="#172532" name="theme-color"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Crowns &amp; Cards — Пять королевств · Мультяшное меню</title>
-<meta name="cc-build" content="20261028-cartoon-ui-v5"><link rel="icon" type="image/webp" href="assets/branding/crowns-cards-logo.webp?art=20261026b">
+<meta name="cc-build" content="20261028-creature-card-stats-v6"><link rel="icon" type="image/webp" href="assets/branding/crowns-cards-logo.webp?art=20261026b">
 <style>
 /* css/00-base-and-early-ui.css */
 /* Original style block 0 */
@@ -2656,7 +2656,7 @@ body.cc-v09-native #tab-battle{display:block!important;visibility:visible!import
 }
 
 </style><link rel="stylesheet" href="css/110-kingdom-campaign.css?v=4">
-<link rel="stylesheet" href="css/120-cartoon-ui-polish-v5.css?v=5">
+<link rel="stylesheet" href="css/120-cartoon-ui-polish-v5.css?v=5"> <link rel="stylesheet" href="css/130-creature-card-stats-v6.css?v=6">
 <!-- Crowns & Cards nine-kingdom campaign v1 -->
 </head><body class="cc-v09-active"><div class="app">
 <header class="top"><div><div class="brand">♛ CROWNS <span>&amp;</span> CARDS</div><div class="sub">Стратегия пяти королевств</div></div><div class="resources"><div class="resource"><svg aria-label="Золото" class="gold-coin-icon" height="30" role="img" viewbox="0 0 64 64" width="30" xmlns="http://www.w3.org/2000/svg"><defs><radialgradient cx="35%" cy="24%" id="coinshine" r="75%"><stop offset="0" stop-color="#fff3b2"></stop><stop offset=".32" stop-color="#f5c94b"></stop><stop offset=".75" stop-color="#b77b18"></stop><stop offset="1" stop-color="#6b3d0d"></stop></radialgradient></defs><circle cx="32" cy="32" fill="#3b2109" r="29" stroke="#ffdb70" stroke-width="2"></circle><circle cx="32" cy="32" fill="url(#coinshine)" r="25" stroke="#9c6116" stroke-width="2"></circle><circle cx="32" cy="32" fill="none" r="19" stroke="#ffe29a" stroke-width="2"></circle><path d="M39 23c-4-4-15-3-15 4 0 8 16 3 16 11 0 8-13 10-18 4M32 17v30" fill="none" stroke="#7c460f" stroke-linecap="round" stroke-width="4"></path><path d="M39 22c-4-4-15-3-15 4 0 8 16 3 16 11 0 8-13 10-18 4M32 17v30" fill="none" stroke="#ffe8a3" stroke-linecap="round" stroke-width="2"></path></svg><b id="gold">500</b></div><div class="resource" style="display:none!important">⭐ Ур. <b id="level">1</b></div><div class="resource" style="display:none!important">🃏 Карт: <b id="total">0</b></div></div></header>
@@ -2757,6 +2757,10 @@ let state;try{state=JSON.parse(localStorage.getItem('cc-save'))||fresh()}catch(e
 // Permanent creature levels. Old saves without level keep level 1.
 function creatureLevel(unit){return Math.max(1,Math.min(5,Number(unit&&unit.level)||1));}
 function creatureStats(unit){const c=CREATURES[unit.key],bonus=creatureLevel(unit)-1;return {atk:c.atk+bonus,hp:c.hp+bonus*2};}
+function ccQuality(u){const r={'Обычная':'common','Редкая':'rare','Эпическая':'epic','Легендарная':'legendary'};return 'cc-quality-'+(r[CREATURES[u.key]?.rarity]||'common')+' cc-level-'+creatureLevel(u);}
+function ccStats(u){const s=creatureStats(u);return '<span class="cc6-stats" aria-label="Урон '+s.atk+', здоровье '+s.hp+'"><span class="cc6-attack" title="Урон">⚔ <b>'+s.atk+'</b><small>УРОН</small></span><span class="cc6-health" title="Здоровье">♥ <b>'+s.hp+'</b><small>ЗДОРОВЬЕ</small></span></span>';}
+function ccLevel(u){return '<span class="cc6-level">УР. '+creatureLevel(u)+'</span>';}
+
 
 function save(){localStorage.setItem('cc-save',JSON.stringify(state));renderAll()}function uid(){return state.nextId++}function addUnit(key){state.units.push({id:uid(),key})}function count(key){return state.units.filter(u=>u.key===key).length}function byId(id){return state.units.find(u=>u.id===id)}function typeName(t){return ({melee:'Ближний бой',ranged:'Стрелок',magic:'Магия'})[t]}
 function renderHeader(){document.getElementById('gold').textContent=state.gold;document.getElementById('level').textContent=state.level;document.getElementById('total').textContent=state.units.length}
@@ -2800,12 +2804,12 @@ function renderCollection(){
     const serial=String(copies[0].id).padStart(3,'0');
     const selection=remaining===0?'− УБРАТЬ 1':selected?'＋ В ОТРЯД ('+selected+')':'＋ В ОТРЯД';
     const action=remaining?'Добавить одну копию в отряд':'Убрать одну копию из отряда';
-    return `<button type="button" class="undead-card collection-stack-card rarity-${rarity} ${active?'is-in-army':''}" onclick="toggleCollectionStack('${key}')" aria-pressed="${active}" aria-label="${c.name}, копий ${copies.length}, в отряде ${selected}. ${action}">
+    return `<button type="button" class="undead-card collection-stack-card rarity-${rarity} ${ccQuality(best)} ${active?'is-in-army':''}" onclick="toggleCollectionStack('${key}')" aria-pressed="${active}" aria-label="${c.name}, копий ${copies.length}, в отряде ${selected}. ${action}">
       <span class="cc-inner-border" aria-hidden="true"></span>
       ${copies.length>1?`<span class="cc-stack-count" aria-hidden="true">×${copies.length}</span>`:''}
       <span class="cc-card-header"><span class="cc-card-name">${c.name}</span><span class="cc-class-icon" title="${typeLabels[c.type]}">${typeIcons[c.type]||'✧'}</span></span>
       <span class="cc-art-frame"><span class="cc-art-bg" style="background-image:url('${CARD_ART[key]}')"></span><img class="cc-card-image" src="${CARD_ART[key]}" alt="" loading="lazy"><span class="cc-art-fade"></span><span class="cc-art-corners" aria-hidden="true"></span><span class="cc-type-tag">${typeLabels[c.type]||'СУЩЕСТВО'}</span></span>
-      <span class="cc-rarity-line"><span class="cc-rarity-gem">◆</span> ${c.rarity} <span class="cc-rarity-gem">◆</span></span>
+      <span class="cc-rarity-line"><span class="cc-rarity-gem">◆</span> ${c.rarity} · УР. ${creatureLevel(best)} <span class="cc-rarity-gem">◆</span></span>
       <span class="cc-flavor">${creatureLevel(best)>1?`✦ ЛУЧШАЯ КАРТА · УР. ${creatureLevel(best)}<br>`:''}${flavor[key]||'Воин проклятых земель.'}</span>
       <span class="cc-stats-row"><span class="cc-stat cc-attack"><span class="cc-stat-icon">⚔</span><span class="cc-stat-number">${bestStats.atk}</span><span class="cc-stat-title">АТАКА</span></span><span class="cc-stat cc-health"><span class="cc-stat-icon">♥</span><span class="cc-stat-number">${bestStats.hp}</span><span class="cc-stat-title">ЗДОРОВЬЕ</span></span></span>
       <span class="cc-card-bottom"><span>${copies.length===1?'№ '+serial:selected+' / '+copies.length+' В ОТРЯДЕ'}</span><span class="cc-selection ${active?'chosen':''}">${selection}</span></span>
@@ -3102,7 +3106,7 @@ renderEquipment();
       const serial=String(u.id).padStart(3,'0');
       const action=isCurrent?'data-remove-world-unit':`data-select-world-unit="${u.id}"`;
       const label=isCurrent?'Убрать из отряда':'Выбрать в отряд';
-      return `<button type="button" class="undead-card rarity-${rarity} ${isCurrent?'is-in-army':''}" ${action} aria-label="${c.name}, копий ${copiesTotal}, доступно ${usableCount}, атака ${upgraded.atk}, здоровье ${upgraded.hp}. ${label}">
+      return `<button type="button" class="undead-card rarity-${rarity} ${ccQuality(u)} ${isCurrent?'is-in-army':''}" ${action} aria-label="${c.name}, копий ${copiesTotal}, доступно ${usableCount}, атака ${upgraded.atk}, здоровье ${upgraded.hp}. ${label}">
         <span class="cc-inner-border" aria-hidden="true"></span>
         ${copiesTotal>1?`<span class="cc-stack-count" title="Всего ${copiesTotal} копий в коллекции" aria-hidden="true">×${copiesTotal}</span>`:''}
         <span class="cc-card-header"><span class="cc-card-name">${c.name}</span><span class="cc-class-icon" title="${typeLabels[c.type]}">${typeIcons[c.type]||'✧'}</span></span>
@@ -3196,7 +3200,7 @@ renderEquipment();
     <span class="cc-inner-border" aria-hidden="true"></span>
     <span class="cc-card-header"><span class="cc-card-name">${name}</span><span class="cc-class-icon" aria-hidden="true">${typeIcon||'✧'}</span></span>
     <span class="cc-art-frame"><span class="cc-art-bg" style="background-image:url('${img}')"></span><img class="cc-card-image" src="${img}" alt="${name}" loading="lazy"><span class="cc-art-fade"></span><span class="cc-type-tag">${type||'СУЩЕСТВО'}</span></span>
-    <span class="cc-rarity-line"><span class="cc-rarity-gem">◆</span> ${rarity} <span class="cc-rarity-gem">◆</span></span>
+    <span class="cc-rarity-line"><span class="cc-rarity-gem">◆</span> ${rarity}${c?' · УР. 1':''} <span class="cc-rarity-gem">◆</span></span>
     <span class="cc-stats-row">${stats}</span>
     <span class="cc-card-bottom"><span>${foot}</span><span>✦</span></span>
   </div>`;
@@ -4099,7 +4103,7 @@ renderEquipment();
    const next={atk:stats.atk+1,hp:stats.hp+2};
    const options=ownedFor(selectedKey).slice().sort((a,b)=>creatureLevel(b)-creatureLevel(a)||a.id-b.id).map(u=>'<option value="'+u.id+'" '+(u.id===baseId?'selected':'')+'>№'+u.id+' · уровень '+creatureLevel(u)+(state.army.includes(u.id)?' · в отряде':'')+'</option>').join('');
    workspace.innerHTML='<div class="lab-fusion-layout">'+
-    '<div class="lab-card"><div class="lab-card-name">'+c.name+'</div><div class="lab-level">УРОВЕНЬ '+lvl+'</div><div class="lab-card-art"><img src="'+CARD_ART[selectedKey]+'" alt="'+c.name+'"></div><div class="lab-card-rarity">✦ '+c.rarity+' ✦</div><div class="lab-card-stats">'+showStat(stats.atk,'⚔ АТАКА')+showStat(stats.hp,'♥ ЗДОРОВЬЕ')+'</div></div>'+
+    '<div class="lab-card '+ccQuality(unit)+'"><div class="lab-card-name">'+c.name+'</div><div class="lab-level">УРОВЕНЬ '+lvl+'</div><div class="lab-card-art"><img src="'+CARD_ART[selectedKey]+'" alt="'+c.name+'"></div><div class="lab-card-rarity">✦ '+c.rarity+' ✦</div><div class="lab-card-stats">'+showStat(stats.atk,'⚔ АТАКА')+showStat(stats.hp,'♥ ЗДОРОВЬЕ')+'</div></div>'+
     '<div class="lab-controls"><div><label for="lab-base-select">Какую копию улучшать</label><select id="lab-base-select" aria-label="Карта для улучшения">'+options+'</select></div>'+
     '<div class="lab-change"><b>УРОВЕНЬ '+lvl+(capped?' · МАКСИМУМ':' → '+(lvl+1))+'</b><div>⚔ Атака: '+stats.atk+(capped?'':' → <span class="lab-next">'+next.atk+'</span>')+'</div><div>♥ Здоровье: '+stats.hp+(capped?'':' → <span class="lab-next">'+next.hp+'</span>')+'</div></div>'+
     (capped?'<div class="lab-requirement">✦ Достигнут максимальный уровень.</div>':'<div class="lab-requirement">Базовые свободные копии: <b>'+count+' / '+needed+'</b><div class="lab-meter"><div class="lab-meter-fill" style="width:'+Math.min(100,count/needed*100)+'%"></div></div></div>')+
@@ -4695,7 +4699,7 @@ function renderWorld(){
  const heroArt=(typeof heroPicture==='function' ? heroPicture(hero.id||'nerkaz') : NERKAZ_FIRE_ART);
  const slots=Array.from({length:4},(_,i)=>{
   const unit=current[i];
-  return unit?`<button type="button" class="cc09-unit" data-cmd="army:${i}" aria-label="Изменить бойца ${i+1}"><img src="${esc(creaturePicture(unit))}" alt="${esc(CREATURES[unit.key].name)}"><span class="cc09-level">${creatureLevel(unit)}</span><span class="cc09-stars">${'★'.repeat(Math.min(5,creatureLevel(unit)+2))}</span><strong>${esc(CREATURES[unit.key].name)}</strong></button>`:`<button type="button" class="cc09-unit empty" data-cmd="army:${i}" aria-label="Добавить бойца ${i+1}"><span>＋</span><strong>Слот ${i+1}</strong></button>`;
+  return unit?`<button type="button" class="cc09-unit ${ccQuality(unit)}" data-cmd="army:${i}" aria-label="${esc(CREATURES[unit.key].name)}, уровень ${creatureLevel(unit)}, урон ${creatureStats(unit).atk}, здоровье ${creatureStats(unit).hp}"><img src="${esc(creaturePicture(unit))}" alt=""><span class="cc09-level">УР. ${creatureLevel(unit)}</span><strong>${esc(CREATURES[unit.key].name)}</strong>${ccStats(unit)}</button>`:`<button type="button" class="cc09-unit empty" data-cmd="army:${i}" aria-label="Добавить бойца ${i+1}"><span>＋</span><strong>Слот ${i+1}</strong></button>`;
  }).join('');
  return `<div class="cc09-world-stage">
    <img class="cc09-hero-art" src="${esc(heroArt)}" alt="Текущий герой — ${esc(hero.name)}">
@@ -4763,15 +4767,16 @@ function showArmy(slot=0){
  const current=livingArmy();
  const row='<div class="cc-squad-row cc09-squad-slots">'+Array.from({length:4},(_,i)=>{
   const unit=current[i];
-  return `<button type="button" data-cmd="army-slot:${i}" class="${i===focusedSlot?'selected':''}" aria-label="Слот ${i+1}${unit?': '+CREATURES[unit.key].name:''}">${unit?cardImg(unit):'<span class="cc09-empty-slot">＋</span>'}<span>${unit?esc(CREATURES[unit.key].name):'Слот '+(i+1)}</span></button>`;
+  return `<button type="button" data-cmd="army-slot:${i}" class="${i===focusedSlot?'selected':''}" aria-label="Слот ${i+1}${unit?': '+CREATURES[unit.key].name:''}">${unit?cardImg(unit):'<span class="cc09-empty-slot">＋</span>'}<span>${unit?esc(CREATURES[unit.key].name)+' · ур. '+creatureLevel(unit)+' · ⚔'+creatureStats(unit).atk+' ♥'+creatureStats(unit).hp:'Слот '+(i+1)}</span></button>`;
  }).join('')+'</div>';
  const list=state.units.map(u=>{
   const c=CREATURES[u.key],chosen=state.army.includes(u.id);
   const label=chosen?'В отряде':'В слот';
-  return `<button type="button" class="cc09-pick-card ${chosen?'is-equipped':''}" data-cmd="army-equip:${u.id}" ${chosen?'disabled':''} aria-label="${esc(c.name)}. Уровень ${creatureLevel(u)}. ${label}">
+  return `<button type="button" class="cc09-pick-card ${ccQuality(u)} ${chosen?'is-equipped':''}" data-cmd="army-equip:${u.id}" ${chosen?'disabled':''} aria-label="${esc(c.name)}. Уровень ${creatureLevel(u)}. ${label}">
    <span class="cc09-pick-portrait">${cardImg(u)}</span>
    <span class="cc09-pick-title">${esc(c.name)}</span>
    <span class="cc09-pick-meta">${esc(c.rarity)} · Ур. ${creatureLevel(u)}</span>
+   ${ccStats(u)}
    <span class="cc09-pick-action">${label}</span>
   </button>`;
  }).join('');
@@ -4782,7 +4787,7 @@ function showCollection(){
  const list=[...groups.entries()].map(([key,arr])=>{
   const u=arr.reduce((a,b)=>creatureLevel(a)>creatureLevel(b)?a:b);const c=CREATURES[key];
   const countSelected=arr.filter(x=>state.army.includes(x.id)).length;
-  return `<div class="cc-item">${cardImg(u)}<div class="cc-item-detail"><b>${esc(c.name)}</b><small>${esc(c.rarity)} · Копий ${arr.length} · В отряде ${countSelected} · Макс. ур. ${Math.max(...arr.map(creatureLevel))}</small></div>${button('collect:'+key,'Выбрать','purple')}</div>`;
+  return `<div class="cc-item cc6-row ${ccQuality(u)}">${cardImg(u)}<div class="cc-item-detail"><b>${esc(c.name)}</b><small>${esc(c.rarity)} · Копий ${arr.length} · В отряде ${countSelected}</small>${ccLevel(u)}${ccStats(u)}</div>${button('collect:'+key,'Выбрать','purple')}</div>`;
  }).join('');
  const heroes=(state.heroes||[]);
  const heroList=heroes.length?'<h3 class="cc-title">Герои</h3>'+heroes.map(h=>`<div class="cc-item"><div class="cc-item-detail"><b>${esc(h.name)}</b><small>${esc(h.title||'Герой')}</small></div>${button('heroes','Выбрать','purple')}</div>`).join(''):'';
@@ -4824,7 +4829,7 @@ function openPack(){
  document.getElementById('buy-pack').click();
  const drops=state.units.slice(before);
  const hero=(state.heroes||[]).slice(previousHeroes);
- const figures=drops.map(u=>`<figure>${cardImg(u)}<figcaption>${esc(CREATURES[u.key].name)}</figcaption></figure>`).join('')+hero.map(h=>`<figure><img src="${esc(typeof heroPicture==='function'?heroPicture(h.id):'assets/heroes/hero-art.jpg')}" alt=""><figcaption>${esc(h.name)}</figcaption></figure>`).join('');
+ const figures=drops.map(u=>`<figure class="cc6-reward ${ccQuality(u)}">${cardImg(u)}<figcaption>${esc(CREATURES[u.key].name)}</figcaption>${ccLevel(u)}${ccStats(u)}</figure>`).join('')+hero.map(h=>`<figure><img src="${esc(typeof heroPicture==='function'?heroPicture(h.id):'assets/heroes/hero-art.jpg')}" alt=""><figcaption>${esc(h.name)}</figcaption></figure>`).join('');
  openModal('Пак открыт!',`<p>${drops.length||hero.length?'Получены настоящие игровые карты, они уже сохранены в коллекции.':'Награда добавлена в коллекцию. Герой, который уже есть, может не дублироваться.'}</p><div class="cc-pack-result">${figures||'<p>Проверь героев в коллекции.</p>'}</div>${button('army','Выбрать отряд','purple')}${button('open-pack-again','Открыть ещё один пак')}`);
  sync();
 }
@@ -4841,7 +4846,7 @@ function showShop(category){
  }).join('');
  const unitSales=[['boneguard',100],['skeletal_archer',120],['gravedigger',150]].map(([key,price])=>{
    const u={key},c=CREATURES[key];
-   return `<div class="cc-item">${cardImg(u)}<div class="cc-item-detail"><b>${esc(c.name)}</b><small>Постоянная карта существа</small></div>${button('unit-buy:'+key+':'+price,price+' золота')}</div>`;
+   return `<div class="cc-item cc6-row ${ccQuality(u)}">${cardImg(u)}<div class="cc-item-detail"><b>${esc(c.name)}</b><small>${esc(c.rarity)} · постоянная карта</small>${ccLevel(u)}${ccStats(u)}</div>${button('unit-buy:'+key+':'+price,price+' золота')}</div>`;
  }).join('');
  const start=category==='gear';
  openModal('Магазин · '+format(state.gold)+' 🪙',`<p>Покупки здесь совершаются только за <b>игровое золото</b>. Цены на карточках показывают только игровое золото. Покупки происходят в существующей экономике.</p><div class="cc-confirm">Монет: <b>${format(state.gold)}</b> 🪙 ${button('shop-refill','Получить припасы','blue',state.quest?'disabled':'')}</div>${button('shop-units','Карты существ','blue')}${button('shop-equipment','Снаряжение','purple')}<h3 class="cc-title">${start?'Снаряжение':'Существа'}</h3><div class="cc-list">${start?gear:unitSales}</div>`);
@@ -4855,14 +4860,16 @@ function showLab(){
  const cards=entries.map(entry=>{
   const key=entry.dataset.labKey, units=owned(key);
   if(!CREATURES[key]||!units.length)return '';
-  return `<div class="cc-item cc09-fusion-unit">
+  const best=units.reduce((a,b)=>creatureLevel(a)>=creatureLevel(b)?a:b);
+  return `<div class="cc-item cc09-fusion-unit cc6-row ${ccQuality(best)}">
     <img src="${esc(CARD_ART[key])}" alt="${esc(CREATURES[key].name)}">
-    <div class="cc-item-detail"><b>${esc(CREATURES[key].name)}</b><small>${units.length} копий · лучший уровень ${Math.max(...units.map(creatureLevel))}</small></div>
+    <div class="cc-item-detail"><b>${esc(CREATURES[key].name)}</b><small>${esc(CREATURES[key].rarity)} · ${units.length} копий</small>${ccLevel(best)}${ccStats(best)}</div>
     ${button('lab-unit:'+key,'Выбрать','purple')}
   </div>`;
  }).join('');
  const key=selected?.dataset.labKey,copies=key?owned(key):[];
- const stats=copies.length?`<div class="cc-confirm">${esc(CREATURES[key].name)} · лучший уровень ${Math.max(...copies.map(creatureLevel))} · копий ${copies.length}</div>`:'';
+ const bestCopy=copies.length?copies.reduce((a,b)=>creatureLevel(a)>=creatureLevel(b)?a:b):null;
+ const stats=bestCopy?`<div class="cc-confirm cc6-summary ${ccQuality(bestCopy)}"><b>${esc(CREATURES[key].name)}</b> · ${copies.length} копий ${ccLevel(bestCopy)}${ccStats(bestCopy)}</div>`:'';
  openModal('Лаборатория слияния',`<p>Выбери карту. Для улучшения нужны свободные копии того же существа. Максимальный уровень — 5.</p>
   ${stats}
   ${button('lab-fuse',merge?.textContent?.trim()||'Нет доступного слияния','',canFuse?'':'disabled')}
