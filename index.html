@@ -5,7 +5,7 @@
 <base href="https://spyder2019-hue.github.io/Crowns-and-Cards/">
 <meta charset="utf-8"/><meta content="#172532" name="theme-color"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Crowns &amp; Cards — Пять королевств · Мультяшное меню</title>
-<meta name="cc-build" content="20261028-ui-refresh-v8"><link rel="icon" type="image/webp" href="assets/branding/crowns-cards-logo.webp?art=20261026b">
+<meta name="cc-build" content="20261028-hq-packs-v9"><link rel="icon" type="image/webp" href="assets/branding/crowns-cards-logo.webp?art=20261026b">
 <style>
 /* css/00-base-and-early-ui.css */
 /* Original style block 0 */
@@ -4729,7 +4729,7 @@ function renderWorld(){
 function renderMap(){return window.CrownsCampaign?window.CrownsCampaign.render():'<p>Карта временно недоступна</p>';}
 function renderPacks(){
  const packs=[['units','Пак нежити','pack-undead','3 существа'],['heroes','Пак героев','pack-heroes','Случайный герой'],['future','Особый пак','pack-royal','Скоро']];
- const packArt={units:"assets/packs/pack-undead-new.webp?v=8",heroes:"assets/packs/pack-heroes-new.webp?v=8",future:"assets/packs/pack-special-new.webp?v=8"};
+ const packArt={units:"assets/packs/pack-undead-new.webp?v=9",heroes:"assets/packs/pack-heroes-new.webp?v=9",future:"assets/packs/pack-special-new.webp?v=9"};
  const cards=packs.map(([type,title,image,caption])=>`<button type="button" class="cc09-pack-card ${pack===type?'selected':''}" data-cmd="pack:${type}"><img src="${packArt[type]}" onerror="this.onerror=null;this.src=&#39;${ico(image)}&#39;" alt="${esc(title)}" loading="lazy"><strong>${esc(title)}</strong><small>${esc(caption)}</small></button>`).join('');
  return `<div class="cc09-packs-grid">${cards}</div>${btn('open-pack',pack==='heroes'?'♛ ОТКРЫТЬ ПАК ГЕРОЕВ':'✦ ОТКРЫТЬ БЕСПЛАТНО')}`;
 }
