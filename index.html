@@ -5,7 +5,7 @@
 <base href="https://spyder2019-hue.github.io/Crowns-and-Cards/">
 <meta charset="utf-8"/><meta content="#172532" name="theme-color"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Crowns &amp; Cards — Пять королевств · Мультяшное меню</title>
-<meta name="cc-build" content="20261028-hq-packs-v9"><link rel="icon" type="image/webp" href="assets/branding/crowns-cards-logo.webp?art=20261026b">
+<meta name="cc-build" content="20261028-correct-packs-v10"><link rel="icon" type="image/webp" href="assets/branding/crowns-cards-logo.webp?art=20261026b">
 <style>
 /* css/00-base-and-early-ui.css */
 /* Original style block 0 */
@@ -2674,6 +2674,16 @@ body.cc-v09-native #tab-battle{display:block!important;visibility:visible!import
 #cc-v09 .cc7-chooser .cc7-option em{margin-top:auto!important}
 @media(max-width:600px){#cc-v09 .cc7-chooser .cc7-options{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}#cc-v09 .cc09-counter .cc09-currency-icon{width:30px!important;height:30px!important}#cc-v09 .cc09-hud-actions{gap:4px!important}}
 </style>
+
+<style id="cc-correct-pack-art-v10">
+/* The green undead art has wide transparent margins; crop only that transparent padding
+   in the same image box used by the two portrait pack covers. */
+#cc-v09 .cc09-pack-card[data-cmd="pack:units"] img{
+ object-fit:cover!important;
+ object-position:50% 50%!important;
+ background:transparent!important;
+}
+</style>
 </head><body class="cc-v09-active"><div class="app">
 <header class="top"><div><div class="brand">♛ CROWNS <span>&amp;</span> CARDS</div><div class="sub">Стратегия пяти королевств</div></div><div class="resources"><div class="resource"><svg aria-label="Золото" class="gold-coin-icon" height="30" role="img" viewbox="0 0 64 64" width="30" xmlns="http://www.w3.org/2000/svg"><defs><radialgradient cx="35%" cy="24%" id="coinshine" r="75%"><stop offset="0" stop-color="#fff3b2"></stop><stop offset=".32" stop-color="#f5c94b"></stop><stop offset=".75" stop-color="#b77b18"></stop><stop offset="1" stop-color="#6b3d0d"></stop></radialgradient></defs><circle cx="32" cy="32" fill="#3b2109" r="29" stroke="#ffdb70" stroke-width="2"></circle><circle cx="32" cy="32" fill="url(#coinshine)" r="25" stroke="#9c6116" stroke-width="2"></circle><circle cx="32" cy="32" fill="none" r="19" stroke="#ffe29a" stroke-width="2"></circle><path d="M39 23c-4-4-15-3-15 4 0 8 16 3 16 11 0 8-13 10-18 4M32 17v30" fill="none" stroke="#7c460f" stroke-linecap="round" stroke-width="4"></path><path d="M39 22c-4-4-15-3-15 4 0 8 16 3 16 11 0 8-13 10-18 4M32 17v30" fill="none" stroke="#ffe8a3" stroke-linecap="round" stroke-width="2"></path></svg><b id="gold">500</b></div><div class="resource" style="display:none!important">⭐ Ур. <b id="level">1</b></div><div class="resource" style="display:none!important">🃏 Карт: <b id="total">0</b></div></div></header>
 <aside class="gothic-sidebar"><div class="side-logo"><img src="assets/branding/crowns-cards-logo.webp?art=20261026b" alt="Crowns & Cards" style="width:100%;max-height:145px;object-fit:contain"></div><button class="active" data-tab="world" type="button">♜ <span>Мир</span></button><button data-tab="map" type="button">◇ <span>Карта</span></button><button data-tab="lab" type="button">⚗ <span>Лаборатория</span></button><button data-tab="packs" type="button">▤ <span>Паки</span></button><button data-tab="shop" type="button">◆ <span>Магазин</span></button></aside>
@@ -4729,7 +4739,7 @@ function renderWorld(){
 function renderMap(){return window.CrownsCampaign?window.CrownsCampaign.render():'<p>Карта временно недоступна</p>';}
 function renderPacks(){
  const packs=[['units','Пак нежити','pack-undead','3 существа'],['heroes','Пак героев','pack-heroes','Случайный герой'],['future','Особый пак','pack-royal','Скоро']];
- const packArt={units:"assets/packs/pack-undead-new.webp?v=9",heroes:"assets/packs/pack-heroes-new.webp?v=9",future:"assets/packs/pack-special-new.webp?v=9"};
+ const packArt={units:"assets/packs/pack-special-new.webp?v=10",heroes:"assets/packs/pack-heroes-new.webp?v=10",future:"assets/packs/pack-undead-new.webp?v=10"};
  const cards=packs.map(([type,title,image,caption])=>`<button type="button" class="cc09-pack-card ${pack===type?'selected':''}" data-cmd="pack:${type}"><img src="${packArt[type]}" onerror="this.onerror=null;this.src=&#39;${ico(image)}&#39;" alt="${esc(title)}" loading="lazy"><strong>${esc(title)}</strong><small>${esc(caption)}</small></button>`).join('');
  return `<div class="cc09-packs-grid">${cards}</div>${btn('open-pack',pack==='heroes'?'♛ ОТКРЫТЬ ПАК ГЕРОЕВ':'✦ ОТКРЫТЬ БЕСПЛАТНО')}`;
 }
