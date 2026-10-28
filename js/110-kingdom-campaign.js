@@ -202,8 +202,7 @@
         <img src="assets/maps/nine-kingdoms-campaign.webp?v=3" draggable="false" alt="Девять отдельных фантастических островов">${glow}
         <svg class="cc-campaign-outline-map" style="--cc-campaign-fill:url(#cc-campaign-picked-fill)" viewBox="0 0 1536 1024" preserveAspectRatio="none" role="group" aria-label="Нажми на землю, чтобы увидеть задания"><defs><radialGradient id="cc-campaign-picked-fill" cx="50%" cy="50%" r="58%"><stop offset="0%" stop-color="${selectedColor}" stop-opacity=".91"/><stop offset="28%" stop-color="${selectedColor}" stop-opacity=".62"/><stop offset="54%" stop-color="${selectedColor}" stop-opacity=".29"/><stop offset="88%" stop-color="${selectedColor}" stop-opacity="0"/><stop offset="100%" stop-color="${selectedColor}" stop-opacity="0"/></radialGradient></defs>${coastline}</svg>
       </div></div>
-      <div class="cc-campaign-map-footer">
-        <span>Нажми на любую землю, чтобы открыть задания.</span>
+      <div class="cc-campaign-map-footer" aria-label="Выполнено заданий: ${number} из ${MISSIONS.length}">
         <strong>🏆 ${number}/${MISSIONS.length}</strong>
       </div>
       ${finished?'<div class="cc-campaign-finale">👑 Кампания пройдена! Все девять земель освобождены.</div>':''}

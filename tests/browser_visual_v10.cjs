@@ -29,6 +29,29 @@ const fs = require('node:fs');
     assert.equal(tabs,5,layout.label+' bottom navigation');
     assert.equal(await page.locator('#cc-v09 .cc09-slot').count(),6,layout.label+' equipment');
     assert.equal(await page.locator('#cc-v09 .cc09-action-row button[data-cmd="map"]').count(),1,layout.label+' battle CTA');
+    await page.waitForSelector('#cc09-world .cc09-unit.cc14-card-ready .cc14-card-skin',{timeout:10000});
+    const ornate=await page.locator('#cc09-world .cc09-unit.cc14-card-ready').first().evaluate(el=>{
+      const frame=el.querySelector('.cc14-card-skin');
+      const sword=el.querySelector('.cc14-attack'),heart=el.querySelector('.cc14-health');
+      const box=frame.getBoundingClientRect(),a=sword.getBoundingClientRect(),h=heart.getBoundingClientRect();
+      return {width:box.width,height:box.height,attack:sword.textContent.trim(),health:heart.textContent.trim(),
+        inside:a.left>=box.left && a.right<=box.right && h.left>=box.left && h.right<=box.right,
+        frame:getComputedStyle(frame).backgroundImage};
+    });
+    assert(ornate.frame.includes('ornate-creature-frame-v14.webp'),layout.label+' ornate card background missing');
+    assert(ornate.inside,layout.label+' stats outside card frame: '+JSON.stringify(ornate));
+    assert(Number.isFinite(Number(ornate.attack))&&Number.isFinite(Number(ornate.health)),
+      layout.label+' stats missing from skin');
+    const asset=await page.request.get('http://127.0.0.1:8765/assets/cards/ornate-creature-frame-v14.webp');
+    assert.equal(asset.status(),200,layout.label+' ornate art missing');
+    const xp=await page.locator('#cc09-world .cc14-hero-top-exp').evaluate(el=>{
+      const stage=el.closest('.cc09-world-stage').getBoundingClientRect(),r=el.getBoundingClientRect();
+      return {top:r.top,bottom:r.bottom,stageTop:stage.top,stageHeight:stage.height};
+    });
+    assert(xp.top>=xp.stageTop && xp.bottom<=xp.stageTop+xp.stageHeight/3,layout.label+' XP bar not above hero');
+    await page.locator('#cc09-world .cc09-unit.cc14-card-ready').first().click();
+    await page.waitForSelector('#cc-v09 .cc09-pick-card.cc14-card-ready .cc14-card-skin',{timeout:10000});
+    await page.locator('#cc-v09 .cc09-dialog-close').click();
     const stage=await page.locator('#cc-v09 .cc09-world-stage').evaluate(el=>({
       background:getComputedStyle(el).backgroundImage,
       width:el.getBoundingClientRect().width
@@ -69,6 +92,7 @@ const fs = require('node:fs');
     await page.locator('#cc-v09 [data-cc-tab="map"]').click();
     await page.waitForSelector('#cc09-map .cc-campaign-canvas',{timeout:5000});
     assert.equal(await page.locator('#cc09-map .cc-campaign-island').count(),9,'territory hit areas');
+    assert.equal(await page.locator('#cc09-map .cc-campaign-map-footer span').count(),0,layout.label+' map caption still shown');
     const mapFit=await page.locator('#cc-campaign-scroll').evaluate(el=>{
       const canvas=el.querySelector('.cc-campaign-canvas');
       const box=el.getBoundingClientRect();
