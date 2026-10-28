@@ -5,6 +5,7 @@
   const targets=[
     '#cc-v09 .cc09-world-squad .cc09-unit:not(.empty)',
     '#cc-v09 .cc09-pick-card',
+    '#cc-v09 .cc09-squad-slots .cc14-squad-choice',
     '#cc-v09 .cc7-card:not(.cc7-empty)',
     '#cc-v09 .cc7-option',
     '#cc-v09 .cc-pack-result figure.cc6-reward',
@@ -35,14 +36,13 @@
     const skin=document.createElement('span');
     skin.className='cc14-card-skin';
     skin.setAttribute('aria-hidden','true');
-    const title=document.createElement('span');title.className='cc14-name';title.textContent=name;
     const portrait=document.createElement('span');portrait.className='cc14-portrait';
     const img=document.createElement('img');img.src=src.getAttribute('src');img.alt='';img.loading='lazy';img.decoding='async';
     portrait.append(img);
     const lvl=document.createElement('span');lvl.className='cc14-level';lvl.textContent='УР. '+levelFrom(node);
     const atk=document.createElement('span');atk.className='cc14-stat cc14-attack';atk.textContent=attackValue;
     const hp=document.createElement('span');hp.className='cc14-stat cc14-health';hp.textContent=healthValue;
-    skin.append(title,portrait,lvl,atk,hp);
+    skin.append(portrait,lvl,atk,hp);
     node.prepend(skin);
     node.classList.add('cc14-card-ready');
     if(node.tagName==='BUTTON'&&!node.getAttribute('aria-label')){
