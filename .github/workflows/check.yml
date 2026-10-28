@@ -30,6 +30,9 @@ jobs:
       - name: Check local references
         run: python tests/check_project.py
 
+      - name: Check embedded game JavaScript
+        run: python tests/check_inline_scripts.py
+
       - name: Check JavaScript syntax
         shell: bash
         run: |
