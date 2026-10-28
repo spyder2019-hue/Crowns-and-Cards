@@ -1,0 +1,215 @@
+/* Crowns & Cards v14 — one authentic ornamental card for every creature view.
+   The sword/heart boxes are part of the user-provided artwork, NOT CSS approximations. */
+#cc-v09 .cc14-card-ready{--cc14-q:var(--q,#a2c4d9);min-width:0}
+#cc-v09 .cc14-card-skin,
+#collection-cards .cc14-card-skin,
+.world-army-choices .cc14-card-skin{
+  display:block!important;position:relative!important;isolation:isolate;
+  box-sizing:border-box!important;
+  width:100%!important;max-width:100%!important;height:auto!important;
+  aspect-ratio:1024 / 1432!important;
+  margin:0 auto!important;flex:none!important;min-width:0!important;
+  overflow:hidden!important;
+  container-type:inline-size;
+  background:transparent url("../assets/cards/ornate-creature-frame-v14.webp") center/100% 100% no-repeat!important;
+  border:0!important;border-radius:0!important;
+  box-shadow:none!important;
+  filter:drop-shadow(0 3px 5px #010a21ba);
+  pointer-events:none!important;
+}
+#cc-v09 .cc14-card-skin .cc14-portrait,
+#collection-cards .cc14-card-skin .cc14-portrait,
+.world-army-choices .cc14-card-skin .cc14-portrait{
+ position:absolute!important;display:flex!important;align-items:flex-end!important;justify-content:center!important;
+ left:17.5%!important;top:21.5%!important;width:65%!important;height:52.5%!important;
+ background:none!important;border:0!important;border-radius:0!important;overflow:hidden!important;
+ box-shadow:none!important;
+}
+#cc-v09 .cc14-card-skin .cc14-portrait>img,
+#collection-cards .cc14-card-skin .cc14-portrait>img,
+.world-army-choices .cc14-card-skin .cc14-portrait>img{
+ position:static!important;display:block!important;flex:none!important;
+ width:100%!important;height:100%!important;max-width:100%!important;
+ object-fit:contain!important;object-position:center bottom!important;
+ margin:0!important;padding:0!important;min-width:0!important;min-height:0!important;
+ border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;
+ filter:drop-shadow(0 4px 5px #0009)!important;
+ transform:none!important;pointer-events:none!important;
+}
+#cc-v09 .cc14-card-skin .cc14-name,
+#collection-cards .cc14-card-skin .cc14-name,
+.world-army-choices .cc14-card-skin .cc14-name{
+ display:-webkit-box!important;position:absolute!important;z-index:2;
+ top:13.3%!important;left:16%!important;width:68%!important;
+ padding:0!important;margin:0!important;text-align:center!important;
+ color:#fff0cb!important;font-size:clamp(8px,7.0cqw,15px)!important;
+ font-weight:950!important;line-height:1.07!important;letter-spacing:0!important;
+ -webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden!important;
+ overflow-wrap:anywhere;word-break:normal;
+ text-shadow:0 2px 3px #000,0 0 7px #020b22!important;
+ white-space:normal!important;pointer-events:none!important;
+}
+#cc-v09 .cc14-card-skin .cc14-level,
+#collection-cards .cc14-card-skin .cc14-level,
+.world-army-choices .cc14-card-skin .cc14-level{
+ position:absolute!important;left:30%!important;right:30%!important;top:70.8%!important;
+ z-index:3;display:block!important;text-align:center!important;
+ color:#ffe7a6!important;font-size:clamp(7px,6.4cqw,13px)!important;
+ font-weight:950!important;line-height:1.05!important;
+ text-shadow:0 2px 4px #000,0 0 5px #1a0f00!important;
+ padding:0!important;background:none!important;border:0!important;box-shadow:none!important;
+}
+#cc-v09 .cc14-card-skin .cc14-stat,
+#collection-cards .cc14-card-skin .cc14-stat,
+.world-army-choices .cc14-card-skin .cc14-stat{
+ position:absolute!important;z-index:4;top:82.25%!important;
+ width:23%!important;min-width:0!important;height:8.4%!important;
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ padding:0!important;margin:0!important;
+ font-size:clamp(11px,11.2cqw,23px)!important;line-height:1!important;
+ font-weight:1000!important;font-variant-numeric:tabular-nums;
+ color:#fff5d9!important;text-shadow:0 2px 2px #000,0 0 5px #060b18!important;
+ background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;
+}
+#cc-v09 .cc14-card-skin .cc14-attack,
+#collection-cards .cc14-card-skin .cc14-attack,
+.world-army-choices .cc14-card-skin .cc14-attack{left:7.5%!important;color:#ffdfa5!important}
+#cc-v09 .cc14-card-skin .cc14-health,
+#collection-cards .cc14-card-skin .cc14-health,
+.world-army-choices .cc14-card-skin .cc14-health{right:7.5%!important;color:#ffd7d3!important}
+/* Respect rarity and upgrade glow, outside the actual card frame. */
+#cc-v09 .cc14-card-ready[class*="cc-quality-"] .cc14-card-skin{
+ filter:drop-shadow(0 4px 4px #000a) drop-shadow(0 0 clamp(2px,.7vw,6px) color-mix(in srgb,var(--cc14-q) var(--glow,24%),transparent));
+}
+#cc-v09 .cc14-card-ready:focus-visible{outline:2px solid #aeefff!important;outline-offset:2px!important}
+
+/* Squad: frame itself is the card, with no old rounded colored tile behind it. */
+#cc-v09 .cc09-world-squad .cc09-unit.cc14-card-ready{
+ min-height:0!important;height:auto!important;padding:0!important;gap:0!important;
+ display:block!important;background:none!important;border:0!important;border-radius:0!important;
+ box-shadow:none!important;overflow:visible!important;
+}
+#cc-v09 .cc09-world-squad .cc09-unit.cc14-card-ready>img,
+#cc-v09 .cc09-world-squad .cc09-unit.cc14-card-ready>.cc6-stats,
+#cc-v09 .cc09-world-squad .cc09-unit.cc14-card-ready>.cc09-level,
+#cc-v09 .cc09-world-squad .cc09-unit.cc14-card-ready>strong{display:none!important}
+#cc-v09 .cc09-world-squad .cc09-unit.cc14-card-ready .cc14-card-skin{width:100%!important}
+
+/* Squad picker: card face, then only rarity and the equip action. */
+#cc-v09 .cc09-pick-card.cc14-card-ready{
+ padding:0 0 7px!important;gap:3px!important;background:none!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;overflow:visible!important;
+}
+#cc-v09 .cc09-pick-card.cc14-card-ready>.cc09-pick-portrait,
+#cc-v09 .cc09-pick-card.cc14-card-ready>.cc09-pick-title,
+#cc-v09 .cc09-pick-card.cc14-card-ready>.cc6-stats{display:none!important}
+#cc-v09 .cc09-pick-card.cc14-card-ready>.cc09-pick-meta{
+ color:#daeaff!important;font-size:clamp(10px,1.2vw,12px)!important;text-align:center!important;
+ min-height:0!important;
+}
+#cc-v09 .cc09-pick-card.cc14-card-ready>.cc09-pick-action{margin-top:auto!important}
+
+/* Laboratory: ornament stays inside the equation / tile boundaries. */
+#cc-v09 .cc7-card.cc14-card-ready{
+ min-height:0!important;height:auto!important;padding:0!important;gap:0!important;
+ background:transparent!important;border:0!important;border-radius:0!important;
+ box-shadow:none!important;overflow:visible!important;
+}
+#cc-v09 .cc7-card.cc14-card-ready>img,
+#cc-v09 .cc7-card.cc14-card-ready>strong,
+#cc-v09 .cc7-card.cc14-card-ready>.cc7-level,
+#cc-v09 .cc7-card.cc14-card-ready>.cc7-stats{display:none!important}
+#cc-v09 .cc7-operand .cc14-card-skin{width:100%!important}
+#cc-v09 .cc7-option.cc14-card-ready{
+ min-height:0!important;height:auto!important;padding:5px!important;gap:5px!important;
+ background:linear-gradient(#f5f9ff,#dceaff)!important;
+ border:1px solid var(--q,#a2bddc)!important;border-radius:10px!important;
+ box-shadow:0 3px 0 #647a9e!important;
+}
+#cc-v09 .cc7-option.cc14-card-ready>img,
+#cc-v09 .cc7-option.cc14-card-ready>span .cc7-stats,
+#cc-v09 .cc7-option.cc14-card-ready>span>b{display:none!important}
+#cc-v09 .cc7-option.cc14-card-ready>span{flex:0!important;gap:3px!important;min-height:0!important}
+#cc-v09 .cc7-option.cc14-card-ready>span small{font-size:10px!important;text-align:center!important}
+#cc-v09 .cc7-option.cc14-card-ready em{margin-top:auto!important}
+
+/* Collection, store and pack rewards preserve game commands and secondary info. */
+#cc-v09 .cc-item.cc6-row.cc14-card-ready{
+ min-height:0!important;height:auto!important;gap:7px!important;
+ padding:7px!important;flex-direction:column!important;align-items:stretch!important;text-align:center!important;
+ overflow:visible!important;
+}
+#cc-v09 .cc-item.cc6-row.cc14-card-ready>img,
+#cc-v09 .cc-item.cc6-row.cc14-card-ready .cc6-stats,
+#cc-v09 .cc-item.cc6-row.cc14-card-ready .cc6-level{display:none!important}
+#cc-v09 .cc-item.cc6-row.cc14-card-ready .cc-item-detail{width:100%!important;flex:1!important;min-width:0!important;text-align:center!important}
+#cc-v09 .cc-item.cc6-row.cc14-card-ready>.cc-btn{width:100%!important;align-self:stretch!important;white-space:normal!important}
+#cc-v09 .cc-pack-result figure.cc6-reward.cc14-card-ready{
+ margin:0!important;padding:0 0 8px!important;min-width:0!important;
+ background:transparent!important;border:0!important;border-radius:0!important;
+ box-shadow:none!important;overflow:visible!important;color:#f9ecce!important;
+}
+#cc-v09 .cc-pack-result figure.cc6-reward.cc14-card-ready>img,
+#cc-v09 .cc-pack-result figure.cc6-reward.cc14-card-ready>.cc6-stats,
+#cc-v09 .cc-pack-result figure.cc6-reward.cc14-card-ready>.cc6-level,
+#cc-v09 .cc-pack-result figure.cc6-reward.cc14-card-ready>figcaption{display:none!important}
+#cc-v09 .cc-pack-result{grid-template-columns:repeat(3,minmax(0,1fr))!important;align-items:start!important}
+
+/* Older collection and recruitment cards use the same sleeve when shown. */
+#collection-cards .undead-card.cc14-card-ready,.world-army-choices .undead-card.cc14-card-ready{
+ box-sizing:border-box!important;min-width:0!important;height:auto!important;min-height:0!important;
+ padding:0!important;background:transparent!important;border:0!important;border-radius:0!important;
+ box-shadow:none!important;overflow:visible!important;display:block!important;
+}
+#collection-cards .undead-card.cc14-card-ready .cc-art-frame,
+#collection-cards .undead-card.cc14-card-ready .cc-card-header,
+#collection-cards .undead-card.cc14-card-ready .cc-stats-row,
+.world-army-choices .undead-card.cc14-card-ready .cc-art-frame,
+.world-army-choices .undead-card.cc14-card-ready .cc-card-header,
+.world-army-choices .undead-card.cc14-card-ready .cc-stats-row{display:none!important}
+
+/* Experience is above the character, independent of the ornate card skins. */
+#cc-v09 .cc09-world-stage .cc10-hero-foot-exp.cc14-hero-top-exp{
+ top:clamp(9px,1.7vw,17px)!important;bottom:auto!important;
+ left:50%!important;right:auto!important;z-index:6!important;
+ transform:translateX(-50%)!important;
+ width:clamp(150px,32%,260px)!important;min-width:0!important;
+ max-width:calc(100% - 176px)!important;
+ padding:6px 10px 8px!important;gap:4px!important;
+}
+#cc-v09 .cc10-hero-foot-exp.cc14-hero-top-exp .cc10-hero-xp-label{font-size:clamp(9px,1.5vw,12px)!important}
+#cc-v09 .cc10-hero-foot-exp.cc14-hero-top-exp .cc10-xp-track{height:10px!important}
+
+/* Map: remove bottom instructional banner, keep only a discrete progress total. */
+#cc-v09 #cc09-map .cc-campaign-map-footer{
+ background:transparent!important;border:0!important;box-shadow:none!important;
+ padding:1px 4px!important;justify-content:flex-end!important;min-height:18px!important;
+}
+#cc-v09 #cc09-map .cc-campaign-map-footer>strong{font-size:12px!important;color:#ffe09e!important}
+
+/* Mobile density without overflow; buttons, panels, and cards scale together. */
+@media(max-width:600px){
+ #cc-v09 .cc09-world-squad{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important}
+ #cc-v09 .cc09-world-squad .cc09-unit.cc14-card-ready{width:100%!important;max-width:100%!important}
+ #cc-v09 .cc09-squad-catalog{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
+ #cc-v09 .cc7-options{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important}
+ #cc-v09 .cc7-equation{gap:clamp(1px,.65vw,6px)!important}
+ #cc-v09 .cc7-card.cc14-card-ready{min-width:0!important}
+ #cc-v09 .cc-pack-result{gap:5px!important}
+ #cc-v09 .cc-pack-result figure.cc6-reward.cc14-card-ready{min-width:0!important}
+ #cc-v09 .cc09-world-stage .cc10-hero-foot-exp.cc14-hero-top-exp{
+  width:44%!important;max-width:calc(100% - 135px)!important;
+  min-width:120px!important;padding:5px 6px!important;
+ }
+ #cc-v09 .cc14-card-skin .cc14-name{font-size:clamp(7px,7.2cqw,13px)!important}
+ #cc-v09 .cc14-card-skin .cc14-stat{font-size:clamp(10px,11cqw,20px)!important}
+}
+@media(max-width:350px){
+ #cc-v09 .cc09-world-stage .cc10-hero-foot-exp.cc14-hero-top-exp{
+  min-width:102px!important;max-width:calc(100% - 125px)!important;
+ }
+ #cc-v09 .cc10-hero-foot-exp.cc14-hero-top-exp .cc10-hero-xp-label{font-size:9px!important}
+}
+@media(prefers-reduced-motion:reduce){
+ #cc-v09 .cc14-card-skin{transition:none!important}
+}
