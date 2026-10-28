@@ -49,6 +49,9 @@ const fs = require('node:fs');
 
     await page.locator('#cc-v09 [data-cc-tab="packs"]').click();
     await page.waitForSelector('#cc09-packs .cc09-pack-card img',{timeout:5000});
+    // Pack covers are lazy-loaded in production: explicitly load all three before checking pixels.
+    await page.locator('#cc09-packs .cc09-pack-card img').evaluateAll(images=>images.forEach(img=>img.loading='eager'));
+    await page.waitForFunction(()=>Array.from(document.querySelectorAll('#cc09-packs .cc09-pack-card img')).every(img=>img.complete && img.naturalWidth>0),null,{timeout:15000});
     const packs=await page.locator('#cc09-packs .cc09-pack-card').evaluateAll(nodes=>nodes.map(node=>({
       action:node.dataset.cmd,loaded:node.querySelector('img')?.naturalWidth||0,src:node.querySelector('img')?.getAttribute('src')
     })));
