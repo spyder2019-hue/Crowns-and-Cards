@@ -4729,20 +4729,29 @@ function renderLab(){
  return `<div class="cc09-panel"><h1 class="cc09-title">⚗ Лаборатория</h1><p class="cc09-subtitle">Объединяй одинаковые карты для усиления существ.</p></div><div class="cc09-lab-scene"><div class="cc09-lab-text"><strong>Магия слияния</strong><p>Два существа превращаются в более сильную карту.</p></div><img class="cc09-lab-art" src="${ico('lab-circle')}" alt="Магический алтарь"></div><div class="cc09-panel"><h2 class="cc09-title" style="font-size:20px">Твои существа</h2><div style="display:grid;gap:9px;margin-top:10px">${labItems||'<p class="cc09-subtitle">Пока нет существ для улучшения.</p>'}</div></div>${btn('lab-choose','⚗ ВЫБРАТЬ И СЛИТЬ КАРТЫ')}`;
 }
 function renderActive(){
- const section=ROOT.querySelector('.cc09-page.active');if(!section)return;
+ const section=ROOT.querySelector('.cc09-page[data-page="'+active+'"]');
+ if(!section)return;
+ ROOT.querySelectorAll('.cc09-page').forEach(e=>e.classList.toggle('active',e===section));
  const renderer={world:renderWorld,map:renderMap,packs:renderPacks,shop:renderShop,lab:renderLab}[active];
- if(renderer)section.innerHTML=renderer();
+ try{
+  section.innerHTML=renderer?.()||'<div class="cc09-panel">Содержимое пока недоступно.</div>';
+ }catch(error){
+  console.error('Crowns & Cards: error rendering '+active,error);
+  section.innerHTML='<div class="cc09-panel">Не получилось открыть этот раздел. Попробуй перейти в него ещё раз.</div>';
+ }
  sync(false);
 }
 function sync(rerender=false){
- ROOT.querySelector('#cc-v09-gold').textContent=format(state.gold);
- if(rerender)renderActive();
+ const gold=ROOT.querySelector('#cc-v09-gold');
+ if(gold)gold.textContent=format(state.gold);
+ if(rerender && !document.body.classList.contains('cc-v09-native'))renderActive();
  pastGold=state.gold;
 }
 function setPage(id){
- if(!pages.includes(id))return;
+ if(!pages.includes(id)||document.body.classList.contains('cc-v09-native'))return;
  active=id;
- ROOT.querySelectorAll('.cc09-page').forEach(e=>e.classList.toggle('active',e.dataset.page===id));
+ clearTimeout(regionPopupTimer);
+ document.body.classList.add('cc-v09-active');
  ROOT.querySelectorAll('.cc09-tabs button').forEach(b=>b.setAttribute('aria-current',b.dataset.ccTab===id?'page':'false'));
  content.scrollTop=0;
  renderActive();
@@ -4838,21 +4847,26 @@ function showShop(category){
  openModal('Магазин · '+format(state.gold)+' 🪙',`<p>Покупки здесь совершаются только за <b>игровое золото</b>. Цены на карточках показывают только игровое золото. Покупки происходят в существующей экономике.</p><div class="cc-confirm">Монет: <b>${format(state.gold)}</b> 🪙 ${button('shop-refill','Получить припасы','blue',state.quest?'disabled':'')}</div>${button('shop-units','Карты существ','blue')}${button('shop-equipment','Снаряжение','purple')}<h3 class="cc-title">${start?'Снаряжение':'Существа'}</h3><div class="cc-list">${start?gear:unitSales}</div>`);
 }
 function showLab(){
- // Use the existing laboratory's exact fusion rules and real inventory.
- showTab('lab');
+ // Reuse the existing hidden fusion engine without switching the hidden old UI.
  const entries=[...document.querySelectorAll('#lab-roster .lab-entry')];
  const selected=document.querySelector('#lab-roster .lab-entry.selected');
- const work=document.getElementById('lab-workspace');
- const canFuse=work.querySelector('#lab-merge')&&!work.querySelector('#lab-merge').disabled;
- const creatures=entries.map((b)=>{
-  const key=b.dataset.labKey;const units=owned(key);const high=Math.max(...units.map(creatureLevel));
-  return `<div class="cc-item"><img src="${esc(CARD_ART[key])}" alt=""><div class="cc-item-detail"><b>${esc(CREATURES[key].name)}</b><small>Копий ${units.length}, лучший уровень ${high}</small></div>${button('lab-unit:'+key,'Выбрать','purple')}</div>`;
+ const merge=document.querySelector('#lab-workspace #lab-merge');
+ const canFuse=Boolean(merge&&!merge.disabled);
+ const cards=entries.map(entry=>{
+  const key=entry.dataset.labKey, units=owned(key);
+  if(!CREATURES[key]||!units.length)return '';
+  return `<div class="cc-item cc09-fusion-unit">
+    <img src="${esc(CARD_ART[key])}" alt="${esc(CREATURES[key].name)}">
+    <div class="cc-item-detail"><b>${esc(CREATURES[key].name)}</b><small>${units.length} копий · лучший уровень ${Math.max(...units.map(creatureLevel))}</small></div>
+    ${button('lab-unit:'+key,'Выбрать','purple')}
+  </div>`;
  }).join('');
- const currentKey=selected?.dataset.labKey;
- const current=owned(currentKey)[0];
- const selectedInfo=current?`<div class="cc-confirm">${esc(CREATURES[currentKey].name)} · текущая карта для улучшения</div>`:'';
- const mergeText=work.querySelector('#lab-merge')?.textContent||'Нет доступного слияния';
- openModal('Лаборатория слияния',`<p>Улучшение стоит бесплатные дубликаты карты. Это реальные правила существующей лаборатории: уровень до 5.</p>${selectedInfo}${button('lab-fuse',mergeText,'',!canFuse?'disabled':'')}<h3 class="cc-title">Существа</h3><div class="cc-list">${creatures||'<p>Для слияния нужны карты. Открой пак.</p>'}</div>`);
+ const key=selected?.dataset.labKey,copies=key?owned(key):[];
+ const stats=copies.length?`<div class="cc-confirm">${esc(CREATURES[key].name)} · лучший уровень ${Math.max(...copies.map(creatureLevel))} · копий ${copies.length}</div>`:'';
+ openModal('Лаборатория слияния',`<p>Выбери карту. Для улучшения нужны свободные копии того же существа. Максимальный уровень — 5.</p>
+  ${stats}
+  ${button('lab-fuse',merge?.textContent?.trim()||'Нет доступного слияния','',canFuse?'':'disabled')}
+  <div class="cc-list">${cards||'<p>Нет карт для слияния. Открой пак нежити.</p>'}</div>`);
 }
 function showSettings(){
  openModal('Настройки игры',`<p>Главное меню теперь использует выбранный мультяшный дизайн. Прогресс сохраняется в памяти этого браузера.</p>${button('heroes','Герои','purple')}${button('collection','Моя коллекция','blue')}${button('settings-save','Показать прогресс')}${button('reset','Сбросить прогресс','blue')}`);
@@ -4934,10 +4948,13 @@ function handle(command){
   case 'rewards':showRewards();break;
   case 'lab-choose':showLab();break;
   case 'lab-unit':{
-    showTab('lab');const entry=document.querySelector('#lab-roster [data-lab-key="'+param+'"]');entry?.click();showLab();break;
+    const entry=document.querySelector('#lab-roster [data-lab-key="'+param+'"]');
+    entry?.click();showLab();break;
   }
   case 'lab-fuse':{
-    showTab('lab');const btn=document.getElementById('lab-merge');if(btn&&!btn.disabled){btn.click();notice('Слияние выполнено!')}showLab();break;
+    const btn=document.getElementById('lab-merge');
+    if(btn&&!btn.disabled){btn.click();notice('Слияние выполнено!')}
+    showLab();break;
   }
   case 'start':enterBattle(param);break;
   case 'settings':showSettings();break;
@@ -4959,7 +4976,7 @@ ROOT.addEventListener('click',e=>{
  if(cmd){handle(cmd.dataset.cmd);sync(true);return}
  if(e.target===dialog)closeModal();
 });
-ROOT.querySelector('.cc09-dialog-close').addEventListener('click',closeModal);
+ROOT.querySelector('.cc09-dialog-close').addEventListener('click',()=>{closeModal();if(!ROOT.querySelector('.cc09-page.active')?.children.length)renderActive();});
 back?.addEventListener('click',leaveNative);
 document.getElementById('retreat')?.addEventListener('click',()=>queueMicrotask(()=>{
  if(!battle&&document.body.classList.contains('cc-v09-native')){
