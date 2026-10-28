@@ -1,0 +1,28 @@
+/* Crowns & Cards v0.9 — centered dialogs and uncropped artwork */
+#cc-v09 .cc09-modal{align-items:center!important;justify-content:center!important;padding:clamp(7px,2vw,20px)!important;background:rgba(6,14,45,.64)!important;box-sizing:border-box}
+#cc-v09 .cc09-dialog{width:min(100%,660px)!important;max-height:calc(100dvh - 24px)!important;min-height:0!important;border:3px solid #ffcf68!important;border-radius:22px!important;overflow:hidden;box-shadow:0 16px 50px #071331b8!important}
+#cc-v09 .cc09-dialog-head{padding:12px clamp(12px,2.5vw,20px)}
+#cc-v09 .cc09-dialog-body{min-height:0!important;overflow-y:auto!important;overscroll-behavior:contain;padding:clamp(12px,2.5vw,22px)!important}
+#cc-v09 .cc09-pack-card img{width:100%!important;height:clamp(140px,27vw,270px)!important;object-fit:contain!important;object-position:center!important;background:linear-gradient(#fff7e4,#d2dcf5);padding:5px}
+#cc-v09 .cc09-pack-card{min-width:0;overflow:hidden}
+#cc-v09 .cc-pack-result{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#cc-v09 .cc-pack-result figure{min-width:0;display:flex;flex-direction:column}
+#cc-v09 .cc-pack-result img{height:clamp(150px,23vw,230px)!important;width:100%!important;object-fit:contain!important;object-position:center!important;padding:5px;background:linear-gradient(#42569e,#192d64)}
+#cc-v09 .cc-pack-result figcaption{padding:8px 5px;overflow-wrap:anywhere}
+#cc-v09 .cc09-product img{object-fit:contain!important;padding:6px}
+#cc-v09 .cc09-modal[data-mode="lab"] .cc-item{gap:11px;min-width:0;padding:10px;align-items:center}
+#cc-v09 .cc09-modal[data-mode="lab"] .cc-item img{flex:0 0 clamp(82px,15vw,115px)!important;width:clamp(82px,15vw,115px)!important;height:clamp(110px,21vw,160px)!important;max-width:none!important;object-fit:contain!important;background:linear-gradient(#5069b3,#1b3065)}
+#cc-v09 .cc09-modal[data-mode="lab"] .cc-item-detail{min-width:0}
+#cc-v09 .cc09-modal[data-mode="lab"] .cc-item b{font-size:clamp(13px,2.1vw,16px)}
+#cc-v09 .cc09-lab-card img{width:clamp(82px,14vw,116px)!important;height:clamp(110px,20vw,150px)!important;object-fit:contain!important}
+#cc-v09 .cc09-page.active{display:flex!important;min-height:100%!important}
+#cc-v09 .cc09-page:not(.active){display:none!important}
+@media(max-width:480px){
+ #cc-v09 .cc09-modal{padding:8px!important}
+ #cc-v09 .cc09-dialog{border-radius:17px!important;max-height:calc(100dvh - 20px)!important}
+ #cc-v09 .cc-pack-result{gap:5px}
+ #cc-v09 .cc-pack-result img{height:clamp(112px,33vw,166px)!important;padding:3px}
+ #cc-v09 .cc09-modal[data-mode="lab"] .cc-item{flex-wrap:wrap}
+ #cc-v09 .cc09-modal[data-mode="lab"] .cc-item .cc-btn{margin-left:auto}
+ #cc-v09 .cc09-modal[data-mode="lab"] .cc-item img{flex-basis:82px!important;width:82px!important;height:108px!important}
+}
