@@ -64,4 +64,4 @@ const fs = require('node:fs');
     console.log('PASS: '+layout.label+' '+layout.width+'x'+layout.height);
   }
   await browser.close();
-})().catch(err=>{console.error(err);process.exitCode=1;});
+})().catch(err=>{console.error(err);process.exit(1);});
