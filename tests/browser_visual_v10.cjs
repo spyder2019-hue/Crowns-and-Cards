@@ -15,6 +15,14 @@ const fs = require('node:fs');
     const page = await browser.newPage({viewport:{width:layout.width,height:layout.height},deviceScaleFactor:1,isMobile:layout.isMobile,hasTouch:layout.isMobile});
     const failures=[];
     page.on('pageerror',error=>failures.push(error.message));
+    // index.html includes a production <base href> for GitHub Pages. Redirect
+    // that *only in this test* so all CSS, JS and artwork load from the branch.
+    await page.route('http://127.0.0.1:8765/',route=>{
+      const original=fs.readFileSync('index.html','utf8');
+      const local=original.replace('<base href="https://spyder2019-hue.github.io/Crowns-and-Cards/">',
+        '<base href="http://127.0.0.1:8765/">');
+      route.fulfill({status:200,contentType:'text/html; charset=utf-8',body:local});
+    });
     await page.goto('http://127.0.0.1:8765/',{waitUntil:'load',timeout:45000});
     await page.waitForSelector('#cc-v09 .cc09-world-stage',{timeout:30000});
     const tabs = await page.locator('#cc-v09 .cc09-tabs [data-cc-tab]').count();
