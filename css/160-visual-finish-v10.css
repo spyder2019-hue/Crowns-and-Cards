@@ -637,3 +637,37 @@ body.cc-v09-active{background:radial-gradient(ellipse at 50% 30%,#1c4586,#06112c
  #cc-v09 .cc09-world-stage .cc10-hero-foot-exp{width:46%;min-width:121px;max-width:calc(100% - 114px);padding:5px 6px 7px}
  #cc-v09 .cc10-hero-foot-exp .cc10-hero-xp-label{font-size:9px}
 }
+
+/* v13 — Fit the ENTIRE nine-kingdom map in the current game window.
+   The old 750/760px minimum made phones show only a cropped, scrollable map.
+   Scale the source map and its SVG hit areas together, preserving their 3:2 ratio. */
+#cc-v09 #cc09-map .cc-campaign-page{
+ width:100%!important;min-width:0!important;
+}
+#cc-v09 #cc09-map .cc-campaign-scroll{
+ width:100%!important;
+ /* 150dvh - 375px means map height <= 100dvh - 250px at 3:2 aspect ratio.
+    Reserve space for the HUD, navigation, footer and page padding. */
+ max-width:min(100%, max(190px, calc(150dvh - 375px)))!important;
+ margin-inline:auto!important;overflow:hidden!important;
+ overscroll-behavior:contain!important;touch-action:manipulation;
+}
+#cc-v09 #cc09-map .cc-campaign-canvas{
+ position:relative!important;
+ width:100%!important;min-width:0!important;max-width:100%!important;
+ aspect-ratio:3/2!important;
+}
+#cc-v09 #cc09-map .cc-campaign-outline-map,
+#cc-v09 #cc09-map .cc-campaign-island{
+ touch-action:manipulation!important;
+}
+#cc-v09 #cc09-map .cc-campaign-canvas>img{
+ width:100%!important;height:100%!important;object-fit:fill!important;
+}
+@media(max-width:550px){
+ #cc-v09 #cc09-map.cc09-page{padding:8px 7px!important}
+ #cc-v09 #cc09-map .cc-campaign-page{gap:7px!important}
+ #cc-v09 #cc09-map .cc-campaign-map-footer{
+   padding:8px 9px!important;gap:6px!important;
+ }
+}

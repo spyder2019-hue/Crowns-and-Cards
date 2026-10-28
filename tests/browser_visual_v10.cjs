@@ -69,7 +69,19 @@ const fs = require('node:fs');
     await page.locator('#cc-v09 [data-cc-tab="map"]').click();
     await page.waitForSelector('#cc09-map .cc-campaign-canvas',{timeout:5000});
     assert.equal(await page.locator('#cc09-map .cc-campaign-island').count(),9,'territory hit areas');
+    const mapFit=await page.locator('#cc-campaign-scroll').evaluate(el=>{
+      const canvas=el.querySelector('.cc-campaign-canvas');
+      const box=el.getBoundingClientRect();
+      return {frameWidth:box.width,canvasWidth:canvas.getBoundingClientRect().width,
+        frameHeight:box.height,scrollWidth:el.scrollWidth,clientWidth:el.clientWidth,
+        visibleBottom:box.bottom,windowHeight:window.innerHeight,
+        scrollStyle:getComputedStyle(el).overflowX};
+    });
+    assert(mapFit.canvasWidth<=mapFit.frameWidth+1,layout.label+' map wider than its frame: '+JSON.stringify(mapFit));
+    assert(mapFit.scrollWidth<=mapFit.clientWidth+1,layout.label+' map still scrolls sideways: '+JSON.stringify(mapFit));
+    assert(mapFit.visibleBottom<=mapFit.windowHeight-40,layout.label+' full map does not fit vertically: '+JSON.stringify(mapFit));
     if(layout.label==='desktop')await page.screenshot({path:'screenshots/desktop-map.png'});
+    if(layout.isMobile && layout.label==='mobile')await page.screenshot({path:'screenshots/mobile-map.png'});
     assert.deepEqual(failures,[],layout.label+' uncaught JavaScript errors');
     await page.close();
     console.log('PASS: '+layout.label+' '+layout.width+'x'+layout.height);

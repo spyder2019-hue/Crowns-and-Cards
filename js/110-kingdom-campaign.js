@@ -198,25 +198,16 @@
     const finished=number===MISSIONS.length;
     const selectedColor=hasPicked?(territories.find(r=>r.id===current)?.color||"#f7d27d"):"#f7d27d";
     const result=`<div class="cc-campaign-page">
-      <div class="cc-campaign-scroll" id="cc-campaign-scroll" aria-label="Карта земель, прокручивается горизонтально"><div class="cc-campaign-canvas">
+      <div class="cc-campaign-scroll" id="cc-campaign-scroll" aria-label="Карта девяти земель целиком"><div class="cc-campaign-canvas">
         <img src="assets/maps/nine-kingdoms-campaign.webp?v=3" draggable="false" alt="Девять отдельных фантастических островов">${glow}
         <svg class="cc-campaign-outline-map" style="--cc-campaign-fill:url(#cc-campaign-picked-fill)" viewBox="0 0 1536 1024" preserveAspectRatio="none" role="group" aria-label="Нажми на землю, чтобы увидеть задания"><defs><radialGradient id="cc-campaign-picked-fill" cx="50%" cy="50%" r="58%"><stop offset="0%" stop-color="${selectedColor}" stop-opacity=".91"/><stop offset="28%" stop-color="${selectedColor}" stop-opacity=".62"/><stop offset="54%" stop-color="${selectedColor}" stop-opacity=".29"/><stop offset="88%" stop-color="${selectedColor}" stop-opacity="0"/><stop offset="100%" stop-color="${selectedColor}" stop-opacity="0"/></radialGradient></defs>${coastline}</svg>
       </div></div>
       <div class="cc-campaign-map-footer">
-        <span>↔ Двигай карту и нажимай на землю — задания откроются отдельно.</span>
+        <span>Нажми на любую землю, чтобы открыть задания.</span>
         <strong>🏆 ${number}/${MISSIONS.length}</strong>
       </div>
       ${finished?'<div class="cc-campaign-finale">👑 Кампания пройдена! Все девять земель освобождены.</div>':''}
     </div>`;
-    Promise.resolve().then(()=>{
-      const el=document.getElementById('cc-campaign-scroll');
-      if(!el)return;
-      const marker=el.querySelector('.cc-campaign-island.is-current') || el.querySelector('.cc-campaign-island[data-cmd="region:human"]');
-      if(!marker)return;
-      const box=marker.getBBox();
-      const desired=(box.x+box.width/2)*el.scrollWidth/1536-el.clientWidth/2;
-      el.scrollLeft=Math.max(0,Math.min(el.scrollWidth-el.clientWidth,desired));
-    });
     return result;
   }
   // SVG areas are keyboard accessible on PCs as well as clickable/tappable.
