@@ -138,6 +138,38 @@ const fs = require('node:fs');
     assert(mapFit.visibleBottom<=mapFit.windowHeight-40,layout.label+' full map does not fit vertically: '+JSON.stringify(mapFit));
     if(layout.label==='desktop')await page.screenshot({path:'screenshots/desktop-map.png'});
     if(layout.isMobile && layout.label==='mobile')await page.screenshot({path:'screenshots/mobile-map.png'});
+    // Hex arena smoke: launch the actual campaign fight after a lab test
+    // that intentionally left us with only one owned creature.
+    await page.evaluate(()=>{
+      state.army=[99001];save();
+      document.body.classList.remove('cc-v09-active');
+      document.body.classList.add('cc-v09-native');
+      startBattle('camp_human_1');
+    });
+    const battlefield=await page.locator('#tab-battle #arena').evaluate(canvas=>{
+      const s=canvas.getContext('2d').getImageData(0,0,canvas.width,canvas.height).data;
+      let ink=0;for(let i=3;i<s.length;i+=1200)if(s[i]>0)ink++;
+      return {width:canvas.width,height:canvas.height,ink,
+        label:canvas.getAttribute('aria-label'),
+        heading:document.querySelector('#tab-battle .tactics-camera>span:first-child')?.textContent,
+        init:!!document.querySelector('#tactics-initiative'),
+        phase:battle?.phase,enemies:battle?.enemies?.length,allies:battle?.allies?.length};
+    });
+    assert(battlefield.label.includes('Гекс-поле') && battlefield.heading?.includes('ГЕКС'),
+      layout.label+' new hex arena not connected '+JSON.stringify(battlefield));
+    assert(battlefield.ink>50&&battlefield.init&&battlefield.phase==='deploy'&&battlefield.enemies>0&&battlefield.allies>0,
+      layout.label+' hex battlefield is blank or failed to start '+JSON.stringify(battlefield));
+    await page.locator('#tactics-auto-deploy').click();
+    await page.locator('#tactics-deploy').click();
+    const turn=await page.evaluate(()=>({
+      phase:battle?.phase,round:battle?.round,queue:battle?.turnQueue?.length,
+      initiative:document.querySelectorAll('#tactics-initiative .ti-chip').length
+    }));
+    assert(turn.phase==='fight'&&turn.round>=1&&turn.queue>=2&&turn.initiative>=2,
+      layout.label+' hex initiative or deployment failed '+JSON.stringify(turn));
+    if(layout.label!=='small-mobile')await page.locator('#tab-battle .tactics-board-area').screenshot({path:'screenshots/'+layout.label+'-hex-arena.png'});
+    await page.locator('#retreat').click();
+    await page.evaluate(()=>{document.body.classList.add('cc-v09-active');document.body.classList.remove('cc-v09-native');});
     assert.deepEqual(failures,[],layout.label+' uncaught JavaScript errors');
     await page.close();
     console.log('PASS: '+layout.label+' '+layout.width+'x'+layout.height);
