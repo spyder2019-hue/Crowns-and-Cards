@@ -41,3 +41,24 @@ jobs:
             echo "Checking $file"
             node --check "$file"
           done
+
+      - name: Install browser for visual regression smoke
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install chromium
+
+      - name: Check desktop and mobile game UI
+        shell: bash
+        run: |
+          python -m http.server 8765 --bind 127.0.0.1 > /tmp/cc-browser.log 2>&1 &
+          sleep 2
+          node tests/browser_visual_v10.cjs
+
+      - name: Save visual screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: crowns-cards-v10-screenshots
+          path: screenshots/
+          if-no-files-found: ignore
+          retention-days: 7
