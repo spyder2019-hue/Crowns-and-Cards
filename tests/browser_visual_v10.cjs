@@ -90,8 +90,12 @@ const fs = require('node:fs');
     await page.waitForSelector('#cc-v09 .cc7-option.cc14-card-ready .cc14-card-skin',{timeout:10000});
     assert.equal(await page.locator('#cc-v09 .cc7-option').count(),1,layout.label+' single owned creature invisible in lab chooser');
     const labImage=await page.locator('#cc-v09 .cc7-option .cc14-portrait img').first().evaluate(img=>({src:img.getAttribute('src'),width:img.naturalWidth,frame:img.closest('.cc14-card-skin').getBoundingClientRect().width}));
-    assert(labImage.src && labImage.frame>50,layout.label+' laboratory card art not laid out');
-    await page.locator('#cc-v09 .cc7-option [data-cmd^="lab-pick:base:"]').count().catch(()=>0);
+    const labFrame=await page.locator('#cc-v09 .cc7-option .cc14-card-skin').first().evaluate(el=>{
+      const r=el.getBoundingClientRect(),s=getComputedStyle(el);
+      return {width:r.width,height:r.height,display:s.display,visibility:s.visibility,opacity:s.opacity};
+    });
+    assert(labImage.src && labImage.frame>50 && labFrame.height>65,
+      layout.label+' laboratory card art not laid out '+JSON.stringify(labFrame));
     await page.locator('#cc-v09 .cc7-option[data-cmd^="lab-pick:base:"]').first().click();
     assert.equal(await page.evaluate(()=>window.CrownsLab.selection.baseId),99001,
       layout.label+' lab selection refused creature with insufficient copies');

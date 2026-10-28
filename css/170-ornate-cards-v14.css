@@ -129,7 +129,7 @@
 #cc-v09 .cc7-option.cc14-card-ready>img,
 #cc-v09 .cc7-option.cc14-card-ready>span .cc7-stats,
 #cc-v09 .cc7-option.cc14-card-ready>span>b{display:none!important}
-#cc-v09 .cc7-option.cc14-card-ready>span{flex:0!important;gap:3px!important;min-height:0!important}
+#cc-v09 .cc7-option.cc14-card-ready>span:not(.cc14-card-skin){flex:0!important;gap:3px!important;min-height:0!important}
 #cc-v09 .cc7-option.cc14-card-ready>span small{font-size:10px!important;text-align:center!important}
 #cc-v09 .cc7-option.cc14-card-ready em{margin-top:auto!important}
 
@@ -282,4 +282,23 @@
  #cc-v09 .cc09-squad-slots{gap:3px!important}
  #cc-v09 .cc09-squad-slots .cc14-squad-choice.cc14-card-ready{padding:1px!important;border-width:1px!important}
  #cc-v09 .cc14-card-skin .cc14-stat{font-size:clamp(8px,8.6cqw,18px)!important}
+}
+
+/* v15b: v7/v10 have a very broad ".cc7-option > span" rule.
+   It accidentally treats the ornamental sleeve as the text column, causing
+   the sleeve to collapse to 0px height in the laboratory picker. */
+#cc-v09 .cc7-option.cc14-card-ready>.cc14-card-skin{
+ display:block!important;flex:0 0 auto!important;
+ align-self:stretch!important;
+ width:100%!important;max-width:100%!important;
+ height:auto!important;min-height:0!important;
+ aspect-ratio:1024 / 1432!important;
+ margin:0 auto!important;
+ gap:0!important;justify-content:initial!important;align-items:initial!important;
+}
+#cc-v09 .cc7-card.cc14-card-ready>.cc14-card-skin,
+#cc-v09 .cc09-pick-card.cc14-card-ready>.cc14-card-skin{
+ display:block!important;flex:0 0 auto!important;
+ width:100%!important;max-width:100%!important;
+ height:auto!important;aspect-ratio:1024 / 1432!important;
 }
