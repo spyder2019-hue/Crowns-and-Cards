@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 235">
+<defs>
+ <linearGradient id="b" x1="0" x2="0.9" y1="0" y2="1"><stop stop-color="#1958ab"/><stop offset=".3" stop-color="#092a6a"/><stop offset=".74" stop-color="#051634"/><stop offset="1" stop-color="#2768aa"/></linearGradient>
+ <linearGradient id="g" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#fff4bd"/><stop offset=".25" stop-color="#ffce4d"/><stop offset=".52" stop-color="#9d5519"/><stop offset=".75" stop-color="#ffd676"/><stop offset="1" stop-color="#77400b"/></linearGradient>
+ <linearGradient id="j" x1="0" y1="0" x2=".9" y2="1"><stop stop-color="#efffff"/><stop offset=".5" stop-color="#1edafb"/><stop offset=".7" stop-color="#0551c7"/><stop offset="1" stop-color="#8efcff"/></linearGradient>
+ <filter id="shadow"><feDropShadow dx="0" dy="5" stdDeviation="4" flood-color="#00142f" flood-opacity=".72"/></filter>
+</defs>
+<g filter="url(#shadow)">
+<path d="M35 17 H185 L207 37 V202 L188 219 H33 L13 201 V37Z" fill="url(#b)" stroke="#52331a" stroke-width="12"/>
+<path d="M35 17 H185 L207 37 V202 L188 219 H33 L13 201 V37Z" fill="none" stroke="url(#g)" stroke-width="7"/>
+<path d="M37 33 H182 L192 44 V193 L182 204 H39 L28 192 V44Z" fill="none" stroke="#67c5f6" stroke-width="2" opacity=".75"/>
+<path d="M110 3 L129 25 L110 48 L91 25Z" fill="url(#j)" stroke="url(#g)" stroke-width="5"/>
+<path d="M110 207 L124 220 L110 233 L96 220Z" fill="url(#j)" stroke="url(#g)" stroke-width="4"/>
+<path d="M13 84 L24 100 L13 115 M207 84 L196 100 L207 115" stroke="url(#g)" stroke-width="6" fill="none"/>
+<path d="M24 36 L48 15 M197 36 L172 15 M24 198 L48 220 M197 198 L172 220" stroke="#ffe0a3" stroke-width="4"/>
+</g></svg>
