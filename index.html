@@ -5,7 +5,7 @@
 <base href="https://spyder2019-hue.github.io/Crowns-and-Cards/">
 <meta charset="utf-8"/><meta content="#172532" name="theme-color"/><meta content="yes" name="apple-mobile-web-app-capable"/><meta content="width=device-width, initial-scale=1" name="viewport"/>
 <title>Crowns &amp; Cards — Пять королевств · Мультяшное меню</title>
-<meta name="cc-build" content="20261028-creature-card-stats-v6"><link rel="icon" type="image/webp" href="assets/branding/crowns-cards-logo.webp?art=20261026b">
+<meta name="cc-build" content="20261028-simple-fusion-v7"><link rel="icon" type="image/webp" href="assets/branding/crowns-cards-logo.webp?art=20261026b">
 <style>
 /* css/00-base-and-early-ui.css */
 /* Original style block 0 */
@@ -2656,7 +2656,7 @@ body.cc-v09-native #tab-battle{display:block!important;visibility:visible!import
 }
 
 </style><link rel="stylesheet" href="css/110-kingdom-campaign.css?v=4">
-<link rel="stylesheet" href="css/120-cartoon-ui-polish-v5.css?v=5"> <link rel="stylesheet" href="css/130-creature-card-stats-v6.css?v=6">
+<link rel="stylesheet" href="css/120-cartoon-ui-polish-v5.css?v=5"> <link rel="stylesheet" href="css/130-creature-card-stats-v6.css?v=6"> <link rel="stylesheet" href="css/140-laboratory-simplified-v7.css?v=7">
 <!-- Crowns & Cards nine-kingdom campaign v1 -->
 </head><body class="cc-v09-active"><div class="app">
 <header class="top"><div><div class="brand">♛ CROWNS <span>&amp;</span> CARDS</div><div class="sub">Стратегия пяти королевств</div></div><div class="resources"><div class="resource"><svg aria-label="Золото" class="gold-coin-icon" height="30" role="img" viewbox="0 0 64 64" width="30" xmlns="http://www.w3.org/2000/svg"><defs><radialgradient cx="35%" cy="24%" id="coinshine" r="75%"><stop offset="0" stop-color="#fff3b2"></stop><stop offset=".32" stop-color="#f5c94b"></stop><stop offset=".75" stop-color="#b77b18"></stop><stop offset="1" stop-color="#6b3d0d"></stop></radialgradient></defs><circle cx="32" cy="32" fill="#3b2109" r="29" stroke="#ffdb70" stroke-width="2"></circle><circle cx="32" cy="32" fill="url(#coinshine)" r="25" stroke="#9c6116" stroke-width="2"></circle><circle cx="32" cy="32" fill="none" r="19" stroke="#ffe29a" stroke-width="2"></circle><path d="M39 23c-4-4-15-3-15 4 0 8 16 3 16 11 0 8-13 10-18 4M32 17v30" fill="none" stroke="#7c460f" stroke-linecap="round" stroke-width="4"></path><path d="M39 22c-4-4-15-3-15 4 0 8 16 3 16 11 0 8-13 10-18 4M32 17v30" fill="none" stroke="#ffe8a3" stroke-linecap="round" stroke-width="2"></path></svg><b id="gold">500</b></div><div class="resource" style="display:none!important">⭐ Ур. <b id="level">1</b></div><div class="resource" style="display:none!important">🃏 Карт: <b id="total">0</b></div></div></header>
@@ -4403,6 +4403,7 @@ renderEquipment();
 </div>
 <button type="button" id="cc-v09-back">‹ Вернуться в меню</button>
 <script src="js/110-kingdom-campaign.js?v=4"></script>
+<script src="js/130-laboratory-ui-v7.js?v=7"></script>
 <script>
 /* js/130-cartoon-native-v09.js */
 /* Crowns & Cards v0.9 — truly native illustrated UI, no flattened screenshots/hotspots. */
@@ -4725,12 +4726,7 @@ function renderShop(){
  return `<div class="cc09-grid3 cc09-available-products">${items}</div>`;
 }
 function renderLab(){
- const grouped=[...new Set(state.units.map(u=>u.key))];
- const labItems=grouped.slice(0,3).map(key=>{
-  const arr=owned(key),unit=arr.reduce((a,b)=>creatureLevel(a)>=creatureLevel(b)?a:b);
-  return `<button type="button" class="cc09-lab-card" data-cmd="lab-unit:${key}"><img src="${esc(CARD_ART[key])}" alt=""><span><b>${esc(CREATURES[key].name)}</b><br><small>${arr.length} копий · ур. ${creatureLevel(unit)}</small></span></button>`;
- }).join('');
- return `<div class="cc09-panel"><h1 class="cc09-title">⚗ Лаборатория</h1><p class="cc09-subtitle">Объединяй одинаковые карты для усиления существ.</p></div><div class="cc09-lab-scene"><div class="cc09-lab-text"><strong>Магия слияния</strong><p>Два существа превращаются в более сильную карту.</p></div><img class="cc09-lab-art" src="${ico('lab-circle')}" alt="Магический алтарь"></div><div class="cc09-panel"><h2 class="cc09-title" style="font-size:20px">Твои существа</h2><div style="display:grid;gap:9px;margin-top:10px">${labItems||'<p class="cc09-subtitle">Пока нет существ для улучшения.</p>'}</div></div>${btn('lab-choose','⚗ ВЫБРАТЬ И СЛИТЬ КАРТЫ')}`;
+ return window.CrownsLab?window.CrownsLab.render():'<div class="cc09-panel">Лаборатория временно недоступна.</div>';
 }
 function renderActive(){
  const section=ROOT.querySelector('.cc09-page[data-page="'+active+'"]');
@@ -4852,28 +4848,7 @@ function showShop(category){
  openModal('Магазин · '+format(state.gold)+' 🪙',`<p>Покупки здесь совершаются только за <b>игровое золото</b>. Цены на карточках показывают только игровое золото. Покупки происходят в существующей экономике.</p><div class="cc-confirm">Монет: <b>${format(state.gold)}</b> 🪙 ${button('shop-refill','Получить припасы','blue',state.quest?'disabled':'')}</div>${button('shop-units','Карты существ','blue')}${button('shop-equipment','Снаряжение','purple')}<h3 class="cc-title">${start?'Снаряжение':'Существа'}</h3><div class="cc-list">${start?gear:unitSales}</div>`);
 }
 function showLab(){
- // Reuse the existing hidden fusion engine without switching the hidden old UI.
- const entries=[...document.querySelectorAll('#lab-roster .lab-entry')];
- const selected=document.querySelector('#lab-roster .lab-entry.selected');
- const merge=document.querySelector('#lab-workspace #lab-merge');
- const canFuse=Boolean(merge&&!merge.disabled);
- const cards=entries.map(entry=>{
-  const key=entry.dataset.labKey, units=owned(key);
-  if(!CREATURES[key]||!units.length)return '';
-  const best=units.reduce((a,b)=>creatureLevel(a)>=creatureLevel(b)?a:b);
-  return `<div class="cc-item cc09-fusion-unit cc6-row ${ccQuality(best)}">
-    <img src="${esc(CARD_ART[key])}" alt="${esc(CREATURES[key].name)}">
-    <div class="cc-item-detail"><b>${esc(CREATURES[key].name)}</b><small>${esc(CREATURES[key].rarity)} · ${units.length} копий</small>${ccLevel(best)}${ccStats(best)}</div>
-    ${button('lab-unit:'+key,'Выбрать','purple')}
-  </div>`;
- }).join('');
- const key=selected?.dataset.labKey,copies=key?owned(key):[];
- const bestCopy=copies.length?copies.reduce((a,b)=>creatureLevel(a)>=creatureLevel(b)?a:b):null;
- const stats=bestCopy?`<div class="cc-confirm cc6-summary ${ccQuality(bestCopy)}"><b>${esc(CREATURES[key].name)}</b> · ${copies.length} копий ${ccLevel(bestCopy)}${ccStats(bestCopy)}</div>`:'';
- openModal('Лаборатория слияния',`<p>Выбери карту. Для улучшения нужны свободные копии того же существа. Максимальный уровень — 5.</p>
-  ${stats}
-  ${button('lab-fuse',merge?.textContent?.trim()||'Нет доступного слияния','',canFuse?'':'disabled')}
-  <div class="cc-list">${cards||'<p>Нет карт для слияния. Открой пак нежити.</p>'}</div>`);
+ closeModal();setPage('lab');
 }
 function showSettings(){
  openModal('Настройки игры',`<p>Главное меню теперь использует выбранный мультяшный дизайн. Прогресс сохраняется в памяти этого браузера.</p>${button('heroes','Герои','purple')}${button('collection','Моя коллекция','blue')}${button('settings-save','Показать прогресс')}${button('reset','Сбросить прогресс','blue')}`);
@@ -4955,13 +4930,37 @@ function handle(command){
   case 'rewards':showRewards();break;
   case 'lab-choose':showLab();break;
   case 'lab-unit':{
-    const entry=document.querySelector('#lab-roster [data-lab-key="'+param+'"]');
-    entry?.click();showLab();break;
+    const u=state.units.filter(x=>x.key===param).sort((a,b)=>creatureLevel(b)-creatureLevel(a))[0];
+    if(u&&window.CrownsLab?.chooseBase(u.id)){closeModal();setPage('lab');}else notice('Нет доступной карты для улучшения.');
+    break;
   }
+  case 'lab-slot':{
+    const choice=window.CrownsLab?.chooser(param);
+    if(choice)openModal(choice.title,choice.html);
+    break;
+  }
+  case 'lab-pick':{
+    if(param==='base'){
+      if(window.CrownsLab?.chooseBase(Number(other)))closeModal();
+      else notice('Не удалось выбрать карту.');
+    }else if(param==='material'){
+      if(window.CrownsLab?.toggleMaterial(Number(other))){
+        if(window.CrownsLab.canFuse())closeModal();
+        else {const choice=window.CrownsLab.chooser('material');openModal(choice.title,choice.html);}
+      }
+    }
+    break;
+  }
+  case 'lab-autofill':{
+    const status=window.CrownsLab?.autoFill();
+    if(status)notice(status.message);
+    break;
+  }
+  case 'lab-done':closeModal();break;
   case 'lab-fuse':{
-    const btn=document.getElementById('lab-merge');
-    if(btn&&!btn.disabled){btn.click();notice('Слияние выполнено!')}
-    showLab();break;
+    const status=window.CrownsLab?.fuse();
+    if(status)notice(status.message);
+    closeModal();break;
   }
   case 'start':enterBattle(param);break;
   case 'settings':showSettings();break;
