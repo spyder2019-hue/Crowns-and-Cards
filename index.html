@@ -2684,7 +2684,7 @@ body.cc-v09-native #tab-battle{display:block!important;visibility:visible!import
  background:transparent!important;
 }
 </style>
-<link rel="stylesheet" href="css/160-visual-finish-v10.css?v=20261028v10">
+<link rel="stylesheet" href="css/160-visual-finish-v10.css?v=20261028hero-xp-v11">
 </head><body class="cc-v09-active"><div class="app">
 <header class="top"><div><div class="brand">♛ CROWNS <span>&amp;</span> CARDS</div><div class="sub">Стратегия пяти королевств</div></div><div class="resources"><div class="resource"><svg aria-label="Золото" class="gold-coin-icon" height="30" role="img" viewbox="0 0 64 64" width="30" xmlns="http://www.w3.org/2000/svg"><defs><radialgradient cx="35%" cy="24%" id="coinshine" r="75%"><stop offset="0" stop-color="#fff3b2"></stop><stop offset=".32" stop-color="#f5c94b"></stop><stop offset=".75" stop-color="#b77b18"></stop><stop offset="1" stop-color="#6b3d0d"></stop></radialgradient></defs><circle cx="32" cy="32" fill="#3b2109" r="29" stroke="#ffdb70" stroke-width="2"></circle><circle cx="32" cy="32" fill="url(#coinshine)" r="25" stroke="#9c6116" stroke-width="2"></circle><circle cx="32" cy="32" fill="none" r="19" stroke="#ffe29a" stroke-width="2"></circle><path d="M39 23c-4-4-15-3-15 4 0 8 16 3 16 11 0 8-13 10-18 4M32 17v30" fill="none" stroke="#7c460f" stroke-linecap="round" stroke-width="4"></path><path d="M39 22c-4-4-15-3-15 4 0 8 16 3 16 11 0 8-13 10-18 4M32 17v30" fill="none" stroke="#ffe8a3" stroke-linecap="round" stroke-width="2"></path></svg><b id="gold">500</b></div><div class="resource" style="display:none!important">⭐ Ур. <b id="level">1</b></div><div class="resource" style="display:none!important">🃏 Карт: <b id="total">0</b></div></div></header>
 <aside class="gothic-sidebar"><div class="side-logo"><img src="assets/branding/crowns-cards-logo.webp?art=20261026b" alt="Crowns & Cards" style="width:100%;max-height:145px;object-fit:contain"></div><button class="active" data-tab="world" type="button">♜ <span>Мир</span></button><button data-tab="map" type="button">◇ <span>Карта</span></button><button data-tab="lab" type="button">⚗ <span>Лаборатория</span></button><button data-tab="packs" type="button">▤ <span>Паки</span></button><button data-tab="shop" type="button">◆ <span>Магазин</span></button></aside>
@@ -4732,8 +4732,12 @@ function renderWorld(){
   const unit=current[i];
   return unit?`<button type="button" class="cc09-unit ${ccQuality(unit)}" data-cmd="army:${i}" aria-label="${esc(CREATURES[unit.key].name)}, уровень ${creatureLevel(unit)}, урон ${creatureStats(unit).atk}, здоровье ${creatureStats(unit).hp}"><img src="${esc(creaturePicture(unit))}" alt=""><span class="cc09-level">УР. ${creatureLevel(unit)}</span><strong>${esc(CREATURES[unit.key].name)}</strong>${ccStats(unit)}</button>`:`<button type="button" class="cc09-unit empty" data-cmd="army:${i}" aria-label="Добавить бойца ${i+1}"><span>＋</span><strong>Слот ${i+1}</strong></button>`;
  }).join('');
- return `<div class="cc10-world-head"><div class="cc10-world-heading"><span>✦ ГЕРОЙ КОРОЛЕВСТВА</span><strong>${esc(hero.name)}</strong></div><div class="cc10-world-exp" aria-label="Опыт героя ${xpNow} из ${xpNeed}"><span>УР. ${state.level||1} · ОПЫТ ${xpNow} / ${xpNeed}</span><div class="cc10-xp-track"><i style="width:${xpPct}%"></i></div></div></div><div class="cc09-world-stage">
+ return `<div class="cc09-world-stage">
    <img class="cc09-hero-art" src="${esc(heroArt)}" alt="Текущий герой — ${esc(hero.name)}">
+   <div class="cc10-hero-foot-exp" role="progressbar" aria-label="Опыт героя" aria-valuenow="${xpNow}" aria-valuemin="0" aria-valuemax="${xpNeed}">
+     <span class="cc10-hero-xp-label">УР. ${state.level||1} · ${xpNow}/${xpNeed} XP</span>
+     <div class="cc10-xp-track"><i style="width:${xpPct}%"></i></div>
+   </div>
    <div class="cc09-slot-list left">${renderSlots(equLeft)}</div><div class="cc09-slot-list right">${renderSlots(equRight)}</div>
 
   </div>
