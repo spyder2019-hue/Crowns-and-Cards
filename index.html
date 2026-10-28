@@ -4745,16 +4745,13 @@ function renderWorld(){
   <div class="cc09-panel cc09-panel-blue"><div class="cc09-row"><strong>⚔ БОЕВОЙ ОТРЯД</strong><span class="cc09-chip">${current.length} / 4</span></div><div class="cc09-world-squad" style="margin-top:12px">${slots}</div></div>`;
 }
 function renderMap(){
- const count=window.CrownsCampaign?.completed?.()||0;
- const total=window.CrownsCampaign?.missions?.length||36;
- return '<div class="cc10-page-head"><div><span class="cc10-eyebrow">КАМПАНИЯ</span><h1>Девять земель</h1><p>Выбирай территорию, открывай задания и побеждай боссов.</p></div><span class="cc10-progress-badge">✦ '+count+' / '+total+'</span></div>'+
- (window.CrownsCampaign?window.CrownsCampaign.render():'<p>Карта временно недоступна</p>');
+ return window.CrownsCampaign?window.CrownsCampaign.render():'<p>Карта временно недоступна</p>';
 }
 function renderPacks(){
  const packs=[['units','Пак нежити','pack-undead','3 существа'],['heroes','Пак героев','pack-heroes','Случайный герой'],['future','Особый пак','pack-royal','Скоро']];
  const packArt={units:"assets/packs/pack-special-new.webp?v=10",heroes:"assets/packs/pack-heroes-new.webp?v=10",future:"assets/packs/pack-undead-new.webp?v=10"};
  const cards=packs.map(([type,title,image,caption])=>`<button type="button" class="cc09-pack-card ${pack===type?'selected':''}" data-cmd="pack:${type}"><img src="${packArt[type]}" onerror="this.onerror=null;this.src=&#39;${ico(image)}&#39;" alt="${esc(title)}" loading="lazy"><strong>${esc(title)}</strong><small>${esc(caption)}</small></button>`).join('');
- return `<div class="cc10-page-head"><div><span class="cc10-eyebrow">КОЛЛЕКЦИЯ</span><h1>Паки</h1><p>Открывай паки и пополняй свою армию.</p></div></div><div class="cc09-packs-grid">${cards}</div>${btn('open-pack',pack==='heroes'?'♛ ОТКРЫТЬ ПАК ГЕРОЕВ':'✦ ОТКРЫТЬ БЕСПЛАТНО')}`;
+ return `<div class="cc09-packs-grid">${cards}</div>${btn('open-pack',pack==='heroes'?'♛ ОТКРЫТЬ ПАК ГЕРОЕВ':'✦ ОТКРЫТЬ БЕСПЛАТНО')}`;
 }
 function renderShop(){
  const products=[
@@ -4763,10 +4760,10 @@ function renderShop(){
   ['Снаряжение','shop-chest','За золото','shop-equipment']
  ];
  const items=products.map(([name,art,price,cmd])=>`<article class="cc09-product"><img src="${ico(art)}" alt="${esc(name)}"><strong>${esc(name)}</strong><button type="button" class="cc09-buy cc09-gold-button" data-cmd="${cmd}">${price}</button></article>`).join('');
- return `<div class="cc10-page-head"><div><span class="cc10-eyebrow">СНАРЯЖЕНИЕ И КАРТЫ</span><h1>Магазин</h1><p>Улучшай отряд за игровое золото.</p></div></div><div class="cc09-grid3 cc09-available-products">${items}</div>`;
+ return `<div class="cc09-grid3 cc09-available-products">${items}</div>`;
 }
 function renderLab(){
- return '<div class="cc10-page-head"><div><span class="cc10-eyebrow">УЛУЧШЕНИЕ КАРТ</span><h1>Лаборатория</h1><p>Соедини одинаковые карты и получи более сильного бойца.</p></div></div>'+(window.CrownsLab?window.CrownsLab.render():'<div class="cc09-panel">Лаборатория временно недоступна.</div>');
+ return window.CrownsLab?window.CrownsLab.render():'<div class="cc09-panel">Лаборатория временно недоступна.</div>';
 }
 function renderActive(){
  const section=ROOT.querySelector('.cc09-page[data-page="'+active+'"]');
